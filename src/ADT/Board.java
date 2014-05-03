@@ -1,5 +1,9 @@
 package ADT;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList; 
 import java.util.Arrays;
 import java.util.Collections;
@@ -15,6 +19,7 @@ import ADT.Gadget;
 import physics.*;
 import physics.Geometry.DoublePair;
 import ADT.Ball;
+import Parser.BoardFileFactory;
 
 /**
  * Concurrency/Thread Safety Strategy: The only aspect of board accessible by the server is its calls.
@@ -99,8 +104,8 @@ public class Board extends TimerTask {
     private boolean isWall(Geometry.DoublePair doublePair){
         double x = doublePair.d1;
         double y = doublePair.d2;
-        return ((x) <= 0.25 || (x)>=19.75 ||
-                (y) <= 0.25 || (y)>=19.75 );   
+        return ((x) < 0.25 || (x)>19.75 ||
+                (y) < 0.25 || (y)>19.75 );   
     }
     
     
@@ -371,8 +376,7 @@ public class Board extends TimerTask {
     public void run() {
         this.update();
         System.out.println(this.balls.get(0).getBallPosition());
-        System.out.println(this.balls.size());
-        System.out.println(this.balls.get(0).getVelocity());
+        System.out.println(this.balls.get(0).isAbsorbed());
         System.out.println(this.toString());
         
     }
@@ -617,8 +621,7 @@ public class Board extends TimerTask {
         }
     }
     
-    public static void main(String[] args){
-        Board myBoard = new Board("Dana", 0, 0, 0);
+    public static void main(String[] args) throws IOException{
         /*CircleBumper circle = new CircleBumper("Cicrle", 9, 9);
         myBoard.addGadget(circle);
         TriangularBumper triangle = new TriangularBumper("T", 4, 4, 0);
@@ -633,12 +636,21 @@ public class Board extends TimerTask {
         //myBoard.addGadget(rf);
         //myBoard.addGadget(lf);
         
-        Absorber abs = new Absorber("abs", 1, 19, 10, 1);
-        abs.isTriggered(abs);
-        myBoard.addGadget(abs);
+        StringBuilder boardText = new StringBuilder("");
         
-        Ball myBall = new  Ball("Zulaa", 7, 7, 0, 10);
-        myBoard.addBall(myBall);
+        BufferedReader fr = new BufferedReader(new FileReader("src/Parser/" + "sampleBoard.pb"));
+        for (String line = fr.readLine(); line != null; line = fr.readLine()) {
+            boardText.append('\n' + line);
+        }
+        String boardTextString = boardText.toString().substring(1);
+        Board myBoard = BoardFileFactory.parse(boardTextString);
+        
+        //Absorber abs = new Absorber("abs", 1, 19, 10, 1);
+        //abs.isTriggered(abs);
+        //myBoard.addGadget(abs);
+        
+        //Ball myBall = new  Ball("Zulaa", 7, 7, 0, 10);
+        //myBoard.addBall(myBall);
         Timer timer = new Timer();
        
         timer.schedule(myBoard, 0, 50);

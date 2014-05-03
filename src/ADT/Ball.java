@@ -26,9 +26,8 @@ public class Ball {
      */
     
     public Ball(String name, double xCoord, double yCoord, double xVel, double yVel) {
-        super();
-        this.radius = .25;
-        this.circle = new Circle(xCoord, yCoord, .25);
+        this.radius = 0.25;
+        this.circle = new Circle(xCoord, yCoord, this.radius);
         this.position = new Geometry.DoublePair(xCoord, yCoord);
         this.velocity = new Vect(xVel, yVel);
         this.name = name;

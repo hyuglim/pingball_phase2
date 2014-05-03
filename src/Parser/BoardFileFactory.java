@@ -1,6 +1,6 @@
 package Parser;
 
-import java.util.ArrayList; 
+import java.util.ArrayList;  
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -130,6 +130,7 @@ public class BoardFileFactory {
       double yCoord = Double.parseDouble(attributes.remove().toString());
       double xVelocity = Double.parseDouble(attributes.remove().toString());
       double yVelocity = Double.parseDouble(attributes.remove().toString());
+  /*    double radius = Double.parseDouble(attributes.remove().toString());*/
       Ball ball = new Ball(name, xCoord, yCoord, xVelocity, yVelocity);
       desiredBoard.addBall(ball);
   }
