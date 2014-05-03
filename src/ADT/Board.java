@@ -45,14 +45,14 @@ public class Board extends TimerTask {
      * @param balls all the balls that are to be included in the board at creation
      * @param gadgets all the gadgets that are to be included in the board
      */
-    public Board(String name, double gravity, double mu, double mu2, List<Ball> balls, List<Gadget> gadgets){
+    public Board(String name, double gravity, double mu, double mu2){
         super();
-        this.balls = Collections.synchronizedList(balls);
+        this.balls = Collections.synchronizedList(new ArrayList<Ball>());
         this.gravity = gravity;
         this.dimension = 20;
         this.mu = mu;
         this.mu2 = mu2;
-        this.gadgets = gadgets;
+        this.gadgets = new ArrayList<Gadget>();
         // wall has a field visible (if visible, it is a solid wall)
         this.walls = Collections.synchronizedList(Arrays.asList(new Wall("top",true, null, boardname), new Wall("bottom",true, null, boardname), new Wall("right",true, null, boardname),new Wall("left",true, null, boardname)));
         this.boardname = name;
