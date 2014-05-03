@@ -247,17 +247,17 @@ public class Board extends TimerTask {
                     else if (w.location.equals("bottom")){
                         ballOutput = ballOutput +"XXXXboard="+ w.getConnectedTo();
                         ballOutput = ballOutput + " ball="+each.name+" x="+each.getOriginX() +" y=0.25 xVelocity="+ each.velocity.x()+" yVelocity="+ each.velocity.y();
-                        this.wallHit = "hit "+this.boardname+" 1 " +each.name+" "+each.getOriginX()+" "+each.getOriginalY()+" "+20*each.getVelocity().x()+" "+20*each.getVelocity().y()+"\n"
+                        this.wallHit = "hit "+this.boardname+" 1 " +each.name+" "+each.getOriginX()+" "+each.getOriginalY()+" "+20*each.getVelocity().x()+" "+20*each.getVelocity().y()+"\n";
                     }
                     else if (w.location.equals("right")){
                         ballOutput = ballOutput +"XXXXboard="+ w.getConnectedTo();
                         ballOutput = ballOutput + " ball="+each.name+" x=0.25 y="+each.getOriginY()+" xVelocity="+ each.velocity.x()+" yVelocity="+ each.velocity.y();
-                        this.wallHit = "hit "+this.boardname+" 3 " +each.name+" "+each.getOriginX()+" "+each.getOriginalY()+" "+20*each.getVelocity().x()+" "+20*each.getVelocity().y()+"\n"
+                        this.wallHit = "hit "+this.boardname+" 3 " +each.name+" "+each.getOriginX()+" "+each.getOriginalY()+" "+20*each.getVelocity().x()+" "+20*each.getVelocity().y()+"\n";
                     }
                     else{//left
                         ballOutput = ballOutput +"XXXXboard="+ w.getConnectedTo();
                         ballOutput = ballOutput + " ball="+each.name+" x=19.75 y="+each.getOriginY()+" xVelocity="+ each.velocity.x()+" yVelocity="+ each.velocity.y();
-                        this.wallHit = "hit "+this.boardname+" 2 " +each.name+" "+each.getOriginX()+" "+each.getOriginalY()+" "+20*each.getVelocity().x()+" "+20*each.getVelocity().y()+"\n"
+                        this.wallHit = "hit "+this.boardname+" 2 " +each.name+" "+each.getOriginX()+" "+each.getOriginalY()+" "+20*each.getVelocity().x()+" "+20*each.getVelocity().y()+"\n";
                     }
                     ballsToRemove.add(each);
                 }
