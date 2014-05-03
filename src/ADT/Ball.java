@@ -21,10 +21,10 @@ public class Ball {
      * @param velocity a vector (also from the physics package)
      */
     
-    public Ball(String name, Circle circle, Vect velocity) {
+    public Ball(String name, double xCoord, double yCoord, double xVel, double yVel) {
         super();
-        this.circle = circle;
-        this.velocity = velocity;
+        this.circle = new Circle(xCoord, yCoord, .25);
+        this.velocity = new Vect(xVel, yVel);
         this.radius = .25;
         this.speed = 0;
         this.updateSpeed();
