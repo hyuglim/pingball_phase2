@@ -16,9 +16,9 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import phase1.Absorber;
-import phase1.Ball;
-import phase1.Board;
+import ADT.Absorber;
+import ADT.Ball;
+import ADT.Board;
 import ADT.CircleBumper;
 import ADT.Gadget;
 import ADT.LeftFlipper;

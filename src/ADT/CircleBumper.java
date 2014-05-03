@@ -67,8 +67,8 @@ public class CircleBumper implements Gadget{
     /**
      * @see Gadget#getChar()
      */
-    public char getChar(){
-        return 'O';
+    public String getChar(){
+        return "O";
     }
     
     /**

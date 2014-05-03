@@ -47,7 +47,7 @@ public interface Gadget {
      * Returns the character representation of the gadget.
      * @return character representation.
      */
-    public char getChar();
+    public String getChar();
     
     /**
      * Returns the width of this gadget.

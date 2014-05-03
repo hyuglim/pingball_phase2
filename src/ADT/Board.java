@@ -1,16 +1,18 @@
 package ADT;
 
-import java.util.ArrayList;
+import java.util.ArrayList; 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.Timer;
 import java.util.TimerTask;
 
+import ADT.Gadget;
 import physics.*;
 import physics.Geometry.DoublePair;
-import pingball.Ball;
+import ADT.Ball;
 
 /**
  * Concurrency/Thread Safety Strategy: The only aspect of board accessible by the server is its calls.
@@ -33,6 +35,7 @@ public class Board extends TimerTask {
     public List<List<String>> boardRep;
     private List<Wall> walls;
     private List<Gadget> gadgets;
+    private final ArrayList<Gadget> myFlippers = new ArrayList<Gadget>();
 
     
     /**
@@ -78,85 +81,6 @@ public class Board extends TimerTask {
             boardRep.add(temp);
         }
         boardRep.add(bottomWall);
-        
-        /**
-         * now update boardrep to include all gadgets (excluding flippers)
-         */
-        for (Gadget g:gadgets){
-            
-            DoublePair origin = g.getOrigin();
-            Double xcoord = origin.d1;
-            Double ycoord = origin.d2;
-            // Adding circular bumpers to the boardRep
-            if(g.toString().equals("O")){
-                boardRep.get(ycoord.intValue()+1).remove(xcoord.intValue()+1);
-                boardRep.get(ycoord.intValue()+1).add(xcoord.intValue()+1, "O"); 
-            }
-            // Adding Square bumpers to the boardRep
-            else if(g.toString().equals("#")){
-                
-                boardRep.get(ycoord.intValue()+1).remove(xcoord.intValue()+1);
-                boardRep.get(ycoord.intValue()+1).add(xcoord.intValue()+1, "#"); 
-            }
-            // Adding triangular bumpers to the boardRep, depending on their orientation
-            else if(g.toString().equals("/")){
-                boardRep.get(ycoord.intValue()+1).remove(xcoord.intValue()+1);
-                boardRep.get(ycoord.intValue()+1).add(xcoord.intValue()+1, "/"); 
-            }
-            // Adding triangular bumpers to the boardRep, depending on their orientation
-            else if(g.toString().equals("\\")){
-                boardRep.get(ycoord.intValue()+1).remove(xcoord.intValue()+1);
-                boardRep.get(ycoord.intValue()+1).add(xcoord.intValue()+1,"\\"); 
-            }
-            // Adding the absorber to the boardRep
-            else if(g.toString().contains("Absorber")){
-                String[] split = g.toString().split(" ");
-                int width = (int) Double.parseDouble(split[1]);
-                int height = (int) Double.parseDouble(split[2]);
-                for (int i =0; i <height;i++){
-                    for (int j =0; j < width; j++){
-                        boardRep.get(ycoord.intValue()+1+i).remove((xcoord.intValue()+1+j));
-                        boardRep.get(ycoord.intValue()+1+i).add((xcoord.intValue()+1+j), "=");
-                    }
-                }  
-            }
-            //Adding flippers to the boardRep
-            else if(g.toString().contains("LeftFlipper") || g.toString().contains("RightFlipper")){
-                String[] words = g.toString().split(" ");
-                int xPivet = (int) Double.parseDouble(words[2]);
-                int yPivet = (int) Double.parseDouble(words[3]);
-                if(words[1].equals("horizontal")){
-                    if(yPivet - ycoord.intValue() == 2){
-                        boardRep.get(ycoord.intValue()+2).remove(xcoord.intValue()+1);
-                        boardRep.get(ycoord.intValue()+2).add(xcoord.intValue()+1,"-");
-                        boardRep.get(ycoord.intValue()+2).remove(xcoord.intValue()+2);
-                        boardRep.get(ycoord.intValue()+2).add(xcoord.intValue()+2,"-");
-                    }
-                    else{
-                        boardRep.get(ycoord.intValue()+1).remove(xcoord.intValue()+1);
-                        boardRep.get(ycoord.intValue()+1).add(xcoord.intValue()+1,"-");
-                        boardRep.get(ycoord.intValue()+1).remove(xcoord.intValue()+2);
-                        boardRep.get(ycoord.intValue()+1).add(xcoord.intValue()+2,"-");
-                    }
-                }
-                else{
-                    if(xPivet - xcoord.intValue() == 2){
-                        boardRep.get(ycoord.intValue()+1).remove(xcoord.intValue()+2);
-                        boardRep.get(ycoord.intValue()+1).add(xcoord.intValue()+2,"|");
-                        boardRep.get(ycoord.intValue()+2).remove(xcoord.intValue()+2);
-                        boardRep.get(ycoord.intValue()+2).add(xcoord.intValue()+2,"|");
-                    }
-                    else{
-                        boardRep.get(ycoord.intValue()+1).remove(xcoord.intValue()+1);
-                        boardRep.get(ycoord.intValue()+1).add(xcoord.intValue()+1,"|");
-                        boardRep.get(ycoord.intValue()+2).remove(xcoord.intValue()+1);
-                        boardRep.get(ycoord.intValue()+2).add(xcoord.intValue()+1,"|");
-                    }
-                }
-            }
-            
-        }
-  
     }
     
     
@@ -213,11 +137,11 @@ public class Board extends TimerTask {
      */
     private Gadget getMinTimeGadget(Ball ball){
         Gadget minGadget = gadgets.get(0);
-        double timetillcollision = gadgets.get(0).timeTilGadgetCollision(ball);
+        double timetillcollision = gadgets.get(0).getCollisionTime(ball);
         for (Gadget g: gadgets){
-            if (g.timeTilGadgetCollision(ball) < timetillcollision){
+            if (g.getCollisionTime(ball) < timetillcollision){
                 minGadget = g;
-                timetillcollision = g.timeTilGadgetCollision(ball);
+                timetillcollision = g.getCollisionTime(ball);
             }
         }
         return minGadget;
@@ -230,7 +154,7 @@ public class Board extends TimerTask {
      * @return
      */
     private double timeMinGadget(Ball ball, Gadget gadget){
-        return gadget.timeTilGadgetCollision(ball);
+        return gadget.getCollisionTime(ball);
     }
     
     
@@ -289,7 +213,7 @@ public class Board extends TimerTask {
                 updateEmpty(each, 0.05);
             }
             else if(timeMinGadget<timeMinWall){
-                g.captureBall(each);
+                g.reflect(each);
             }
             else{
                 // CASE 1: if the wall is solid, then merely bounce of it
@@ -609,61 +533,18 @@ public class Board extends TimerTask {
      * Note: this method is called during each update to ensure that all flippers are up-to-date.
      */
     public void updateFlipperStringPosition(){
-       
-        for (Gadget g: this.gadgets){
-            DoublePair origin = g.getOrigin();
-            Double xcoord = origin.d1;
-            Double ycoord = origin.d2;
-            if(g.toString().contains("LeftFlipper") || g.toString().contains("RightFlipper")){
-                
-                String[] words = g.toString().split(" ");
-                int xPivet = (int) Double.parseDouble(words[2]);
-                int yPivet = (int) Double.parseDouble(words[3]);
-                if(words[1].equals("horizontal")){
-                    if(yPivet - ycoord.intValue() == 2){
-                        boardRep.get(ycoord.intValue()+1).remove(xcoord.intValue()+1);
-                        boardRep.get(ycoord.intValue()+1).add(xcoord.intValue()+1," ");
-                        boardRep.get(ycoord.intValue()+1).remove(xcoord.intValue()+2);
-                        boardRep.get(ycoord.intValue()+1).add(xcoord.intValue()+2," ");
-                        boardRep.get(ycoord.intValue()+2).remove(xcoord.intValue()+1);
-                        boardRep.get(ycoord.intValue()+2).add(xcoord.intValue()+1,"-");
-                        boardRep.get(ycoord.intValue()+2).remove(xcoord.intValue()+2);
-                        boardRep.get(ycoord.intValue()+2).add(xcoord.intValue()+2,"-");
-                    }
-                    else{
-                        boardRep.get(ycoord.intValue()+2).remove(xcoord.intValue()+1);
-                        boardRep.get(ycoord.intValue()+2).add(xcoord.intValue()+1," ");
-                        boardRep.get(ycoord.intValue()+2).remove(xcoord.intValue()+2);
-                        boardRep.get(ycoord.intValue()+2).add(xcoord.intValue()+2," ");
-                        boardRep.get(ycoord.intValue()+1).remove(xcoord.intValue()+1);
-                        boardRep.get(ycoord.intValue()+1).add(xcoord.intValue()+1,"-");
-                        boardRep.get(ycoord.intValue()+1).remove(xcoord.intValue()+2);
-                        boardRep.get(ycoord.intValue()+1).add(xcoord.intValue()+2,"-");
-                    }
-                }
-                else{
-                    if(xPivet - xcoord.intValue() == 2){
-                        boardRep.get(ycoord.intValue()+1).remove(xcoord.intValue()+1);
-                        boardRep.get(ycoord.intValue()+1).add(xcoord.intValue()+1," ");
-                        boardRep.get(ycoord.intValue()+2).remove(xcoord.intValue()+1);
-                        boardRep.get(ycoord.intValue()+2).add(xcoord.intValue()+1," ");
-                        boardRep.get(ycoord.intValue()+1).remove(xcoord.intValue()+2);
-                        boardRep.get(ycoord.intValue()+1).add(xcoord.intValue()+2,"|");
-                        boardRep.get(ycoord.intValue()+2).remove(xcoord.intValue()+2);
-                        boardRep.get(ycoord.intValue()+2).add(xcoord.intValue()+2,"|");
-                    }
-                    else{
-                        boardRep.get(ycoord.intValue()+1).remove(xcoord.intValue()+2);
-                        boardRep.get(ycoord.intValue()+1).add(xcoord.intValue()+2," ");
-                        boardRep.get(ycoord.intValue()+2).remove(xcoord.intValue()+2);
-                        boardRep.get(ycoord.intValue()+2).add(xcoord.intValue()+2," ");
-                        boardRep.get(ycoord.intValue()+1).remove(xcoord.intValue()+1);
-                        boardRep.get(ycoord.intValue()+1).add(xcoord.intValue()+1,"|");
-                        boardRep.get(ycoord.intValue()+2).remove(xcoord.intValue()+1);
-                        boardRep.get(ycoord.intValue()+2).add(xcoord.intValue()+1,"|");
-                    }
-                }
-            }
+
+        for(Gadget gadget : myFlippers){
+            int x = gadget.getX();
+            int y= gadget.getY();
+            boardRep.get(y).remove(x);
+            boardRep.get(y).add(x, gadget.toString().substring(0, 1));
+            boardRep.get(y).remove(x+1);
+            boardRep.get(y).add(x+1, gadget.toString().substring(1, 2));
+            boardRep.get(y+1).remove(x);
+            boardRep.get(y+1).add(x, gadget.toString().substring(2, 3));
+            boardRep.get(y+1).remove(x+1);
+            boardRep.get(y+1).add(x+1, gadget.toString().substring(3, 4));
         }
     }
     
@@ -684,5 +565,47 @@ public class Board extends TimerTask {
         
         return output;
         
+    }
+    
+
+    /**
+     * Adds the specified gadget to the board's list of gadgets.
+     * @param gadget the gadget to be added to the board.
+     */
+    public void addGadget(Gadget gadget) {
+        gadgets.add(gadget);
+        if(!gadget.doesFlip()){
+            for(int x = gadget.getX(); x < gadget.getX() + gadget.getWidth(); x++){
+                for(int y=gadget.getY(); y < gadget.getY() + gadget.getHeight(); y++){
+                    boardRep.get(y).remove(x);
+                    boardRep.get(y).add(x, gadget.getChar());
+                }
+            }
+        }else{
+            myFlippers.add(gadget);
+            int x = gadget.getX();
+            int y= gadget.getY();
+            boardRep.get(y).remove(x);
+            boardRep.get(y).add(x, gadget.toString().substring(0, 1));
+            boardRep.get(y).remove(x+1);
+            boardRep.get(y).add(x+1, gadget.toString().substring(1, 2));
+            boardRep.get(y+1).remove(x);
+            boardRep.get(y+1).add(x, gadget.toString().substring(2, 3));
+            boardRep.get(y+1).remove(x+1);
+            boardRep.get(y+1).add(x+1, gadget.toString().substring(3, 4));
+        }
+    }
+    
+    public static void main(String[] args){
+        Board myBoard = new Board("Dana", 0, 0, 0);
+        CircleBumper circle = new CircleBumper("Cicrle", 9, 9);
+        myBoard.addGadget(circle);
+        TriangularBumper triangle = new TriangularBumper("T", 4, 4, 0);
+        myBoard.addGadget(triangle);
+        Ball myBall = new  Ball("Zulaa", 7, 7, 1, 1);
+        myBoard.addBall(myBall);
+        System.out.println(circle.getCollisionTime(myBall));
+       /* Timer timer = new Timer();
+        timer.schedule(myBoard, 0, 50);*/
     }
 }

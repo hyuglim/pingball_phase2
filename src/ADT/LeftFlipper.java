@@ -128,8 +128,8 @@ public class LeftFlipper implements Gadget{
     /**
      * @see Gadget#getChar()
      */
-    public char getChar(){
-        return ' ';
+    public String getChar(){
+        return " ";
     }
     
     /**

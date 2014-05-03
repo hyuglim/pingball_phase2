@@ -113,11 +113,11 @@ public class TriangularBumper implements Gadget{
     /**
      * @see Gadget#getChar()
      */
-    public char getChar() {
+    public String getChar() {
         if(this.orientation==180 || this.orientation ==0){
-            return '/';
+            return "/";
         }
-        return '\\';
+        return "\\";
     }
     
     /**
