@@ -39,6 +39,7 @@ public class Board extends TimerTask {
     private List<Gadget> gadgets;
     private final ArrayList<Gadget> myFlippers = new ArrayList<Gadget>();
     private String wallHit;
+    private String[] neighbours = new String[4];
     
     /**
      * The constructor for a board
@@ -59,7 +60,7 @@ public class Board extends TimerTask {
         this.mu2 = mu2;
         this.gadgets = new ArrayList<Gadget>();
         // wall has a field visible (if visible, it is a solid wall)
-        this.walls = Collections.synchronizedList(Arrays.asList(new Wall("top",true, null, boardname), new Wall("bottom",true, null, boardname), new Wall("right",true, null, boardname),new Wall("left",true, null, boardname)));
+        this.walls = Collections.synchronizedList(Arrays.asList(new Wall("top",true, null, boardname), new Wall("bottom",true, null, boardname), new Wall("left",true, null, boardname),new Wall("right",true, null, boardname)));
         this.boardname = name;
         this.wallHit = "";
         
@@ -70,8 +71,8 @@ public class Board extends TimerTask {
 
         List<String> topWall = walls.get(0).toList();
         List<String> bottomWall = walls.get(1).toList();
-        List<String> rightWall = walls.get(2).toList();
-        List<String> leftWall = walls.get(3).toList();
+        List<String> rightWall = walls.get(3).toList();
+        List<String> leftWall = walls.get(2).toList();
 
         boardRep.add(topWall);
         for (int height=0; height<dimension; height++){
@@ -299,7 +300,7 @@ public class Board extends TimerTask {
         int x = (int) Math.floor(ball.getOriginX());
         int y = (int) Math.floor(ball.getOriginY());
         
-        if (boardRep.get(y + 1).get(x + 1).equals(" ")){
+        if (boardRep.get(y + 1).get(x + 1).equals(" ") && !ball.isAbsorbed()){
             boardRep.get(y+1).remove(x+1);
             boardRep.get(y+1).add(x+1, "*");
         }
@@ -506,10 +507,10 @@ public class Board extends TimerTask {
             walls.get(1).addConnection(boardname);
         }
         else if (walllocation.equals("right")){
-            walls.get(2).addConnection(boardname);
+            walls.get(3).addConnection(boardname);
         }
         else{
-            walls.get(3).addConnection(boardname);
+            walls.get(2).addConnection(boardname);
         }
     }
     
@@ -541,10 +542,10 @@ public class Board extends TimerTask {
             walls.get(1).disconnectWall();
         }
         else if(location.equals("right")){
-            walls.get(2).disconnectWall();
+            walls.get(3).disconnectWall();
         }
         else{//left one
-            walls.get(3).disconnectWall();
+            walls.get(2).disconnectWall();
         }
     }
     
@@ -647,6 +648,11 @@ public class Board extends TimerTask {
     }
     public String whichWallGotHit(){
         return this.wallHit;
+        
+    }
+    public void giveNeighboursName(int wallNum, String neighbor){
+        this.neighbours [wallNum] = neighbor;
+        this.walls.get(wallNum).addConnection(neighbor);
         
     }
 }

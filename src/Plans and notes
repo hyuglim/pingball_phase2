@@ -1,3 +1,5 @@
 to do:
-for single machine play at class GamePlayer:
+- for single machine play at class GamePlayer:
 instead of moveAllBalls, set a timer task and timer.schedule(board)
+
+- change the insertBall to addBAll
