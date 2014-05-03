@@ -38,7 +38,7 @@ public class Board extends TimerTask {
     private List<Wall> walls;
     private List<Gadget> gadgets;
     private final ArrayList<Gadget> myFlippers = new ArrayList<Gadget>();
-
+    private String wallHit;
     
     /**
      * The constructor for a board
@@ -61,6 +61,7 @@ public class Board extends TimerTask {
         // wall has a field visible (if visible, it is a solid wall)
         this.walls = Collections.synchronizedList(Arrays.asList(new Wall("top",true, null, boardname), new Wall("bottom",true, null, boardname), new Wall("right",true, null, boardname),new Wall("left",true, null, boardname)));
         this.boardname = name;
+        this.wallHit = "";
         
         /**
          * Makes an empty board with named walls
@@ -241,18 +242,22 @@ public class Board extends TimerTask {
                     if (w.location.equals("top")){
                         ballOutput = ballOutput +"XXXXboard="+ w.getConnectedTo();
                         ballOutput = ballOutput + " ball="+each.name+" x="+each.getOriginX() +" y=19.75 xVelocity="+ each.velocity.x()+" yVelocity="+ each.velocity.y();
+                        this.wallHit = "hit "+this.boardname+" 0 " +each.name+" "+each.getOriginX()+" "+each.getOriginalY()+" "+20*each.getVelocity().x()+" "+20*each.getVelocity().y()+"\n";
                     }
                     else if (w.location.equals("bottom")){
                         ballOutput = ballOutput +"XXXXboard="+ w.getConnectedTo();
                         ballOutput = ballOutput + " ball="+each.name+" x="+each.getOriginX() +" y=0.25 xVelocity="+ each.velocity.x()+" yVelocity="+ each.velocity.y();
+                        this.wallHit = "hit "+this.boardname+" 1 " +each.name+" "+each.getOriginX()+" "+each.getOriginalY()+" "+20*each.getVelocity().x()+" "+20*each.getVelocity().y()+"\n"
                     }
                     else if (w.location.equals("right")){
                         ballOutput = ballOutput +"XXXXboard="+ w.getConnectedTo();
                         ballOutput = ballOutput + " ball="+each.name+" x=0.25 y="+each.getOriginY()+" xVelocity="+ each.velocity.x()+" yVelocity="+ each.velocity.y();
+                        this.wallHit = "hit "+this.boardname+" 3 " +each.name+" "+each.getOriginX()+" "+each.getOriginalY()+" "+20*each.getVelocity().x()+" "+20*each.getVelocity().y()+"\n"
                     }
                     else{//left
                         ballOutput = ballOutput +"XXXXboard="+ w.getConnectedTo();
                         ballOutput = ballOutput + " ball="+each.name+" x=19.75 y="+each.getOriginY()+" xVelocity="+ each.velocity.x()+" yVelocity="+ each.velocity.y();
+                        this.wallHit = "hit "+this.boardname+" 2 " +each.name+" "+each.getOriginX()+" "+each.getOriginalY()+" "+20*each.getVelocity().x()+" "+20*each.getVelocity().y()+"\n"
                     }
                     ballsToRemove.add(each);
                 }
@@ -638,6 +643,10 @@ public class Board extends TimerTask {
         Timer timer = new Timer();
        
         timer.schedule(myBoard, 0, 50);
+        
+    }
+    public String whichWallGotHit(){
+        return this.wallHit;
         
     }
 }

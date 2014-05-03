@@ -1,0 +1,3 @@
+to do:
+for single machine play at class GamePlayer:
+instead of moveAllBalls, set a timer task and timer.schedule(board)
