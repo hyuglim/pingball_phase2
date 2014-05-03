@@ -181,7 +181,7 @@ public class Absorber implements Gadget{
         double yPosition = y + getHeight() - 0.25;
         Geometry.DoublePair position = new Geometry.DoublePair(xPosition, yPosition);
         ball.updateBallVelocity(new Vect(0, 0));
-        ball.updateBallPosition(position);
+        ball.updatePosition(position.d1, position.d2);
         if(this.triggeredBy.contains(this)){
             ball.updateBallVelocity(new Vect(0, -50));
         }else{
@@ -206,7 +206,7 @@ public class Absorber implements Gadget{
         double xPosition = ball.getBallPosition().d1 + 0.1*ball.getVelocity().x();
         double yPosition = ball.getBallPosition().d2 + 0.1*ball.getVelocity().y();
         Geometry.DoublePair position = new Geometry.DoublePair(xPosition, yPosition);
-        ball.updateBallPosition(position);
+        ball.updatePosition(position.d1, position.d2);
     }
     
     /**

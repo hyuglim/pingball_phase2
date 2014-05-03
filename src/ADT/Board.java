@@ -9,6 +9,8 @@ import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.antlr.v4.codegen.model.chunk.ThisRulePropertyRef_ctx;
+
 import ADT.Gadget;
 import physics.*;
 import physics.Geometry.DoublePair;
@@ -213,7 +215,18 @@ public class Board extends TimerTask {
                 updateEmpty(each, 0.05);
             }
             else if(timeMinGadget<timeMinWall){
-                g.reflect(each);
+                if(g instanceof Absorber){
+                    if(each.isAbsorbed()){
+                        updateEmpty(each, 0.05);
+                        g.release(each);
+                    }else{
+                        g.reflect(each);
+                    }
+                   
+                }
+                else{
+                    g.reflect(each);
+                }
             }
             else{
                 // CASE 1: if the wall is solid, then merely bounce of it
@@ -336,7 +349,7 @@ public class Board extends TimerTask {
         //(unless if it is in a square that already contains another gadget
         for(Ball ball:balls){
             DoublePair pos = ball.getCurrentPosition();
-            if(!isWall(pos))
+            //if(!isWall(pos))
                 boardRepAddBall(ball);
         }
         // Update the boardRep to represent the flippers in their right states
@@ -353,7 +366,11 @@ public class Board extends TimerTask {
     @Override
     public void run() {
         this.update();
+        System.out.println(this.balls.get(0).getBallPosition());
+        System.out.println(this.balls.size());
+        System.out.println(this.balls.get(0).getVelocity());
         System.out.println(this.toString());
+        
     }
     
     
@@ -598,14 +615,29 @@ public class Board extends TimerTask {
     
     public static void main(String[] args){
         Board myBoard = new Board("Dana", 0, 0, 0);
-        CircleBumper circle = new CircleBumper("Cicrle", 9, 9);
+        /*CircleBumper circle = new CircleBumper("Cicrle", 9, 9);
         myBoard.addGadget(circle);
         TriangularBumper triangle = new TriangularBumper("T", 4, 4, 0);
-        myBoard.addGadget(triangle);
-        Ball myBall = new  Ball("Zulaa", 7, 7, 1, 1);
+        myBoard.addGadget(triangle);*/
+        
+        //RightFlipper rf = new RightFlipper("Rf", 9, 9, 0);
+        //rf.isTriggered(rf);
+        
+        //LeftFlipper lf = new LeftFlipper("lf", 4, 4, 0);
+        //lf.isTriggered(lf);
+        
+        //myBoard.addGadget(rf);
+        //myBoard.addGadget(lf);
+        
+        Absorber abs = new Absorber("abs", 1, 19, 10, 1);
+        abs.isTriggered(abs);
+        myBoard.addGadget(abs);
+        
+        Ball myBall = new  Ball("Zulaa", 7, 7, 0, 10);
         myBoard.addBall(myBall);
-        System.out.println(circle.getCollisionTime(myBall));
-       /* Timer timer = new Timer();
-        timer.schedule(myBoard, 0, 50);*/
+        Timer timer = new Timer();
+       
+        timer.schedule(myBoard, 0, 50);
+        
     }
 }

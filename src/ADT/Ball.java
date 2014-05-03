@@ -35,6 +35,7 @@ public class Ball {
     public Ball(String name, double xCoord, double yCoord, double xVel, double yVel) {
         super();
         this.circle = new Circle(xCoord, yCoord, .25);
+        this.position = new Geometry.DoublePair(xCoord, yCoord);
         this.velocity = new Vect(xVel, yVel);
         this.radius = .25;
         this.speed = 0;
@@ -46,7 +47,9 @@ public class Ball {
     
     public void updatePosition(double x,double y){
         this.circle = new Circle(x, y, this.radius);
+        this.position = new Geometry.DoublePair(x, y);
     }
+    
     public void updateVelocity(Vect newVelocity){
         this.velocity = newVelocity;
     }
@@ -140,7 +143,7 @@ public class Ball {
      * @return the circle of this ball
      */
     public Circle getBallCircle() {
-        return this.ballCircle;
+        return this.circle;
     }
     
     /**
@@ -175,14 +178,7 @@ public class Ball {
         return this.position;
     }
     
-    /**
-     * Updates this ball's position to a new position
-     * @param position the new position of this ball
-     */
-    public void updateBallPosition(Geometry.DoublePair position) {
-        this.position = position;
-        this.ballCircle = new Circle(position.d1, position.d2, 0.25);
-    }
+
 
     /**
      * Updates this ball's velocity to a new velocity
