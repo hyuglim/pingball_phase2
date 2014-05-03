@@ -17,15 +17,8 @@ public class Ball {
     public Circle circle;
     public Vect velocity;
     private final double radius;
-    public double speed;
-    
-    
-    
-    private Circle ballCircle;
     private Geometry.DoublePair position;
     private boolean absorbed = false;
-    private final double x;
-    private final double y;
     /**
      * make a new ball instance
      * @param circle from the physics package
@@ -34,15 +27,12 @@ public class Ball {
     
     public Ball(String name, double xCoord, double yCoord, double xVel, double yVel) {
         super();
+        this.radius = .25;
         this.circle = new Circle(xCoord, yCoord, .25);
         this.position = new Geometry.DoublePair(xCoord, yCoord);
         this.velocity = new Vect(xVel, yVel);
-        this.radius = .25;
-        this.speed = 0;
-        this.updateSpeed();
         this.name = name;
-        this.x = xCoord;
-        this.y = yCoord;
+        
     }
     
     public void updatePosition(double x,double y){
@@ -52,14 +42,6 @@ public class Ball {
     
     public void updateVelocity(Vect newVelocity){
         this.velocity = newVelocity;
-    }
-
-    public void setSpeed(double nextSpeed){
-        this.speed = nextSpeed;
-    }
-        
-    public void updateSpeed(){
-        this.speed = Math.sqrt(Math.pow(this.velocity.x(),2) + Math.pow(this.velocity.y(),2));
     }
 
     public double getOriginX(){
@@ -81,23 +63,6 @@ public class Ball {
         
     }
     
-    
-
-    
-    /**
-     * Returns the original x without adding the board offset. Used for debugging antlr.
-     * @return the x coordinate passed in
-     */
-    public double getOriginalX(){
-        return x;
-    }
-    /**
-     * Returns the original y without adding the board offset. Used for debugging antlr.
-     * @return the y coordinate passed in
-     */
-    public double getOriginalY(){
-        return y;
-    }
     
     /**
      * Returns the x velocity passed in. Used for debugging antlr.

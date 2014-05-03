@@ -107,7 +107,6 @@ public class Wall {
         
         ball.updatePosition(newXPos, newYPos);
         ball.updateVelocity(newVelocity);
-        ball.updateSpeed();
         
     }
     

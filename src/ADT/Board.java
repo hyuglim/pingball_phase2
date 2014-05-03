@@ -174,7 +174,7 @@ public class Board extends TimerTask {
     private void updateEmpty(Ball ball, double time){
         double oldX = ball.getOriginX();
        
-        double distanceTraveled = time*ball.speed;
+        double distanceTraveled = time*ball.getVelocity().length();
         double newX = oldX + ball.velocity.angle().cos()*distanceTraveled;
         
         double oldY = ball.getOriginY();
@@ -184,11 +184,10 @@ public class Board extends TimerTask {
         ball.updatePosition(newPos.d1, newPos.d2);
         
         Vect vel = ball.velocity;
-        Vect newVel = vel.times(1-mu*time-mu2*ball.speed*time);
+        Vect newVel = vel.times(1-mu*time-mu2*ball.getVelocity().length()*time);
         newVel = newVel.plus(new Vect(0, gravity*time));
         
         ball.updateVelocity(newVel);
-        ball.updateSpeed();
     
     }
     
@@ -197,10 +196,9 @@ public class Board extends TimerTask {
      * Updates positions of balls within the board and also tackle removal of balls from it
      * @returns: A String encoding information about the ball(s) leaving the board
      */
-    public synchronized String update(){
+    public synchronized void update(){
         List<Ball> freeBalls = performBallBallCollision(balls);
         List<Ball>ballsToRemove = new ArrayList<Ball>();
-        String ballOutput = "";
         boolean ballOut = false;
         synchronized(this.balls){
         for (Ball each:freeBalls){
@@ -241,24 +239,24 @@ public class Board extends TimerTask {
                     ballOut = true;
                     //XXXX is used for splitting purposes to indicate the beginning of information about a new ball
                     if (w.location.equals("top")){
-                        ballOutput = ballOutput +"XXXXboard="+ w.getConnectedTo();
-                        ballOutput = ballOutput + " ball="+each.name+" x="+each.getOriginX() +" y=19.75 xVelocity="+ each.velocity.x()+" yVelocity="+ each.velocity.y();
-                        this.wallHit = "hit "+this.boardname+" 0 " +each.name+" "+each.getOriginX()+" "+each.getOriginalY()+" "+20*each.getVelocity().x()+" "+20*each.getVelocity().y()+"\n";
+                        
+                
+                        this.wallHit = "hit "+this.boardname+" 0 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+20*each.getVelocity().x()+" "+20*each.getVelocity().y()+"\n";
                     }
                     else if (w.location.equals("bottom")){
-                        ballOutput = ballOutput +"XXXXboard="+ w.getConnectedTo();
-                        ballOutput = ballOutput + " ball="+each.name+" x="+each.getOriginX() +" y=0.25 xVelocity="+ each.velocity.x()+" yVelocity="+ each.velocity.y();
-                        this.wallHit = "hit "+this.boardname+" 1 " +each.name+" "+each.getOriginX()+" "+each.getOriginalY()+" "+20*each.getVelocity().x()+" "+20*each.getVelocity().y()+"\n";
+                        
+                        
+                        this.wallHit = "hit "+this.boardname+" 1 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+20*each.getVelocity().x()+" "+20*each.getVelocity().y()+"\n";
                     }
                     else if (w.location.equals("right")){
-                        ballOutput = ballOutput +"XXXXboard="+ w.getConnectedTo();
-                        ballOutput = ballOutput + " ball="+each.name+" x=0.25 y="+each.getOriginY()+" xVelocity="+ each.velocity.x()+" yVelocity="+ each.velocity.y();
-                        this.wallHit = "hit "+this.boardname+" 3 " +each.name+" "+each.getOriginX()+" "+each.getOriginalY()+" "+20*each.getVelocity().x()+" "+20*each.getVelocity().y()+"\n";
+                        
+                        
+                        this.wallHit = "hit "+this.boardname+" 3 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+20*each.getVelocity().x()+" "+20*each.getVelocity().y()+"\n";
                     }
                     else{//left
-                        ballOutput = ballOutput +"XXXXboard="+ w.getConnectedTo();
-                        ballOutput = ballOutput + " ball="+each.name+" x=19.75 y="+each.getOriginY()+" xVelocity="+ each.velocity.x()+" yVelocity="+ each.velocity.y();
-                        this.wallHit = "hit "+this.boardname+" 2 " +each.name+" "+each.getOriginX()+" "+each.getOriginalY()+" "+20*each.getVelocity().x()+" "+20*each.getVelocity().y()+"\n";
+                        
+                        
+                        this.wallHit = "hit "+this.boardname+" 2 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+20*each.getVelocity().x()+" "+20*each.getVelocity().y()+"\n";
                     }
                     ballsToRemove.add(each);
                 }
@@ -271,10 +269,10 @@ public class Board extends TimerTask {
             for (Ball b:ballsToRemove){
                 removeBall(b);
             }
-            return ballOutput;
+            
         }
         }
-        return this.toString();
+        
     }
     
     
@@ -355,7 +353,7 @@ public class Board extends TimerTask {
         //(unless if it is in a square that already contains another gadget
         for(Ball ball:balls){
             DoublePair pos = ball.getCurrentPosition();
-            //if(!isWall(pos))
+            if(!isWall(pos))
                 boardRepAddBall(ball);
         }
         // Update the boardRep to represent the flippers in their right states
@@ -399,9 +397,9 @@ public class Board extends TimerTask {
         updateEmpty(ball1, time);
         updateEmpty(ball2, time);
         ball1.updateVelocity(velocities.v1);
-        ball1.updateSpeed();
+
         ball2.updateVelocity(velocities.v2);
-        ball2.updateSpeed();
+
         
         
     }
