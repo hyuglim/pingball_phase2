@@ -309,4 +309,5 @@ public class Absorber implements Gadget{
         // TODO Auto-generated method stub
         return null;
     }
+    
 }
