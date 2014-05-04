@@ -13,6 +13,8 @@ import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.rmi.CORBA.Tie;
+
 import org.antlr.v4.codegen.model.chunk.ThisRulePropertyRef_ctx;
 
 import ADT.Gadget;
@@ -246,6 +248,7 @@ public class Board extends TimerTask {
                     }
                 }else{
                     g.reflect(each);
+                    updateEmpty(each, timeMinGadget);
                 }
             }
             else{
