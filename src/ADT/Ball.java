@@ -33,6 +33,13 @@ public class Ball {
         
     }
     
+    public Ball(String name, Circle circle, Vect vel){
+        this.radius = circle.getRadius();
+        this.circle = circle;
+        this.position = new Geometry.DoublePair(circle.getCenter().x(),circle.getCenter().y());
+        this.velocity = vel;
+        this.name = name;
+    }
     public void updatePosition(double x,double y){
         this.circle = new Circle(x, y, this.radius);
         this.position = new Geometry.DoublePair(x, y);
