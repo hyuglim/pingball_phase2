@@ -44,6 +44,7 @@ public class Board extends TimerTask {
     private List<Gadget> gadgets;
     private final ArrayList<Gadget> myFlippers = new ArrayList<Gadget>();
     private String wallHit;
+    private String portalHit;
     private String[] neighbours = new String[4];
     
     /**
@@ -68,6 +69,7 @@ public class Board extends TimerTask {
         this.walls = Collections.synchronizedList(Arrays.asList(new Wall("top",true, null, boardname), new Wall("bottom",true, null, boardname), new Wall("left",true, null, boardname),new Wall("right",true, null, boardname)));
         this.boardname = name;
         this.wallHit = "";
+        this.portalHit = "";
         
         /**
          * Makes an empty board with named walls
@@ -231,13 +233,14 @@ public class Board extends TimerTask {
                                 otherPortalExists = true;
                                 each.updatePosition(gadget.getX()-0.5, gadget.getY()-0.5);
                             }
+                            
                         }
                         if(otherPortalExists == false){
                             updateEmpty(each, 0.05);
                         }
                     }else{
-                        this.wallHit = "hit "+this.boardname+" 0 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+20*each.getVelocity().x()+" "+20*each.getVelocity().y()+"\n";
-                        this.wallHit += g.getOtherBoard() + g.getOtherPortal();
+                        this.portalHit = "port "+this.boardname+" " +g.getOtherBoard()+" "+g.getOtherPortal()+" "+each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+20*each.getVelocity().x()+" "+20*each.getVelocity().y()+"\n";
+                  
                     }
                 }else{
                     g.reflect(each);
@@ -636,6 +639,9 @@ public class Board extends TimerTask {
     public String whichWallGotHit(){
         return this.wallHit;
         
+    }
+    public String whichPortalGotHit(){
+        return this.portalHit;
     }
     public void giveNeighboursName(int wallNum, String neighbor){
         this.neighbours [wallNum] = neighbor;
