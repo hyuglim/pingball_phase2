@@ -1,6 +1,6 @@
 package PingballClientServer;
 
-import java.io.BufferedReader;
+import java.io.BufferedReader; 
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -14,7 +14,6 @@ import java.util.Queue;
 import java.util.Scanner;
 import java.util.concurrent.ConcurrentHashMap;
 
-import phase1.Triple;
 
 /**
  * ##############Server/Client Overview and Concurrency Arguments###############
@@ -108,7 +107,10 @@ public class PingballServer {
 		for (int i = 0; i < adj.size(); i++) {
 			if (invis.get(i)) {
 				String neigh = adj.get(i);
+				System.out.println("mark " + i + " " + neigh);
+				
 				out.println("mark " + i + " " + neigh);
+				
 			}
 		}		
 	}
@@ -458,7 +460,7 @@ public class PingballServer {
 				outSender = new PrintWriter(socketSender.getOutputStream(), true);
 
 				if (hitInvisible) {
-					System.out.println("hit invisible MAAYNN");
+					System.out.println("hit invisible MAANN");
 					String neighbor = neighbors.get(nameOfBoard).getOne().get(wallNum);
 					Socket socketReceiver = neighbors.get(neighbor).getThree();
 					outReceiver = new PrintWriter(socketReceiver.getOutputStream(), true);
@@ -538,7 +540,7 @@ public class PingballServer {
 		} catch (IllegalArgumentException iae) {
 			iae.printStackTrace();
 			System.err.println(iae.getMessage());
-			System.err.println("usage: PingballClient [--host HOST] [--port PORT] FILE");
+			System.err.println("usage: PingballServer [--port PORT]");
 			return;
 		}
 

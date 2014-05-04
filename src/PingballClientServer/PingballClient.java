@@ -161,6 +161,8 @@ public class PingballClient{
                 board = BoardFileFactory.parse(boardTextString);
 				Socket socket = new Socket(host, port);
 				PingballClient player = new PingballClient(socket, board);
+				
+				
 			} catch (Exception e) {
 				e.printStackTrace();			
 			}

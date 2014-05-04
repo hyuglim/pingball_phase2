@@ -50,6 +50,7 @@ public class Communicator implements Runnable{
 		try{      	
 			//tell the server name of the board
 			out.println("name " + board.getName());
+			System.out.println(board.getName());
 
 			/**
 			 * spin off another thread to constantly check on the board 
@@ -134,9 +135,11 @@ public class Communicator implements Runnable{
 		}
 		
 		if(tokens[0].equals("mark")) {
+		    System.out.println(tokens);
 			int wallNum = Integer.parseInt(tokens[1]);
 			String neighbor = tokens[2];
 			board.giveNeighborsName(wallNum, neighbor);
+			board.connectWall(wallNum, neighbor);
 			return null;
 		}
 

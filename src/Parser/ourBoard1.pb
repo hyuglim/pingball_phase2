@@ -1,8 +1,8 @@
 board name=ourBoard1 friction1=0.040 friction2=0.040 
 
 # define a ball
-ball name=BallA x=3 y=2.5 xVelocity=1.0 yVelocity=1.2 
-ball name=BallB x=18 y=15 xVelocity=0.0 yVelocity=-10 
+ball name=BallA x=3 y=2.5 xVelocity=1.0 yVelocity=1.2 radius=0.25
+ball name=BallB x=18 y=15 xVelocity=0.0 yVelocity=-10 radius = 0.5
 
 # define some bumpers
 squareBumper name=Square1 x=12 y=11
@@ -19,6 +19,10 @@ triangleBumper name=Tri x=0 y=0 orientation=0
 leftFlipper name=FlipL x=9 y=6 orientation=0 
 rightFlipper name=FlipR x=12 y=5 orientation=0
 
+
+  portal name=Alpha x=19 y=8 otherPortal=Gamma
+  portal name=Beta x=19 y=16 otherPortal=Delta
+  portal name=Gamma x=9 y=16 otherPortal=Mui
 
 # define an absorber to catch the ball
 absorber name=Abs x=10 y=8 width=10 height=2 

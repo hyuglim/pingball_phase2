@@ -519,14 +519,14 @@ public class Board extends TimerTask {
      * @param boardname the new board it will be connected to
      */
     
-    public void connectWall(String walllocation, String boardname){
-        if (walllocation.equals("top")){
+    public void connectWall(int walllocation, String boardname){
+        if (walllocation == 0){
             walls.get(0).addConnection(boardname);
         }
-        else if (walllocation.equals("bottom")){
+        else if (walllocation == 1){
             walls.get(1).addConnection(boardname);
         }
-        else if (walllocation.equals("right")){
+        else if (walllocation == 3){
             walls.get(3).addConnection(boardname);
         }
         else{
@@ -671,14 +671,14 @@ public class Board extends TimerTask {
     
     
     public static void main(String[] args) throws IOException{
-       /* Board myBoard = new Board("B", 0, 0, 0);
+/*        Board myBoard = new Board("B", 0, 0, 0);
         CircleBumper circle = new CircleBumper("Cicrle", 9, 9);
         myBoard.addGadget(circle);
         TriangularBumper triangle = new TriangularBumper("T", 4, 4, 0);
         myBoard.addGadget(triangle);
         
         myBoard.addBall(new Ball("Ball", 1, 10, 0.0, -4.0, 0.25));
-        myBoard.addBall(new Ball("BallA", 1, 1, 1, 1, 0.25 ));
+        myBoard.addBall(new Ball("BallA", 1, 1, 1, 1, 0.25 ));*/
         
         //RightFlipper rf = new RightFlipper("Rf", 9, 9, 0);
         //rf.isTriggered(rf);
@@ -691,23 +691,25 @@ public class Board extends TimerTask {
         
         StringBuilder boardText = new StringBuilder("");
         
-        BufferedReader fr = new BufferedReader(new FileReader("src/Parser/" + "sampleBoard.pb"));
+        BufferedReader fr = new BufferedReader(new FileReader("src/Parser/" + "ourBoard1.pb"));
         for (String line = fr.readLine(); line != null; line = fr.readLine()) {
             boardText.append('\n' + line);
         }
         String boardTextString = boardText.toString().substring(1);
         Board myBoard = BoardFileFactory.parse(boardTextString);
         
+        myBoard.connectWall(0, "ZulaaDana");
+        
         //Ball myBall = new  Ball("Zulaa", 7, 7, 0, 10);
         //myBoard.addBall(myBall);
         Timer timer = new Timer();
        
         timer.schedule(myBoard, 0, 50);
-        
+/*        
         CircleBumper circle = new CircleBumper("C", 0, 0);
-        Ball newBall = new Ball("A", 0.5, 0.5, 0, 1, 0.25);
+        Ball newBall = new Ball("A", 0.5, 0.5, 0, 1, 0.25);*/
 
- */
+ 
     }
 
 
