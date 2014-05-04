@@ -646,15 +646,22 @@ public class Board extends TimerTask {
         
     }
     
-    public void trigger(String key){
+    public void triggerUpKey(String key){
         for(Gadget gadget:gadgets){
-            if(gadget.getDownKeyTriggers().contains(key)){
-                gadget.action();
-            }else if(gadget.getUpKeyTriggers().contains(key)){
+            if(gadget.getUpKeyTriggers().contains(key)){
                 gadget.action();
             }
         }
     }
+    
+    public void triggerDownKey(String key){
+        for(Gadget gadget:gadgets){
+            if(gadget.getDownKeyTriggers().contains(key)){
+                gadget.action();
+            }
+        }
+    }
+    
     
     public static void main(String[] args) throws IOException{
        /* Board myBoard = new Board("B", 0, 0, 0);
