@@ -50,7 +50,6 @@ public class Communicator implements Runnable{
 		try{      	
 			//tell the server name of the board
 			out.println("name " + board.getName());
-			System.out.println(board.getName());
 
 			/**
 			 * spin off another thread to constantly check on the board 
@@ -67,10 +66,12 @@ public class Communicator implements Runnable{
 							e.printStackTrace();
 						}
 						String hitwall = board.whichWallGotHit();
+						
 						if(! hitwall.equals("")){//if ball hits a wall
 							synchronized(out){
 								// sample output: hit NAMEofBoard wallNum  NAMEofBall x y xVel yVel
 								out.println(hitwall);
+								board.updateWallHit();
 							}	
 						}
 					}
@@ -117,6 +118,7 @@ public class Communicator implements Runnable{
 		}
 
 		if(tokens[0].equals("create")) {
+		    System.out.println(tokens);
 			// sample input: invisible NAMEofBALL x y xVel yVel
 			String nameOfBall = tokens[1];
 			float x = Float.parseFloat(tokens[2]);

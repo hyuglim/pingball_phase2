@@ -1,4 +1,4 @@
-board name=sampleBoard1 gravity=0.0 friction1 = 0.0 friction2 = 0.0
+board name=sampleBoard gravity=0.0 friction1 = 0.0 friction2 = 0.0
 # This is the staff's sample board.
 # This board is meant for stand-alone play. It is a loose 
 # representation of the screenshot in the project handout.

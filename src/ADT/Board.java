@@ -261,22 +261,22 @@ public class Board extends TimerTask {
                     if (w.location.equals("top")){
                         
                 
-                        this.wallHit = "hit "+this.boardname+" 0 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+20*each.getVelocity().x()+" "+20*each.getVelocity().y()+"\n";
+                        this.wallHit = "hit "+this.boardname+" 0 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+"\n";
                     }
                     else if (w.location.equals("bottom")){
                         
                         
-                        this.wallHit = "hit "+this.boardname+" 1 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+20*each.getVelocity().x()+" "+20*each.getVelocity().y()+"\n";
+                        this.wallHit = "hit "+this.boardname+" 1 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+"\n";
                     }
                     else if (w.location.equals("right")){
                         
                         
-                        this.wallHit = "hit "+this.boardname+" 3 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+20*each.getVelocity().x()+" "+20*each.getVelocity().y()+"\n";
+                        this.wallHit = "hit "+this.boardname+" 3 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+"\n";
                     }
                     else{//left
                         
                         
-                        this.wallHit = "hit "+this.boardname+" 2 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+20*each.getVelocity().x()+" "+20*each.getVelocity().y()+"\n";
+                        this.wallHit = "hit "+this.boardname+" 2 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+"\n";
                     }
                     ballsToRemove.add(each);
                 }
@@ -390,11 +390,6 @@ public class Board extends TimerTask {
     @Override
     public void run() {
         this.update();
-        System.out.println();
-        System.out.println(this.balls.get(0).velocity);
-        
-        System.out.println(this.balls.get(0).getBallPosition());
-        System.out.println(this.balls.get(0).isAbsorbed());
         System.out.println(this.toString());
         
     }
@@ -738,5 +733,9 @@ public class Board extends TimerTask {
     
     public int getBallsSize(){
         return this.balls.size();
+    }
+    
+    public void updateWallHit(){
+        this.wallHit = "";
     }
 }
