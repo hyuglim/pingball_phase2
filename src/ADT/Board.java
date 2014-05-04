@@ -646,7 +646,8 @@ public class Board extends TimerTask {
     public String whichPortalGotHit(){
         return this.portalHit;
     }
-    public void giveNeighboursName(int wallNum, String neighbor){
+    
+    public void giveNeighborsName(int wallNum, String neighbor){
         this.neighbours [wallNum] = neighbor;
         this.walls.get(wallNum).addConnection(neighbor);
         
@@ -677,7 +678,7 @@ public class Board extends TimerTask {
         myBoard.addGadget(triangle);
         
         myBoard.addBall(new Ball("Ball", 1, 10, 0.0, -4.0, 0.25));
-        myBoard.addBall(new Ball("BallA", 1, 1, 1, 1, 0.25 ));*/
+        myBoard.addBall(new Ball("BallA", 1, 1, 1, 1, 0.25 ));
         
         //RightFlipper rf = new RightFlipper("Rf", 9, 9, 0);
         //rf.isTriggered(rf);
@@ -703,28 +704,37 @@ public class Board extends TimerTask {
        
         timer.schedule(myBoard, 0, 50);
         
-/*        CircleBumper circle = new CircleBumper("C", 0, 0);
+        CircleBumper circle = new CircleBumper("C", 0, 0);
         Ball newBall = new Ball("A", 0.5, 0.5, 0, 1, 0.25);
-        
-        */
+
+ */
+    }
+
+
+    public void insertBall(String nameOfBall, double x, double y, double xVel, double yVel){
+        Ball ball = new Ball(nameOfBall, x, x, xVel, yVel, .25);
+        this.addBall(ball);
+
+    }
+    public void deleteBall(String nameFfBall){
+        for (Ball b:this.balls){
+            if (b.getName().equals(nameFfBall)){
+                this.removeBall(b);
+            }
+        }
+
     }
     
-
-        public void insertBall(String nameOfBall, double x, double y, double xVel, double yVel){
-            Ball ball = new Ball(nameOfBall, x, x, xVel, yVel, .25);
-            this.addBall(ball);
-            
-        }
-        public void deleteBall(String nameFfBall){
-            for (Ball b:this.balls){
-                if (b.getName().equals(nameFfBall)){
-                    this.removeBall(b);
-                }
-            }
-            
-        }
-        
-        
     
+    public String getName(){
+        return this.boardname;
+    }
 
+    public void clearAllBalls(){
+        this.balls = new ArrayList<Ball>();
+    }
+    
+    public int getBallsSize(){
+        return this.balls.size();
+    }
 }
