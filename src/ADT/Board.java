@@ -708,4 +708,23 @@ public class Board extends TimerTask {
         
         */
     }
+    
+
+        public void insertBall(String nameOfBall, double x, double y, double xVel, double yVel){
+            Ball ball = new Ball(nameOfBall, x, x, xVel, yVel, .25);
+            this.addBall(ball);
+            
+        }
+        public void deleteBall(String nameFfBall){
+            for (Ball b:this.balls){
+                if (b.getName().equals(nameFfBall)){
+                    this.removeBall(b);
+                }
+            }
+            
+        }
+        
+        
+    
+
 }
