@@ -4,8 +4,7 @@ board name=sampleBoard1 gravity=0.0 friction1 = 0.0 friction2 = 0.0
 # representation of the screenshot in the project handout.
 
   # define a ball
-  ball name=Ball x=0.5 y=5.5 xVelocity=2.5 yVelocity=2.5 radius=0.5
-  ball name=Ball2 x=6.0 y=5.0 xVelocity=10.5 yVelocity=-1.4 radius=0.25
+  ball name=Ball x=0.5 y=5.5 xVelocity=5 yVelocity=5 radius=0.25
   
   # define a series of circle bumpers
   circleBumper name=Circle5 x=5 y=4 

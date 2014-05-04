@@ -178,15 +178,15 @@ public class Board extends TimerTask {
      */
     private void updateEmpty(Ball ball, double time){
         double oldX = ball.getOriginX();
-       
-        double distanceTraveled = time*ball.getVelocity().length();
-        double newX = oldX + ball.velocity.angle().cos()*distanceTraveled;
-        
         double oldY = ball.getOriginY();
-        double newY = oldY + ball.velocity.angle().sin()*distanceTraveled;//look at 
-        DoublePair newPos = new DoublePair(newX, newY);
+      
+        double newX = oldX + ball.getVelocity().times(time).x();
+        double newY = oldY + ball.getVelocity().times(time).y();
         
-        ball.updatePosition(newPos.d1, newPos.d2);
+        System.out.println(newX);
+        System.out.println(newY);
+        
+        ball.updatePosition(newX, newY);
         
         Vect vel = ball.velocity;
         Vect newVel = vel.times(1-mu*time-mu2*ball.getVelocity().length()*time);
@@ -213,11 +213,13 @@ public class Board extends TimerTask {
             if (!gadgets.isEmpty()){
             g = getMinTimeGadget(each);
             timeMinGadget = timeMinGadget(each, g);
-            }
+            System.out.println(timeMinGadget);
+            }           
             Wall w = getMinWall(each);
             double timeMinWall = getMinTimeWall(each, w);
-            if(timeMinGadget > .05 && timeMinWall > 0.05){
+            if(timeMinGadget >0.05 && timeMinWall > 0.05){
                 updateEmpty(each, 0.05);
+                System.out.println(timeMinWall);
             }
             else if(timeMinGadget<timeMinWall){
                 if(each.isAbsorbed()){
@@ -387,6 +389,7 @@ public class Board extends TimerTask {
         this.update();
         System.out.println();
         System.out.println(this.balls.get(0).velocity);
+        
         System.out.println(this.balls.get(0).getBallPosition());
         System.out.println(this.balls.get(0).isAbsorbed());
         System.out.println(this.toString());
@@ -643,11 +646,25 @@ public class Board extends TimerTask {
         
     }
     
+    public void trigger(String key){
+        for(Gadget gadget:gadgets){
+            if(gadget.getDownKeyTriggers().contains(key)){
+                gadget.action();
+            }else if(gadget.getUpKeyTriggers().contains(key)){
+                gadget.action();
+            }
+        }
+    }
+    
     public static void main(String[] args) throws IOException{
-        /*CircleBumper circle = new CircleBumper("Cicrle", 9, 9);
+       /* Board myBoard = new Board("B", 0, 0, 0);
+        CircleBumper circle = new CircleBumper("Cicrle", 9, 9);
         myBoard.addGadget(circle);
         TriangularBumper triangle = new TriangularBumper("T", 4, 4, 0);
-        myBoard.addGadget(triangle);*/
+        myBoard.addGadget(triangle);
+        
+        myBoard.addBall(new Ball("Ball", 1, 10, 0.0, -4.0, 0.25));
+        myBoard.addBall(new Ball("BallA", 1, 1, 1, 1, 0.25 ));*/
         
         //RightFlipper rf = new RightFlipper("Rf", 9, 9, 0);
         //rf.isTriggered(rf);
@@ -673,5 +690,9 @@ public class Board extends TimerTask {
        
         timer.schedule(myBoard, 0, 50);
         
+/*        CircleBumper circle = new CircleBumper("C", 0, 0);
+        Ball newBall = new Ball("A", 0.5, 0.5, 0, 1, 0.25);
+        
+        */
     }
 }
