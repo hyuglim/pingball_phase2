@@ -220,16 +220,26 @@ public class Board extends TimerTask {
                 updateEmpty(each, 0.05);
             }
             else if(timeMinGadget<timeMinWall){
-                if(g instanceof Absorber){
-                    if(each.isAbsorbed()){
-                        updateEmpty(each, 0.05);
-                        g.release(each);
+                if(each.isAbsorbed()){
+                    updateEmpty(each, 0.05);
+                    g.release(each);                
+                }else if(g.doesPort()){
+                    if(g.getOtherBoard().equals("")){
+                        boolean otherPortalExists = false;
+                        for(Gadget gadget: this.gadgets){
+                            if(gadget.getName().equals(g.getOtherPortal())){
+                                otherPortalExists = true;
+                                each.updatePosition(gadget.getX()-0.5, gadget.getY()-0.5);
+                            }
+                        }
+                        if(otherPortalExists == false){
+                            updateEmpty(each, 0.05);
+                        }
                     }else{
-                        g.reflect(each);
+                        this.wallHit = "hit "+this.boardname+" 0 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+20*each.getVelocity().x()+" "+20*each.getVelocity().y()+"\n";
+                        this.wallHit += g.getOtherBoard() + g.getOtherPortal();
                     }
-                   
-                }
-                else{
+                }else{
                     g.reflect(each);
                 }
             }
@@ -375,6 +385,8 @@ public class Board extends TimerTask {
     @Override
     public void run() {
         this.update();
+        System.out.println();
+        System.out.println(this.balls.get(0).velocity);
         System.out.println(this.balls.get(0).getBallPosition());
         System.out.println(this.balls.get(0).isAbsorbed());
         System.out.println(this.toString());
@@ -621,6 +633,16 @@ public class Board extends TimerTask {
         }
     }
     
+    public String whichWallGotHit(){
+        return this.wallHit;
+        
+    }
+    public void giveNeighboursName(int wallNum, String neighbor){
+        this.neighbours [wallNum] = neighbor;
+        this.walls.get(wallNum).addConnection(neighbor);
+        
+    }
+    
     public static void main(String[] args) throws IOException{
         /*CircleBumper circle = new CircleBumper("Cicrle", 9, 9);
         myBoard.addGadget(circle);
@@ -645,24 +667,11 @@ public class Board extends TimerTask {
         String boardTextString = boardText.toString().substring(1);
         Board myBoard = BoardFileFactory.parse(boardTextString);
         
-        //Absorber abs = new Absorber("abs", 1, 19, 10, 1);
-        //abs.isTriggered(abs);
-        //myBoard.addGadget(abs);
-        
         //Ball myBall = new  Ball("Zulaa", 7, 7, 0, 10);
         //myBoard.addBall(myBall);
         Timer timer = new Timer();
        
         timer.schedule(myBoard, 0, 50);
-        
-    }
-    public String whichWallGotHit(){
-        return this.wallHit;
-        
-    }
-    public void giveNeighboursName(int wallNum, String neighbor){
-        this.neighbours [wallNum] = neighbor;
-        this.walls.get(wallNum).addConnection(neighbor);
         
     }
 }

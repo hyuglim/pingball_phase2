@@ -250,4 +250,45 @@ public class TriangularBumper implements Gadget{
         return null;
     }
 
+
+    public void addKeyUp(String key) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void addKeyDown(String key) {
+        // TODO Auto-generated method stub
+        
+    }
+
+
+    public ArrayList<String> getUpKeyTriggers() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+
+    public ArrayList<String> getDownKeyTriggers() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public boolean doesPort() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public String getOtherBoard() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String getOtherPortal() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

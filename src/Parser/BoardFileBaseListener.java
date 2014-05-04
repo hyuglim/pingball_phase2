@@ -18,6 +18,9 @@ public class BoardFileBaseListener implements BoardFileListener {
 	@Override public void enterDeclaration(BoardFileParser.DeclarationContext ctx) { }
 	@Override public void exitDeclaration(BoardFileParser.DeclarationContext ctx) { }
 
+	@Override public void enterPortal(BoardFileParser.PortalContext ctx) { }
+	@Override public void exitPortal(BoardFileParser.PortalContext ctx) { }
+
 	@Override public void enterAttribute(BoardFileParser.AttributeContext ctx) { }
 	@Override public void exitAttribute(BoardFileParser.AttributeContext ctx) { }
 
@@ -32,6 +35,9 @@ public class BoardFileBaseListener implements BoardFileListener {
 
 	@Override public void enterFire(BoardFileParser.FireContext ctx) { }
 	@Override public void exitFire(BoardFileParser.FireContext ctx) { }
+
+	@Override public void enterKeytrigger(BoardFileParser.KeytriggerContext ctx) { }
+	@Override public void exitKeytrigger(BoardFileParser.KeytriggerContext ctx) { }
 
 	@Override public void enterTriangle(BoardFileParser.TriangleContext ctx) { }
 	@Override public void exitTriangle(BoardFileParser.TriangleContext ctx) { }

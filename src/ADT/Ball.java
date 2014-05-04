@@ -1,6 +1,5 @@
 package ADT;
 
-import ADT.Ball;
 import physics.Circle;
 import physics.Geometry;
 import physics.LineSegment;
@@ -25,8 +24,8 @@ public class Ball {
      * @param velocity a vector (also from the physics package)
      */
     
-    public Ball(String name, double xCoord, double yCoord, double xVel, double yVel) {
-        this.radius = 0.25;
+    public Ball(String name, double xCoord, double yCoord, double xVel, double yVel, double radius) {
+        this.radius = radius;
         this.circle = new Circle(xCoord, yCoord, this.radius);
         this.position = new Geometry.DoublePair(xCoord, yCoord);
         this.velocity = new Vect(xVel, yVel);

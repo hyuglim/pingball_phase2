@@ -2,7 +2,7 @@
 
 package Parser;
 
-import org.antlr.v4.runtime.tree.*; 
+import org.antlr.v4.runtime.tree.*;
 import org.antlr.v4.runtime.Token;
 
 public interface BoardFileListener extends ParseTreeListener {
@@ -14,6 +14,9 @@ public interface BoardFileListener extends ParseTreeListener {
 
 	void enterDeclaration(BoardFileParser.DeclarationContext ctx);
 	void exitDeclaration(BoardFileParser.DeclarationContext ctx);
+
+	void enterPortal(BoardFileParser.PortalContext ctx);
+	void exitPortal(BoardFileParser.PortalContext ctx);
 
 	void enterAttribute(BoardFileParser.AttributeContext ctx);
 	void exitAttribute(BoardFileParser.AttributeContext ctx);
@@ -29,6 +32,9 @@ public interface BoardFileListener extends ParseTreeListener {
 
 	void enterFire(BoardFileParser.FireContext ctx);
 	void exitFire(BoardFileParser.FireContext ctx);
+
+	void enterKeytrigger(BoardFileParser.KeytriggerContext ctx);
+	void exitKeytrigger(BoardFileParser.KeytriggerContext ctx);
 
 	void enterTriangle(BoardFileParser.TriangleContext ctx);
 	void exitTriangle(BoardFileParser.TriangleContext ctx);

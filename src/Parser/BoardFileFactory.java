@@ -1,6 +1,6 @@
-package Parser;
+package Parser;  
 
-import java.util.ArrayList;  
+import java.util.ArrayList;   
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -11,7 +11,7 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RuleContext;
-import org.antlr.v4.runtime.TokenStream;
+import org.antlr.v4.runtime.TokenStream; 
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
@@ -22,6 +22,7 @@ import ADT.Board;
 import ADT.CircleBumper;
 import ADT.Gadget;
 import ADT.LeftFlipper;
+import ADT.Portal;
 import ADT.RightFlipper;
 import ADT.SquareBumper;
 import ADT.TriangularBumper;
@@ -130,8 +131,8 @@ public class BoardFileFactory {
       double yCoord = Double.parseDouble(attributes.remove().toString());
       double xVelocity = Double.parseDouble(attributes.remove().toString());
       double yVelocity = Double.parseDouble(attributes.remove().toString());
-  /*    double radius = Double.parseDouble(attributes.remove().toString());*/
-      Ball ball = new Ball(name, xCoord, yCoord, xVelocity, yVelocity);
+      double radius = Double.parseDouble(attributes.remove().toString());
+      Ball ball = new Ball(name, xCoord, yCoord, xVelocity, yVelocity, radius);
       desiredBoard.addBall(ball);
   }
       
@@ -195,9 +196,27 @@ public class BoardFileFactory {
       int yCoord = Integer.parseInt(attributes.remove().toString());
       int width = Integer.parseInt(attributes.remove().toString());
       int height = Integer.parseInt(attributes.remove().toString());
+      
       Absorber absorber = new Absorber(name, xCoord, yCoord, width, height);
       desiredBoard.addGadget(absorber);
       gadgets.add(absorber);
+  }
+  
+  @Override
+  public void exitPortal(BoardFileParser.PortalContext ctx) {
+      String name = attributes.remove().toString();
+      int xCoord = Integer.parseInt(attributes.remove().toString());
+      int yCoord = Integer.parseInt(attributes.remove().toString());
+      String otherBoard = "";
+      String otherPortal = attributes.remove().toString();
+      if(otherPortal.equals("otherBoard")){
+          otherBoard = otherPortal;
+          otherPortal = attributes.remove().toString();
+      }
+      
+      Portal portal = new Portal(name, xCoord, yCoord, otherBoard, otherPortal);
+      desiredBoard.addGadget(portal);
+      gadgets.add(portal);
   }
   
   @Override
@@ -216,6 +235,29 @@ public class BoardFileFactory {
           }
       }
       actionGadget.isTriggered(triggerGadget);
+  }
+  
+  @Override
+  public void exitKeytrigger(BoardFileParser.KeytriggerContext ctx) {
+      //the fire node points to terminal nodes trigger and action
+      //(among other terminal nodes).
+      Object command = ctx.getChild(0);
+      Object key = ctx.getChild(3);
+      Object action = ctx.getChild(6);
+   
+      if(command.toString().equals("keyup")){
+          for (Gadget gadget : gadgets) {
+              if (gadget.getName().equals(action.toString())) {
+                  gadget.addKeyUp(key.toString());
+              }
+          }
+      }else{
+          for (Gadget gadget : gadgets) {
+              if (gadget.getName().equals(action.toString())) {
+                  gadget.addKeyDown(key.toString());
+              }
+          }
+      }
   }
   
   @Override
@@ -287,8 +329,14 @@ static class PrintEverythingListener extends BoardFileBaseListener {
   public void enterAbsorber(BoardFileParser.AbsorberContext ctx) { System.err.println("entering absorber " + ctx.getText()); }
   public void exitAbsorber(BoardFileParser.AbsorberContext ctx) { System.err.println("exiting absorber " + ctx.getText()); }
   
+  public void enterPortal(BoardFileParser.PortalContext ctx) { System.err.println("entering portal " + ctx.getText()); }
+  public void exitPortal(BoardFileParser.PortalContext ctx) { System.err.println("exiting portal " + ctx.getText()); }
+  
   public void enterFire(BoardFileParser.FireContext ctx) { System.err.println("entering fire " + ctx.getText()); }
   public void exitFire(BoardFileParser.FireContext ctx) { System.err.println("exiting fire " + ctx.getText()); }
+  
+  public void enterKey(BoardFileParser.KeytriggerContext ctx) { System.err.println("entering key " + ctx.getText()); }
+  public void exitKey(BoardFileParser.KeytriggerContext ctx) { System.err.println("exiting key " + ctx.getText()); }
 }
 
 }

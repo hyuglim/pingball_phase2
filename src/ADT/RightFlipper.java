@@ -25,6 +25,9 @@ public class RightFlipper implements Gadget{
     private Circle end1;
     private Circle end2;
     
+    private ArrayList<String> upTriggers = new ArrayList<String>();
+    private ArrayList<String> downTriggers = new ArrayList<String>();
+    
     /*
      * REP INVARIANT:
      * x, y, name and orientation must be non-null.
@@ -321,6 +324,42 @@ public class RightFlipper implements Gadget{
      */
     public ArrayList<Gadget> getTriggers() {
         return this.triggeredBy;
+    }
+
+    public void addKeyUp(String key) {
+        upTriggers.add(key);
+        
+    }
+
+    public void addKeyDown(String key) {
+        downTriggers.add(key);
+        
+    }
+
+    public ArrayList<String> getUpKeyTriggers() {
+        return upTriggers;
+    }
+
+    public ArrayList<String> getDownKeyTriggers() {
+        return downTriggers;
+    }
+
+    @Override
+    public boolean doesPort() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public String getOtherBoard() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String getOtherPortal() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

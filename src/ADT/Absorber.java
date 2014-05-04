@@ -33,6 +33,9 @@ public class Absorber implements Gadget{
     private final ArrayList<LineSegment> segments = new ArrayList<LineSegment>();
     private final ArrayList<Circle> corners = new ArrayList<Circle>();
     
+    private ArrayList<String> upTriggers = new ArrayList<String>();
+    private ArrayList<String> downTriggers = new ArrayList<String>();
+    
     /**
      * Constructor for an Absorber
      * @param name the name of this triangular bumper
@@ -270,4 +273,40 @@ public class Absorber implements Gadget{
         return this.triggeredBy;
     }
 
+
+    public void addKeyUp(String key) {
+        upTriggers.add(key);
+        
+    }
+
+    public void addKeyDown(String key) {
+        downTriggers.add(key);
+        
+    }
+
+    public ArrayList<String> getUpKeyTriggers() {
+        return upTriggers;
+    }
+
+    public ArrayList<String> getDownKeyTriggers() {
+        return downTriggers;
+    }
+
+    @Override
+    public boolean doesPort() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public String getOtherBoard() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String getOtherPortal() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

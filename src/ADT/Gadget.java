@@ -124,5 +124,21 @@ public interface Gadget {
      * @return the triggers of this gadget
      */
     public ArrayList<Gadget> getTriggers();
+    
+    
+    public void addKeyUp(String key);
+    
+    public void addKeyDown(String key);
+    
+    public ArrayList<String> getUpKeyTriggers();
+    
+    public ArrayList<String> getDownKeyTriggers();
+    
+    public boolean doesPort();
+    
+    
+    public String getOtherBoard();
+    
+    public String getOtherPortal();
            
 }
