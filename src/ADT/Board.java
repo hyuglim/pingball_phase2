@@ -523,9 +523,7 @@ public class Board extends TimerTask {
     
     public void connectWall(int walllocation, String boardname){
         //truncate long names
-        if (boardname.length()>=20){
-            boardname = boardname.substring(0,20);
-        }
+        
         if (walllocation == 0){
             walls.get(0).addConnection(boardname);
         }
