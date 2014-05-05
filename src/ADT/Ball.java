@@ -13,8 +13,8 @@ public class Ball {
      * some methods to be retained (and improved on are as follows)
      */
     public String name;
-    public Circle circle;
-    public Vect velocity;
+    private Circle circle;
+    private Vect velocity;
     private final double radius;
     private Geometry.DoublePair position;
     private boolean absorbed = false;

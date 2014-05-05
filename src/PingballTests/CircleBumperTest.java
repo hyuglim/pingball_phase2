@@ -10,6 +10,19 @@ import physics.Vect;
 import ADT.Ball;
 import ADT.CircleBumper;
 
+/**
+ * Testing strategy: 
+ * With current specifications we can have one type of
+ * circular bumpers. Bumpers are represented by a circle. When a ball hits the
+ * bumper, only its velocity should change, the position is changed within the
+ * Board update method.
+ * 
+ * Tests: 
+ * - check when ball approaches the bumper, it must hit it and properly
+ * change the velocity 
+ * - check when ball hits a bumper straight on and at an angle
+ * 
+ */
 public class CircleBumperTest {
 
     @Test public void circleBumperCollision(){
@@ -35,8 +48,8 @@ public class CircleBumperTest {
         
         circlarBumper.reflect(ball);
         
-        assertEquals(new Vect(.71, 0.5), ball.circle.getCenter());
-        assertEquals(new Vect(-1,0), ball.velocity);
+        assertEquals(new Vect(.71, 0.5), ball.getBallCircle().getCenter());
+        assertEquals(new Vect(-1,0), ball.getVelocity());
     }
     
     /**
@@ -49,9 +62,9 @@ public class CircleBumperTest {
         
         circlarBumper.reflect(ball);
         
-       
-        assertEquals(-1.0, ball.velocity.x(),.0001);
-        assertEquals(1.0, ball.velocity.y(), .0001);
+        assertEquals(new Vect(0.71, .5), ball.getBallCircle().getCenter());
+        assertEquals(-1.0, ball.getVelocity().x(),.0001);
+        assertEquals(1.0, ball.getVelocity().y(), .0001);
         
     }
     
@@ -65,9 +78,9 @@ public class CircleBumperTest {
         
         circlarBumper.reflect(ball);
         
-        assertEquals(new Vect(5.71, .5), ball.circle.getCenter());
-        assertEquals(50, ball.velocity.x(), 1);
-        assertEquals(0, ball.velocity.y(), 1);
+        assertEquals(new Vect(5.71, .5), ball.getBallCircle().getCenter());
+        assertEquals(50, ball.getVelocity().x(), 1);
+        assertEquals(0, ball.getVelocity().y(), 1);
         
         
     }

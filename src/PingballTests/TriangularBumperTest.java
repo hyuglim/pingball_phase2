@@ -10,7 +10,21 @@ import physics.LineSegment;
 import physics.Vect;
 import ADT.Ball;
 import ADT.TriangularBumper;
-
+/**
+ * Testing strategy:
+ * With current specifications we can have four types of triangular bumpers, each
+ * differ from other by its orientation. Bumpers are represented by 3 line segments and
+ * three circles at corners. When a ball hits the bumper, only its velocity should
+ * change, the position is changed within the Board update method.
+ * 
+ * Tests:
+ * - check when ball approaches the bumper, it must hit it
+ *   and properly change the velocity
+ * - check if the ball hits the right line segment
+ * - check when ball hits all 4 types of bumpers (must change the velocity)
+ * - check when ball hits the corners (must change the velocity, nothing weird should happen)
+ *
+ */
 public class TriangularBumperTest {
 
     @Test public void triangularBumperCollision(){
@@ -48,7 +62,7 @@ public class TriangularBumperTest {
         TriangularBumper bumper = new TriangularBumper("tr", 0,2,0);
         
         bumper.reflect(ball);
-        assertEquals(new Vect(0, 17), ball.velocity );
+        assertEquals(new Vect(0, 17), ball.getVelocity() );
     }
     
     /**
@@ -61,7 +75,7 @@ public class TriangularBumperTest {
         
         bumper.reflect(ball);
         
-        assertEquals(new Vect(0, 16), ball.velocity );
+        assertEquals(new Vect(0, 16), ball.getVelocity() );
     }
     
     /**
@@ -75,7 +89,7 @@ public class TriangularBumperTest {
         bumper.reflect(ball);
         
         
-        assertEquals(new Vect(0, -17), ball.velocity );
+        assertEquals(new Vect(0,17), ball.getVelocity() );
     }
     
     /**
@@ -89,7 +103,7 @@ public class TriangularBumperTest {
         bumper.reflect(ball);
         
         
-        assertEquals(new Vect(0, -17), ball.velocity );
+        assertEquals(new Vect(0, -17), ball.getVelocity() );
     }
     
     /**
@@ -102,8 +116,8 @@ public class TriangularBumperTest {
         
         bumper.reflect(ball);
         
-        assertEquals(1.25, ball.circle.getCenter().x(),.01);
-        assertEquals(2., ball.circle.getCenter().y(), .01);
+        assertEquals(new Vect(3.,2), ball.getBallCircle().getCenter());
+        assertEquals(new Vect(17,0), ball.getVelocity());
     }
     
     /**
@@ -116,8 +130,8 @@ public class TriangularBumperTest {
         
         bumper.reflect(ball);
         
-        assertEquals(1.25, ball.circle.getCenter().x(),.01);
-        assertEquals(3., ball.circle.getCenter().y(), .01);
+        assertEquals(new Vect(5.,3), ball.getBallCircle().getCenter());
+        assertEquals(new Vect(17,0), ball.getVelocity());
     }
     
     /**
@@ -130,8 +144,8 @@ public class TriangularBumperTest {
         
         bumper.reflect(ball);
         
-        assertEquals(0., ball.circle.getCenter().x(),.01);
-        assertEquals(3.25, ball.circle.getCenter().y(), .01);
+        assertEquals(new Vect(0.,5), ball.getBallCircle().getCenter());
+        assertEquals(new Vect(0,17), ball.getVelocity());
     }
     
     /**
@@ -144,8 +158,8 @@ public class TriangularBumperTest {
         
         bumper.reflect(ball);
         
-        assertEquals(0., ball.circle.getCenter().x(),.01);
-        assertEquals(0.75, ball.circle.getCenter().y(), .01);
+        assertEquals(new Vect(0.,0), ball.getBallCircle().getCenter());
+        assertEquals(new Vect(0,-17), ball.getVelocity());
     }
 
 
