@@ -244,7 +244,13 @@ public class Board extends TimerTask {
                         }
                     }else{
 
+<<<<<<< HEAD
                         this.portalHit = "port "+this.boardname+" " +g.getOtherBoard()+" "+g.getOtherPortal()+" "+each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+"\n";
+=======
+                        this.portalHit = "port "+this.boardname+" " +g.getOtherBoard()+" "+g.getOtherPortal()+" "+each.getName()+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+"\n";
+
+                        this.portalHit = "port "+this.boardname+" " +g.getOtherBoard()+" "+g.getOtherPortal()+" "+each.getName()+" "+each.getOriginX()+" "+each.getOriginY()+" "+20*each.getVelocity().x()+" "+20*each.getVelocity().y()+"\n";
+>>>>>>> 6ebf16de2d340cfc12faf25174df4bd64f537608
 
                   
                     }
@@ -521,9 +527,7 @@ public class Board extends TimerTask {
     
     public void connectWall(int walllocation, String boardname){
         //truncate long names
-        if (boardname.length()>=20){
-            boardname = boardname.substring(0,20);
-        }
+        
         if (walllocation == 0){
             walls.get(0).addConnection(boardname);
         }
@@ -748,7 +752,10 @@ public class Board extends TimerTask {
         this.wallHit = "";
     }
 
+<<<<<<< HEAD
     
+=======
+>>>>>>> 6ebf16de2d340cfc12faf25174df4bd64f537608
     public Gadget getPortal(String portalName){
         for (Gadget gadget: this.gadgets){
             if(gadget.getName().equals(portalName)){
