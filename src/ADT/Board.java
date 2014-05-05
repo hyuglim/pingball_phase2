@@ -121,10 +121,10 @@ public class Board extends TimerTask {
      */
     private Wall getMinWall(Ball ball){
         Wall minWall = walls.get(0);
-        double minTime = Geometry.timeUntilWallCollision(minWall.getWall(), ball.circle, ball.velocity);
+        double minTime = Geometry.timeUntilWallCollision(minWall.getWall(), ball.getBallCircle(), ball.getVelocity());
         for (Wall wall:walls){
-            if (Geometry.timeUntilWallCollision(wall.getWall(), ball.circle, ball.velocity)<minTime){
-                minTime = Geometry.timeUntilWallCollision(minWall.getWall(), ball.circle, ball.velocity);
+            if (Geometry.timeUntilWallCollision(wall.getWall(), ball.getBallCircle(), ball.getVelocity())<minTime){
+                minTime = Geometry.timeUntilWallCollision(minWall.getWall(), ball.getBallCircle(), ball.getVelocity());
                 minWall = wall;
             }
         }
@@ -139,7 +139,7 @@ public class Board extends TimerTask {
      * @return
      */
     private double getMinTimeWall(Ball ball, Wall wall){
-        return Geometry.timeUntilWallCollision(wall.getWall(), ball.circle, ball.velocity);
+        return Geometry.timeUntilWallCollision(wall.getWall(), ball.getBallCircle(), ball.getVelocity());
     }
     
     
@@ -192,7 +192,7 @@ public class Board extends TimerTask {
         
         ball.updatePosition(newX, newY);
         
-        Vect vel = ball.velocity;
+        Vect vel = ball.getVelocity();
         Vect newVel = vel.times(1-mu*time-mu2*ball.getVelocity().length()*time);
         newVel = newVel.plus(new Vect(0, gravity*time));
         
@@ -243,7 +243,7 @@ public class Board extends TimerTask {
                             updateEmpty(each, 0.05);
                         }
                     }else{
-                        this.portalHit = "port "+this.boardname+" " +g.getOtherBoard()+" "+g.getOtherPortal()+" "+each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+20*each.getVelocity().x()+" "+20*each.getVelocity().y()+"\n";
+                        this.portalHit = "port "+this.boardname+" " +g.getOtherBoard()+" "+g.getOtherPortal()+" "+each.getName()+" "+each.getOriginX()+" "+each.getOriginY()+" "+20*each.getVelocity().x()+" "+20*each.getVelocity().y()+"\n";
                   
                     }
                 }else{
@@ -261,17 +261,17 @@ public class Board extends TimerTask {
                 else{
                     ballOut = true;
                     //XXXX is used for splitting purposes to indicate the beginning of information about a new ball
-                    if (w.location.equals("top")){
+                    if (w.getLocation().equals("top")){
                         
                 
                         this.wallHit = "hit "+this.boardname+" 0 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+"\n";
                     }
-                    else if (w.location.equals("bottom")){
+                    else if (w.getLocation().equals("bottom")){
                         
                         
                         this.wallHit = "hit "+this.boardname+" 1 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+"\n";
                     }
-                    else if (w.location.equals("right")){
+                    else if (w.getLocation().equals("right")){
                         
                         
                         this.wallHit = "hit "+this.boardname+" 3 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+"\n";
@@ -334,16 +334,16 @@ public class Board extends TimerTask {
      */
     private void boardRepUpdateWalls(){
         for (Wall wall: walls){
-            if (wall.location.equals("top")){
+            if (wall.getLocation().equals("top")){
                 boardRep.remove(0);
                 boardRep.add(0, wall.toList());
             }
-            else if (wall.location.equals("bottom")){
+            else if (wall.getLocation().equals("bottom")){
                 boardRep.remove(21);
                 boardRep.add(21, wall.toList());
             }
             
-            else if (wall.location.equals("right")){
+            else if (wall.getLocation().equals("right")){
                 List<String> wallList = wall.toList();
                 for (int i=0; i<20; i++){
                     boardRep.get(i+1).remove(21);
@@ -408,10 +408,10 @@ public class Board extends TimerTask {
     public void handleBallBallCollision(Ball ball1, Ball ball2){
         //mass of the ball?
         Geometry.VectPair velocities = Geometry.reflectBalls(
-                ball1.circle.getCenter(), 1, ball1.velocity,
-                ball2.circle.getCenter(), 1, ball2.velocity);
-        double time = Geometry.timeUntilBallBallCollision(ball1.circle,
-                ball1.velocity, ball2.circle, ball2.velocity);
+                ball1.getBallCircle().getCenter(), 1, ball1.getVelocity(),
+                ball2.getBallCircle().getCenter(), 1, ball2.getVelocity());
+        double time = Geometry.timeUntilBallBallCollision(ball1.getBallCircle(),
+                ball1.getVelocity(), ball2.getBallCircle(), ball2.getVelocity());
         boardRepRemoveBall(ball1);
         boardRepRemoveBall(ball2);
         updateEmpty(ball1, time);
@@ -455,7 +455,7 @@ public class Board extends TimerTask {
                 Ball ballToCollideWith = null;
                 for (int j=i+1; j<numBalls; j++){
                     Ball ball2 = balls.get(j);
-                    double timeToColl = Geometry.timeUntilBallBallCollision(ball1.circle, ball1.velocity, ball2.circle, ball2.velocity);
+                    double timeToColl = Geometry.timeUntilBallBallCollision(ball1.getBallCircle(), ball1.getVelocity(), ball2.getBallCircle(), ball2.getVelocity());
                     if (timeToColl<0.05 && timeToColl<time && (!hasCollided.contains(ball2))){
                         ballToCollideWith = ball2;
                         time = timeToColl;
@@ -518,6 +518,10 @@ public class Board extends TimerTask {
      */
     
     public void connectWall(int walllocation, String boardname){
+        //truncate long names
+        if (boardname.length()>=20){
+            boardname = boardname.substring(0,20);
+        }
         if (walllocation == 0){
             walls.get(0).addConnection(boardname);
         }
@@ -695,7 +699,7 @@ public class Board extends TimerTask {
         }
         String boardTextString = boardText.toString().substring(1);
         Board myBoard = BoardFileFactory.parse(boardTextString);
-        
+        myBoard.addBall(new Ball("b", 19, 14, 0, 10, .25));
         myBoard.connectWall(0, "ZulaaDana");
         
         //Ball myBall = new  Ball("Zulaa", 7, 7, 0, 10);
@@ -740,5 +744,8 @@ public class Board extends TimerTask {
     
     public void updateWallHit(){
         this.wallHit = "";
+    }
+    public List<Ball> getBalls(){
+        return this.balls;
     }
 }

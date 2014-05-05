@@ -16,19 +16,26 @@ import ADT.Board;
 import ADT.CircleBumper;
 import ADT.LeftFlipper;
 import ADT.RightFlipper;
+
 /**
- * Flippers : A ball can hit each of its wall and both ends which are circles.
- *                   It has 4 orientations and 2 state.
- *
+ * Testing strategy: 
+ * With current specifications we can have two types of
+ * flippers, each of two types can have 4 orientations Flippers are represented
+ * by 2 line segments and two circles at end points. When a ball hits the bumper,
+ * only its velocity should change, the position is changed within the Board
+ * update method. Also, when a flipper is hit it must change its orientation. 
+ * Flippers can come self-triggering and non-self triggering
+ * 
+ * Tests: 
+ * - check when a ball hits the flipper, it must change the orientation
+ *   (for all 8 kinds of flippers)
+ * - check when a ball hits, it must change its velocity
+ * - check when self-triggering, must change its orientation once the ball hits it
+ * - check when non-self triggering, must change its orientation once
+ *   the trigger is hit
  */
 public class FlippersTest {
-    /**
-     * Testing construction of all kinds of leftFlipper and rightFlipper
-     * - once hit by the ball, must change orientation:
-     *   vertical to horizontal and vice versa
-     *   
-     * 
-     */
+    
     @Test public void leftFlipperToString(){
         LeftFlipper leftFlipperOrientation0 = new LeftFlipper("LeftA", 5, 5, 0);
         LeftFlipper leftFlipperOrientation90 = new LeftFlipper("LeftB", 5, 5, 90);
@@ -97,10 +104,7 @@ public class FlippersTest {
    
 
 
-    /**
-     * Testing that the ball hitting the right Line Segment and appropriately changes
-     * the velocity
-     */
+  
     @Test public void flipperCollision(){
         Ball ballA = new Ball("BallA", 9, 11, 1, 0, 0.25);
         Ball ballB = new Ball("BallB", 9, 10, 0, 1, 0.25);

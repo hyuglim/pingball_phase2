@@ -2,6 +2,8 @@ package PingballTests;
 
 import static org.junit.Assert.*; 
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
@@ -16,8 +18,8 @@ import ADT.SquareBumper;
 import ADT.TriangularBumper;
 import physics.Circle;
 import physics.Geometry;
-import physics.LineSegment;
 import physics.Vect;
+import ADT.Gadget;
 
 /**
  * Testing Strategy:
@@ -33,46 +35,28 @@ import physics.Vect;
  *   orientation/
  *   Absorber =
  *   Outer wall . 
+ *
  * 
- * - Test to check if the board prints its neighbor name correctly. 
- * 
- * - Test ball collision:
- *   A ball can hit either a gadget or another ball. 
- *   
- * - Tests to make sure Each Gadget is reflecting properly when a ball
- *   hits it in its different orientations and states, or when it is triggered:
- *      Check that the collision time until the ball hits the gadget is correct
- *      /In other words, check that each gadget has the right line segments and circles and
- *      make sure that the ball's collision time until the nearest line segment or 
- *      circle is calculated correctly./
- *      
- *      SquareBumper :  A ball can hit each of its 4 walls and 4 corner circles. 
- *                      It has only one orientation and one state.
- *      CircleBumper :  A ball can hit its circle. It has only one orientation and one state.
- *      TriangularBumper : A ball can hit each of its 3 walls and 3 corner circles. 
- *                         It has 4 orientations and 1 state.
- *      Absorber : A ball can hit each of its 4 walls and 4 corner circles. 
- *                   It has only one orientation and one state.
- *      Both flippers : A ball can hit each of its wall and both ends which are circles.
- *                   It has 4 orientations and 2 state.
- *      Wall : A ball can hit its line segment and line segment's both end circles.
- *                   It has only one orientation and one state.
- *      
  * - Test when there are multiple gadgets, the board is calculating the correct collision time
  *      until the ball hits the nearest gadget in the board. /check board getCollisonTime() method/
  *    
  * - Tests for trigger relationships:
  *   
- *   A gadget can be triggered by a single gadget /Triggering gadget could be either
- *   the gadget itself /self-triggering/, or a different gadget./
+ *      A gadget can be triggered by a single gadget /Triggering gadget could be either
+ *      the gadget itself /self-triggering/, or a different gadget./
  *   
- *   A gadget can be triggered by multiple gadgets. /It could include the gadget itself or not./
+ *      A gadget can be triggered by multiple gadgets. /It could include the gadget itself or not./
  *   
- *   A gadget can trigger a single gadget or multiple gadgets. 
+ *      A gadget can trigger a single gadget or multiple gadgets. 
  *   
- *   When a gadget is an absorber:
- *      When the previously ejected ball has not yet left the absorber, the absorber should 
- *      take no action when it is triggered. 
+ *      When a gadget is an absorber:
+ *         When the previously ejected ball has not yet left the absorber, the absorber should 
+ *         take no action when it is triggered. 
+ * - Test if the board reflects the name of the neighbors correctly:
+ *      always start the name at the beginning of the wall
+ *      if name of the neighbor is too long, truncate it to 20 characters
+ * - Test ball-ball collisions
+ *      two, three, four balls
  *      
  * 2. Manual Tests:
  * - Manually checked and saw that when a ball hits a gadget from different angles /all edge cases/, 
@@ -109,167 +93,6 @@ public class BoardTests {
         }
         assertEquals(rows[21], "......................");
     }
-    
-    @Test public void leftFlipperToString(){
-        LeftFlipper leftFlipperOrientation0 = new LeftFlipper("LeftA", 5, 5, 0);
-        LeftFlipper leftFlipperOrientation90 = new LeftFlipper("LeftB", 5, 5, 90);
-        LeftFlipper leftFlipperOrientation180 = new LeftFlipper("LeftC", 5, 5, 180);
-        LeftFlipper leftFlipperOrientation270 = new LeftFlipper("LeftD", 5, 5, 270);
-        
-        assertEquals(leftFlipperOrientation0.toString(), "| | ");
-        assertEquals(leftFlipperOrientation90.toString(), "--  ");
-        assertEquals(leftFlipperOrientation180.toString(), " | |");
-        assertEquals(leftFlipperOrientation270.toString(), "  --");
-        
-        Ball ball = new Ball("ballA", 5, 4, 0, 1, 0.25);
-        leftFlipperOrientation0.isTriggered(leftFlipperOrientation0);
-        leftFlipperOrientation90.isTriggered(leftFlipperOrientation0);
-        leftFlipperOrientation180.isTriggered(leftFlipperOrientation0);
-        leftFlipperOrientation270.isTriggered(leftFlipperOrientation0);
-        
-        leftFlipperOrientation0.reflect(ball);
-        
-        assertEquals(leftFlipperOrientation0.toString(), "--  ");
-        assertEquals(leftFlipperOrientation90.toString(), " | |");
-        assertEquals(leftFlipperOrientation180.toString(), "  --");
-        assertEquals(leftFlipperOrientation270.toString(), "| | ");
-        
-        leftFlipperOrientation0.reflect(ball);
-        
-        assertEquals(leftFlipperOrientation0.toString(), "| | ");
-        assertEquals(leftFlipperOrientation90.toString(), "--  ");
-        assertEquals(leftFlipperOrientation180.toString(), " | |");
-        assertEquals(leftFlipperOrientation270.toString(), "  --");
-    }
-    
-    @Test public void rightFlipperToString(){
-        RightFlipper rightFlipperOrientation0 = new RightFlipper("RightA", 5, 5, 0);
-        RightFlipper rightFlipperOrientation90 = new RightFlipper("RightB", 5, 5, 90);
-        RightFlipper rightFlipperOrientation180 = new RightFlipper("RightC", 5, 5, 180);
-        RightFlipper rightFlipperOrientation270 = new RightFlipper("RightD", 5, 5, 270);
-        
-        assertEquals(rightFlipperOrientation0.toString(), " | |");
-        assertEquals(rightFlipperOrientation90.toString(), "  --");
-        assertEquals(rightFlipperOrientation180.toString(), "| | ");
-        assertEquals(rightFlipperOrientation270.toString(), "--  ");
-
-        Ball ball = new Ball("ballA", 1, 4, 0, 1, 0.25);
-        CircleBumper circleBumper = new CircleBumper("A", 10, 10);
-        rightFlipperOrientation0.isTriggered(circleBumper);
-        rightFlipperOrientation90.isTriggered(circleBumper);
-        rightFlipperOrientation180.isTriggered(circleBumper);
-        rightFlipperOrientation270.isTriggered(circleBumper);
-        
-        circleBumper.reflect(ball);
-        
-        assertEquals(rightFlipperOrientation0.toString(), "--  ");
-        assertEquals(rightFlipperOrientation90.toString(), " | |");
-        assertEquals(rightFlipperOrientation180.toString(), "  --");
-        assertEquals(rightFlipperOrientation270.toString(), "| | ");
-        
-        circleBumper.reflect(ball);
-
-        assertEquals(rightFlipperOrientation0.toString(), " | |");
-        assertEquals(rightFlipperOrientation90.toString(), "  --");
-        assertEquals(rightFlipperOrientation180.toString(), "| | ");
-        assertEquals(rightFlipperOrientation270.toString(), "--  ");
-    }
-
-   
-
-
-    @Test public void triangularBumperCollision(){
-        Ball ballA = new Ball("BallA", 10.5, 9.75, 0, 1, 0.25);
-        Ball ballB = new Ball("BallB", 9.75, 10.5, 1, 0, 0.25);
-        
-        Vect newVelocityA = Geometry.reflectWall(new LineSegment(10, 10, 11, 10), ballA.getVelocity());
-        Vect newVelocityB = Geometry.reflectWall(new LineSegment(10, 10, 10, 11), ballB.getVelocity());
-        
-        TriangularBumper triangle = new TriangularBumper("triangleA", 10, 10, 0);
-        triangle.reflect(ballA);
-        triangle.reflect(ballB);
-                
-        assertEquals(newVelocityA, ballA.getVelocity());
-        assertEquals(newVelocityB, ballB.getVelocity());
-        
-    }
-    
-    @Test public void triangularBumperCollisionTime(){
-        Ball ballA = new Ball("BallA", 10.5, 9.75, 0, 1, 0.25);
-        Ball ballB = new Ball("BallB", 9.75, 10.5, 1, 0, 0.25);
-        
-        double collisionTimeA = Geometry.timeUntilWallCollision(new LineSegment(10, 10, 11, 10), ballA.getBallCircle(), ballA.getVelocity());
-        double collisionTimeB = Geometry.timeUntilWallCollision(new LineSegment(10, 11, 11, 11), ballB.getBallCircle(), ballB.getVelocity());
-        
-        TriangularBumper triangle = new TriangularBumper("triangleA", 10, 10, 0);
-        
-        assert(collisionTimeA == triangle.getCollisionTime(ballA));
-        assert(collisionTimeB == triangle.getCollisionTime(ballB));
-        
-    }
-    
-    @Test public void flipperCollision(){
-        Ball ballA = new Ball("BallA", 9, 11, 1, 0, 0.25);
-        Ball ballB = new Ball("BallB", 9, 10, 0, 1, 0.25);
-        Ball ballC = new Ball("BallC", 9, 12, 1, 0, 0.25);
-        LeftFlipper leftFlipper = new LeftFlipper("LeftA", 10, 10, 0);
-        leftFlipper.isTriggered(leftFlipper);
-        
-        Vect newVelocityA = Geometry.reflectRotatingWall(new LineSegment(10, 10, 10, 12), new Vect(10, 10), Math.PI*6, ballA.getBallCircle(), ballA.getVelocity());
-        Vect newVelocityB = Geometry.reflectCircle(new Circle(10, 10, 0).getCenter(), ballB.getBallCircle().getCenter(), ballB.getVelocity());
-        Vect newVelocityC = Geometry.reflectWall(new LineSegment(10, 10, 10, 11), ballC.getVelocity());
-        
-        leftFlipper.reflect(ballA);
-        leftFlipper.reflect(ballB);
-        leftFlipper.reflect(ballC);
-
-        assertEquals(newVelocityA.times(0.95), ballA.getVelocity());
-        assertEquals(newVelocityB.times(0.95), ballB.getVelocity());
-        assertEquals(newVelocityC.times(0.95), ballC.getVelocity());
-        
-    }
-    
-    @Test public void flipperNonSelfTrigger() {
-        Board board = new Board("Board1", 25.0, 0.025, 0.025);
-
-        RightFlipper rightFlipper = new RightFlipper("FlipR", 4, 5, 0);
-        LeftFlipper leftFlipper = new LeftFlipper("FlipL", 10, 10, 0);
-        board.addGadget(rightFlipper);
-        board.addGadget(leftFlipper);
-        
-        Ball ball1 = new Ball("Ball1", 3, 3, 1, 2, 0.25);
-        Ball ball2 = new Ball("Ball2", 2, 2, 0, 1,0.25);
-        board.addBall(ball1);
-        board.addBall(ball2);
-        
-        rightFlipper.isTriggered(leftFlipper);
-        rightFlipper.reflect(ball1);
-        assertEquals(" | |", rightFlipper.toString());
-        
-        leftFlipper.reflect(ball2);
-        assertEquals("--  ", rightFlipper.toString());
-        assertEquals("| | ", leftFlipper.toString());
-    }
-    
-    @Test public void flipperSelfTrigger() {
-        Board board = new Board("Board1", 25.0, 0.025, 0.025);
-        Absorber absorber = new Absorber("Abs", 0, 19, 20, 1);
-        board.addGadget(absorber);
-        
-        RightFlipper rightFlipper = new RightFlipper("FlipR", 4, 5, 0);
-        board.addGadget(rightFlipper);
-        
-        Ball ball1 = new Ball("Ball1", 3, 3, 1, 2, 0.25);
-        Ball ball2 = new Ball("Ball2", 2, 2, 0, 1, 0.25);
-        board.addBall(ball1);
-        board.addBall(ball2);
-        
-        rightFlipper.isTriggered(rightFlipper);
-        rightFlipper.reflect(ball1);
-        assertEquals("--  ", rightFlipper.toString());
-    }
-    
-   
     
     @Test public void twoGadgetsTriggeredBySameGadget() {
         Board board = new Board("Board1", 25.0, 0.025, 0.025);
@@ -348,6 +171,147 @@ public class BoardTests {
         
         assertFalse(ball3.getVelocity().equals(new Vect(0, 0)));
     }
+    @Test public void neighborNamesAllTogether(){
+        Board board = new Board("Board A", 25, 0.01, 0.01);
+        board.connectWall(0, "Mercury");
+        board.connectWall(3,"Some new star that has never been see before");
+        board.connectWall(2," Zulsar Lena George  ");
+        board.connectWall(1,"Mars");
+        board.update();
+        String boardToString = board.toString();
+        String[] rows = boardToString.split("\n");
+        System.out.println(boardToString);
+        assertEquals(rows[0], "Mercury...............");
+        assertEquals(rows[1], "                     S");
+        assertEquals(rows[2], "Z                    o");
+        assertEquals(rows[3], "u                    m");
+        assertEquals(rows[4], "l                    e");
+        assertEquals(rows[5], "s                     ");
+        assertEquals(rows[6], "a                    n");
+        assertEquals(rows[7], "r                    e");
+        assertEquals(rows[8], "                     w");
+        assertEquals(rows[9], "L                     ");
+        assertEquals(rows[10], "e                    s");
+        assertEquals(rows[11], "n                    t");
+        assertEquals(rows[12], "a                    a");
+        assertEquals(rows[13], "                     r");
+        assertEquals(rows[14], "G                     ");
+        assertEquals(rows[15], "e                    t");
+        assertEquals(rows[16], "o                    h");
+        assertEquals(rows[17], "r                    a");
+        assertEquals(rows[18], "g                    t");
+        assertEquals(rows[19], "e                     ");
+        assertEquals(rows[20], "                     h");
+        assertEquals(rows[21], "Mars..................");
+    }
+    public void testHandleBallBallCollision() {
+        Ball ball1 = new Ball("ball1",new Circle(1,1,0.25), new Vect(0,-1));
+        Ball ball2 = new Ball("ball2",new Circle(1,1.05,0.25), new Vect(0,1));
+        Board board = new Board("test",25, .025, .025);
+        board.addBall(ball1);
+        board.addBall(ball2);
+        board.handleBallBallCollision(ball1, ball2);
+
+        assertEquals(new Vect(0, 1), ball1.getVelocity());
+        assertEquals(new Vect(0, -1), ball2.getVelocity());
+        
+    }
+    
+    /**
+     * Test two balls colliding
+     */
+    @Test 
+    public void testPerformBallBallCollisionTwoBalls(){
+        //System.out.println("TEST2");
+        Ball ball1 = new Ball("ball1",new Circle(1.05,1,.25), new Vect(-1,0));
+        Ball ball2 = new Ball("ball2",new Circle(1,1.0,0.25), new Vect(1,0));
+        Board board = new Board("test",25, .025, .025);
+        board.addBall(ball1);
+        board.addBall(ball2);
+        List<Ball> balls = Arrays.asList(ball1, ball2);
+        List<Ball> uninvolved = board.performBallBallCollision(balls);
+        
+        assertEquals(ball2.getVelocity(), new Vect(-1,0));
+        assertEquals(ball1.getVelocity(), new Vect(1,0));
+        assertTrue(uninvolved.isEmpty());
+        List<Ball> uninvolved2 = board.performBallBallCollision(balls);
+        assertTrue(uninvolved2.size()==2);
+        
+        
+        
+    }
+    
+    /**
+     * Test three Balls Colliding
+     */
+    @Test
+    public void testPerformBallBallCollisionThreeBalls(){
+        //1 and 3 collide, 2 keeps moving
+        //System.out.println("TEST3");
+        Ball ball1 = new Ball("ball1",new Circle(1,1,0.25), new Vect(0,-1));
+        Ball ball2 = new Ball("ball2",new Circle(1,1.05,0.25), new Vect(0,1));
+        Vect vel2Old = ball2.getVelocity();
+        Ball ball3 = new Ball("ball3",new Circle(1.04,1,0.25), new Vect(-1,0));
+        List<Ball> balls = Arrays.asList(ball1, ball2, ball3);
+        Board board = new Board("test",25, .025, .025);
+        board.addBall(ball1);
+        
+        board.performBallBallCollision(balls);
+        
+        assertEquals(ball2.getVelocity(), vel2Old);
+        assertEquals(ball1.getVelocity(), new Vect(-1,-1));
+        
+    }
+    
+    /**
+     * Test four balls colliding
+     */
+    @Test
+    public void testPerformBallBallCollisionFourBalls(){
+        //1 and 3 collide, 2 and 4 collide
+        //System.out.println("TEST4");
+        Ball ball1 = new Ball("ball1",new Circle(1,1,0.25), new Vect(0,1));
+        Ball ball3 = new Ball("ball2",new Circle(1,1.05,0.25), new Vect(0,-1));
+        
+        Ball ball2 = new Ball("ball3",new Circle(5,5.0,0.25), new Vect(1,0));
+        Ball ball4 = new Ball("ball4",new Circle(5.04,5.0,0.25), new Vect(-1,0));
+        
+        List<Ball> balls = Arrays.asList(ball1, ball2, ball3,ball4);
+        Board board = new Board("test",25, .025, .025);
+
+        board.performBallBallCollision(balls);
+        
+        assertEquals(new Vect(0,-1), ball1.getVelocity());
+        assertEquals(new Vect(0,1), ball3.getVelocity());
+        
+        assertEquals(new Vect(-1,0), ball2.getVelocity());
+        assertEquals(new Vect(1,0), ball4.getVelocity());
+       
+        
+    }
+    
+    /**
+     * test removing a ball from the board
+     */
+    @Test
+    public void testRemoveBall(){
+        Ball ball1 = new Ball("ball1",new Circle(1,1,0.25), new Vect(0,1));
+        Ball ball3 = new Ball("ball2",new Circle(1,1.05,0.25), new Vect(0,-1));
+        
+        Ball ball2 = new Ball("ball3",new Circle(5,5.0,0.25), new Vect(1,0));
+        Ball ball4 = new Ball("ball4",new Circle(5.04,5.0,0.25), new Vect(-1,0));
+        Board board = new Board("test",25, .025, .025);
+        board.addBall(ball1);
+        board.addBall(ball2);
+        board.addBall(ball3);
+        board.addBall(ball4);
+        
+        board.removeBall(ball1);
+        assertTrue(board.getBallsSize()==3);
+        assertFalse(board.getBalls().contains(ball1));
+    }
+    
+    
     
     
     

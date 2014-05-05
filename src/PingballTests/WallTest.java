@@ -10,8 +10,15 @@ import ADT.Ball;
 import ADT.Wall;
 
 /**
- * Wall : A ball can hit its line segment and line segment's both end circles.
- *                   It has only one orientation and one state.
+ * Testing strategy:
+ * With current specifications we can have only four types of walls 
+ * (bottom, top, right, left), each represented by a line segment.
+ * of length 20. Once the ball hit the wall, the wall instance changes its
+ * velocity AND position (unlike other gadgets).
+ * 
+ * Tests:
+ * - ball hits each type of wall and appropriately changes 
+ *   the position and velocity
  *
  */
 public class WallTest {
@@ -24,10 +31,11 @@ public class WallTest {
         Ball ball = new Ball("ball1",new Circle(0.71,0.5,0.25), new Vect(0,-10));
         
         Wall wall = new Wall("top", false, "", "test");
-        
+        assertTrue(wall.getWall().length() == 20);
         wall.update(ball);
         
-        assertEquals(new Vect(.71,.25), ball.circle.getCenter());
+        assertEquals(new Vect(.71,.25), ball.getBallCircle().getCenter());
+        assertEquals(ball.getVelocity(), new Vect(0,10));
         
     }
     
@@ -39,10 +47,11 @@ public class WallTest {
         Ball ball = new Ball("ball1",new Circle(16.71,5.5,0.25), new Vect(100,0));
         
         Wall wall = new Wall("right", false, "", "test");
-        
+        assertTrue(wall.getWall().length() == 20);
         wall.update(ball);
         
-        assertEquals(new Vect(19.75,5.5), ball.circle.getCenter());
+        assertEquals(new Vect(19.75,5.5), ball.getBallCircle().getCenter());
+        assertEquals(ball.getVelocity(), new Vect(-100,0));
         
     }
     
@@ -54,10 +63,11 @@ public class WallTest {
         Ball ball = new Ball("ball1",new Circle(3.71,6.5,0.25), new Vect(-100,0));
         
         Wall wall = new Wall("left", false, "", "test");
-        
+        assertTrue(wall.getWall().length() == 20);
         wall.update(ball);
         
-        assertEquals(new Vect(0.25,6.5), ball.circle.getCenter());
+        assertEquals(new Vect(0.25,6.5), ball.getBallCircle().getCenter());
+        assertEquals(ball.getVelocity(), new Vect(100,0));
         
     }
     
@@ -69,10 +79,11 @@ public class WallTest {
         Ball ball = new Ball("ball1",new Circle(5.,17.5,0.25), new Vect(0,100));
         
         Wall wall = new Wall("bottom", false, "", "test");
-        
+        assertTrue(wall.getWall().length() == 20);
         wall.update(ball);
         
-        assertEquals(new Vect(5.,19.75), ball.circle.getCenter());
+        assertEquals(new Vect(5.,19.75), ball.getBallCircle().getCenter());
+        assertEquals(ball.getVelocity(), new Vect(0,-100));
         
     }
 

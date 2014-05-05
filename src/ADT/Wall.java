@@ -14,8 +14,8 @@ import physics.*;
  */
 
 public class Wall {
-    public String boardname;
-    public String location; // string representing "top", "bottom", "right", "left"
+    private String boardname;
+    private String location; // string representing "top", "bottom", "right", "left"
     private boolean visible; // if visible it means wall is solid
     private String connectedTo; // the name of the board the wall is connected to
     
@@ -98,12 +98,12 @@ public class Wall {
     public void update(Ball ball){
         LineSegment wall = getWall();
         //System.out.println("Hit wall "+this.location);
-        double timeToWall = Geometry.timeUntilWallCollision(wall, ball.circle, ball.velocity);
-        Vect oldVel = ball.velocity;
+        double timeToWall = Geometry.timeUntilWallCollision(wall, ball.getBallCircle(), ball.getVelocity());
+        Vect oldVel = ball.getVelocity();
         double newXPos = ball.getOriginX() + oldVel.x()*timeToWall;
         double newYPos = ball.getOriginY() + oldVel.y()*timeToWall;
         
-        Vect newVelocity = Geometry.reflectWall(wall, ball.velocity);
+        Vect newVelocity = Geometry.reflectWall(wall, ball.getVelocity());
         
         ball.updatePosition(newXPos, newYPos);
         ball.updateVelocity(newVelocity);
@@ -135,6 +135,9 @@ public class Wall {
     
     public String getConnectedTo(){
         return this.connectedTo;
+    }
+    public String getLocation(){
+        return this.location;
     }
     
 
