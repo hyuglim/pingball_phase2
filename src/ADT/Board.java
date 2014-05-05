@@ -217,13 +217,13 @@ public class Board extends TimerTask {
             if (!gadgets.isEmpty()){
             g = getMinTimeGadget(each);
             timeMinGadget = timeMinGadget(each, g);
-            System.out.println(timeMinGadget);
+
             }           
             Wall w = getMinWall(each);
             double timeMinWall = getMinTimeWall(each, w);
             if(timeMinGadget >0.05 && timeMinWall > 0.05){
                 updateEmpty(each, 0.05);
-                System.out.println(timeMinWall);
+
             }
             else if(timeMinGadget<timeMinWall){
                 if(each.isAbsorbed()){
@@ -243,11 +243,9 @@ public class Board extends TimerTask {
                             updateEmpty(each, 0.05);
                         }
                     }else{
-<<<<<<< HEAD
+
                         this.portalHit = "port "+this.boardname+" " +g.getOtherBoard()+" "+g.getOtherPortal()+" "+each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+"\n";
-=======
-                        this.portalHit = "port "+this.boardname+" " +g.getOtherBoard()+" "+g.getOtherPortal()+" "+each.getName()+" "+each.getOriginX()+" "+each.getOriginY()+" "+20*each.getVelocity().x()+" "+20*each.getVelocity().y()+"\n";
->>>>>>> 556b87e03b474721b4f89946b6fd785cd4df7746
+
                   
                     }
                 }else{
@@ -749,7 +747,7 @@ public class Board extends TimerTask {
     public void updateWallHit(){
         this.wallHit = "";
     }
-<<<<<<< HEAD
+
     
     public Gadget getPortal(String portalName){
         for (Gadget gadget: this.gadgets){
@@ -759,7 +757,7 @@ public class Board extends TimerTask {
         }
         return null;
     }
-=======
+
     public List<Ball> getBalls(){
         return this.balls;
     }
@@ -789,6 +787,4 @@ public class Board extends TimerTask {
     }
 
 
-   
->>>>>>> 556b87e03b474721b4f89946b6fd785cd4df7746
 }

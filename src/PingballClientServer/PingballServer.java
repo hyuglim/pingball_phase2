@@ -366,16 +366,19 @@ public class PingballServer {
 			}
 			System.out.println("got out of for loop");
 			out.println("kill");
+		} catch(Exception e) {
+		  //when the client disconnects, revert all boards to solid walls
+            revertToSolidWalls(name);
+            
+            
+            System.out.println("revert walls");
+		
 		} finally {
 			out.close();
 			in.close();
 			socket.close();
 			
-			//when the client disconnects, revert all boards to solid walls
-			revertToSolidWalls(name);
 			
-			
-			System.out.println("revert walls");
 			
 			//when the client disconnects, all balls inside its board are lost
 			
