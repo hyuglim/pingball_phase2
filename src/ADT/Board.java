@@ -748,4 +748,31 @@ public class Board extends TimerTask {
     public List<Ball> getBalls(){
         return this.balls;
     }
+
+
+    public double getGravity() {
+        // TODO Auto-generated method stub
+        return this.gravity;
+    }
+
+
+    public double getFriction1() {
+        // TODO Auto-generated method stub
+        return this.mu;
+    }
+
+
+    public double getFriction2() {
+        // TODO Auto-generated method stub
+        return this.mu2;
+    }
+
+
+    public List<Gadget> getGadgets() {
+        // TODO Auto-generated method stub
+        return this.gadgets;
+    }
+
+
+   
 }
