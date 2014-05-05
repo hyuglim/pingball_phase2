@@ -361,7 +361,7 @@ public class PingballServer {
 
 				String output = handleRequest(line); 
 				if (output != null) {
-
+				    out.println(output);
 				}
 			}
 			System.out.println("got out of for loop");
@@ -373,6 +373,9 @@ public class PingballServer {
 			
 			//when the client disconnects, revert all boards to solid walls
 			revertToSolidWalls(name);
+			
+			
+			System.out.println("revert walls");
 			
 			//when the client disconnects, all balls inside its board are lost
 			
@@ -401,6 +404,8 @@ public class PingballServer {
 				System.out.println("index of neighbor: " + index);
 				nOfns.set(index, null);
 				bOfns.set(index, false);
+				
+				System.out.println("revert walls");
 			}
 		}	
 		
@@ -431,7 +436,77 @@ public class PingballServer {
 			System.out.println("name: " + input);
 			return input;
 		}
+		
+		if (tokens[0].equals("create ")){
+            
+            String otherBoardName = tokens[1];
+            String nameOfBall = tokens[2];
 
+            double x = Double.parseDouble(tokens[3]);
+            double y = Double.parseDouble(tokens[4]);
+            double xVel = Double.parseDouble(tokens[5]);
+            double yVel = Double.parseDouble(tokens[6]);    
+
+            PrintWriter outReceiver;
+            try {
+                System.out.println("Portal Does Not Exist");
+                Socket socketReceiver = neighbors.get(otherBoardName).getThree();
+
+                outReceiver = new PrintWriter(socketReceiver.getOutputStream(), true);
+
+                //String msgToSender = "delete " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel;
+                String msgToReceiver = "create " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel;
+                
+                //outSender.println(msgToSender);
+                outReceiver.println(msgToReceiver);
+
+                //return null;
+
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                System.out.println("custom print");
+                e.printStackTrace();
+            }
+
+        }
+
+		//port hit:
+		if (tokens[0].equals("port")){
+		    
+		    String nameOfBoard = tokens[1];
+            String otherBoardName = tokens[2];
+            String otherPortalName = tokens[3];
+            String nameOfBall = tokens[4];
+
+            double x = Double.parseDouble(tokens[5]);
+            double y = Double.parseDouble(tokens[6]);
+            double xVel = Double.parseDouble(tokens[7]);
+            double yVel = Double.parseDouble(tokens[8]);    
+
+            PrintWriter outReceiver;
+            try {
+                System.out.println("Portal Transfer");
+                Socket socketReceiver = neighbors.get(otherBoardName).getThree();
+
+                outReceiver = new PrintWriter(socketReceiver.getOutputStream(), true);
+
+                System.out.println(otherPortalName);
+
+                //String msgToSender = "delete " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel;
+                String msgToReceiver = "port "+ nameOfBoard +" " + otherPortalName+" "+nameOfBall+" "+x+" "+y+" "+xVel+" "+yVel+"\n";
+                
+                //outSender.println(msgToSender);
+                outReceiver.println(msgToReceiver);
+
+                //return null;
+
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                System.out.println("custom print");
+                e.printStackTrace();
+            }
+
+		}
 		// sample input: hit NAMEofBoard wallNum  NAMEofBall x y xVel yVel
 		// wallNum is either 0,1,2,3 -> top, bottom, left, right
 		if (tokens[0].equals("hit")) {
@@ -469,24 +544,23 @@ public class PingballServer {
 					
 					switch(wallNum){
 					case 0: 
-						y += 15;
+						y += 19;
 						break;
 					case 1:
-						y -= 15;
+						y -= 19;
 						break;
 					case 2:
-						x += 15;
+						x += 19;
 						break;
 					case 3:
-						x -= 15;
+						x -= 19;
 						break;					
 
 					}
 
 					//String msgToSender = "delete " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel;
 					String msgToReceiver = "create " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel;
-					
-					System.out.println(msgToReceiver);
+
 					//outSender.println(msgToSender);
 					outReceiver.println(msgToReceiver);
 

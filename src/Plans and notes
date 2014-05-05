@@ -4,3 +4,6 @@ instead of moveAllBalls, set a timer task and timer.schedule(board)
 
 - change the insertBall to addBAll
  - be able to handle portals
+ 
+ - Correct the server and client quit!
+ - Correct portal connection!

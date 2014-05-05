@@ -241,7 +241,7 @@ public class Board extends TimerTask {
                             updateEmpty(each, 0.05);
                         }
                     }else{
-                        this.portalHit = "port "+this.boardname+" " +g.getOtherBoard()+" "+g.getOtherPortal()+" "+each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+20*each.getVelocity().x()+" "+20*each.getVelocity().y()+"\n";
+                        this.portalHit = "port "+this.boardname+" " +g.getOtherBoard()+" "+g.getOtherPortal()+" "+each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+"\n";
                   
                     }
                 }else{
@@ -737,5 +737,14 @@ public class Board extends TimerTask {
     
     public void updateWallHit(){
         this.wallHit = "";
+    }
+    
+    public Gadget getPortal(String portalName){
+        for (Gadget gadget: this.gadgets){
+            if(gadget.getName().equals(portalName)){
+                return gadget;
+            }
+        }
+        return null;
     }
 }

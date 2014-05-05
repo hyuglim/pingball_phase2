@@ -8,6 +8,7 @@ import java.net.Socket;
 import java.util.List;
 
 import ADT.Board;
+import ADT.Gadget;
 
 public class Communicator implements Runnable{
 	private Socket clientSocket = null;
@@ -109,6 +110,8 @@ public class Communicator implements Runnable{
 
 		//CONFIRMING IF BALL HIT AN INVISIBLE WALL
 		if(tokens[0].equals("delete")) {
+		    
+		 
 			// sample input: invisible NAMEofBALL x y xVel yVel
 			String nameOfBall = tokens[1];
 
@@ -116,6 +119,37 @@ public class Communicator implements Runnable{
 			board.deleteBall(nameOfBall);
 			return null;
 		}
+		
+		//CONFIRMING IF BALL HIT a portal
+        if(tokens[0].equals("transfer")) {
+
+            // sample input: invisible NAMEofBALL x y xVel yVel
+            String originalBoardName = tokens[1];
+            String portalName = tokens[2];
+            String nameOfBall = tokens[3];
+            float x = Float.parseFloat(tokens[4]);
+            float y = Float.parseFloat(tokens[5]);
+            float xVel = Float.parseFloat(tokens[6]);
+            float yVel = Float.parseFloat(tokens[7]);
+            
+            if(board.getPortal(portalName) != null){
+                Gadget portal = board.getPortal(portalName);
+                board.insertBall(nameOfBall, portal.getX(), portal.getY(), xVel, yVel);
+                return null;
+            }
+
+            return "create " + originalBoardName + " " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel;
+          
+        }
+        
+		if(tokens[0].equals("delete")) {
+            // sample input: invisible NAMEofBALL x y xVel yVel
+            String nameOfBall = tokens[1];
+
+            // get rid of the ball with that name     
+            board.deleteBall(nameOfBall);
+            return null;
+        }
 
 		if(tokens[0].equals("create")) {
 		    System.out.println(tokens);

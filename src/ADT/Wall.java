@@ -81,11 +81,19 @@ public class Wall {
         }
         
         if (!visible){
-            //printing the name of the other board to the wall
             String name = connectedTo;
-            for (int i=0; i<name.length(); i++){
-                rep.remove(i);
-                rep.add(i, (""+name.charAt(i))); 
+            int nameLength = connectedTo.length();
+            if(nameLength >= 20){
+                for (int i=1; i<20; i++){
+                    rep.remove(i);
+                    rep.add(i, (""+name.charAt(i-1))); 
+                }
+            }else{
+                for (int i=0; i<name.length(); i++){
+                    rep.remove(i+(22-nameLength)/2);
+                    rep.add(i+(22-nameLength)/2, (""+name.charAt(i))); 
+                }
+           
             }
         }
         return rep;
