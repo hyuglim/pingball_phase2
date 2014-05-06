@@ -178,7 +178,7 @@ public class PingballServer {
 		String top = words[1].split("_top")[0];
 		String bottom = words[2].split("_bottom")[0];
 		if (!neighbors.containsKey(top) || !neighbors.containsKey(bottom)) {
-			printNeighbors();
+			//printNeighbors();
 			throw new IllegalArgumentException("cannot join uncreated board");
 		}
 
@@ -228,7 +228,7 @@ public class PingballServer {
 		List<Boolean> isInvisible = neighbors.get(s1).getTwo();
 		adjBoardNames.set(i2, s2);
 		isInvisible.set(i2, true);
-		printNeighbors();
+		//printNeighbors();
 	}
 
 	/**
@@ -344,9 +344,13 @@ public class PingballServer {
 
 				//System.out.println("line: " + line);
 				//When the client first connects, it passes in the name of the board
+			    
+			    System.out.println(line);
+			    
 				String[] tokens = line.split(" ");
 				if (tokens[0].equals("name")) {
 					name = tokens[1];
+					System.out.println(name);
 					if (!neighbors.contains(name)) {
 						//top, bottom, left, right
 						List<String> adjacents = Arrays.asList(null, null, null, null);
@@ -356,12 +360,12 @@ public class PingballServer {
 
 						neighbors.put(name, triple);
 					}
-					printNeighbors();
+					//printNeighbors();
 				}				
 
 				String output = handleRequest(line); 
 				if (output != null) {
-				    out.println(output);
+				    //out.println(output);
 				}
 			}
 			System.out.println("got out of for loop");
@@ -407,8 +411,7 @@ public class PingballServer {
 				System.out.println("index of neighbor: " + index);
 				nOfns.set(index, null);
 				bOfns.set(index, false);
-				
-				System.out.println("revert walls");
+			
 			}
 		}	
 		
@@ -419,8 +422,8 @@ public class PingballServer {
 		= new Triple<List<String>, List<Boolean>,Socket>(adjacents, invisibles, null);
 		neighbors.put(name, triple);
 		
-		System.out.println("**********");
-		printNeighbors();
+		//System.out.println("**********");
+		//printNeighbors();
 	}
 
 	/**
@@ -433,14 +436,14 @@ public class PingballServer {
 
 		//System.out.println("input from the client: " + input);
 		String[] tokens = input.split(" ");
-
+	
 		//sample input: name 
 		if(tokens[0].equals("name")) {
 			System.out.println("name: " + input);
 			return input;
 		}
 		
-		if (tokens[0].equals("create ")){
+		if (tokens[0].equals("create")){
             
             String otherBoardName = tokens[1];
             String nameOfBall = tokens[2];
@@ -463,7 +466,7 @@ public class PingballServer {
                 //outSender.println(msgToSender);
                 outReceiver.println(msgToReceiver);
 
-                //return null;
+                return null;
 
             } catch (IOException e) {
                 // TODO Auto-generated catch block
@@ -475,7 +478,7 @@ public class PingballServer {
 
 		//port hit:
 		if (tokens[0].equals("port")){
-		    
+		  
 		    String nameOfBoard = tokens[1];
             String otherBoardName = tokens[2];
             String otherPortalName = tokens[3];
@@ -489,20 +492,20 @@ public class PingballServer {
             PrintWriter outReceiver;
             try {
                 System.out.println("Portal Transfer");
-                Socket socketReceiver = neighbors.get(otherBoardName).getThree();
+                //System.out.println("ffffffffffffffffffffffffffffffffffffffffff");
+                if(neighbors.containsKey(otherBoardName)){
+                    Socket socketReceiver = neighbors.get(otherBoardName).getThree();
 
-                outReceiver = new PrintWriter(socketReceiver.getOutputStream(), true);
+                    outReceiver = new PrintWriter(socketReceiver.getOutputStream(), true);
+                                      
+                    //String msgToSender = "delete " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel;
+                    String msgToReceiver = "port "+ nameOfBoard +" " + otherPortalName+" "+nameOfBall+" "+x+" "+y+" "+xVel+" "+yVel+"\n";
+                    //outSender.println(msgToSender);
+                    outReceiver.println(msgToReceiver);
 
-                System.out.println(otherPortalName);
-
-                //String msgToSender = "delete " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel;
-                String msgToReceiver = "port "+ nameOfBoard +" " + otherPortalName+" "+nameOfBall+" "+x+" "+y+" "+xVel+" "+yVel+"\n";
-                
-                //outSender.println(msgToSender);
-                outReceiver.println(msgToReceiver);
-
-                //return null;
-
+                    return null;
+                }
+                return null;
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 System.out.println("custom print");
@@ -537,26 +540,24 @@ public class PingballServer {
 			try {
 				outSender = new PrintWriter(socketSender.getOutputStream(), true);
 				if (hitInvisible) {
-					System.out.println("hit invisible MAANN");
+					//System.out.println("hit invisible MAANN");
 					String neighbor = neighbors.get(nameOfBoard).getOne().get(wallNum);
 					Socket socketReceiver = neighbors.get(neighbor).getThree();
                     
 					outReceiver = new PrintWriter(socketReceiver.getOutputStream(), true);
 					
-					System.out.println(wallNum);
-					
 					switch(wallNum){
 					case 0: 
-						y += 19;
+						y += 15;
 						break;
 					case 1:
-						y -= 19;
+						y -= 15;
 						break;
 					case 2:
-						x += 19;
+						x += 15;
 						break;
 					case 3:
-						x -= 19;
+						x -= 15;
 						break;					
 
 					}

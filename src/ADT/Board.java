@@ -244,19 +244,16 @@ public class Board extends TimerTask {
                         }
                     }else{
 
-<<<<<<< HEAD
                         this.portalHit = "port "+this.boardname+" " +g.getOtherBoard()+" "+g.getOtherPortal()+" "+each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+"\n";
-=======
-                        this.portalHit = "port "+this.boardname+" " +g.getOtherBoard()+" "+g.getOtherPortal()+" "+each.getName()+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+"\n";
-
-                        this.portalHit = "port "+this.boardname+" " +g.getOtherBoard()+" "+g.getOtherPortal()+" "+each.getName()+" "+each.getOriginX()+" "+each.getOriginY()+" "+20*each.getVelocity().x()+" "+20*each.getVelocity().y()+"\n";
->>>>>>> 6ebf16de2d340cfc12faf25174df4bd64f537608
-
+                        ballOut = true;
+                        ballsToRemove.add(each);
                   
                     }
                 }else{
                     g.reflect(each);
-                    updateEmpty(each, timeMinGadget);
+    /*                if(!g.doesAbsorb() && !g.doesPort()){
+                        updateEmpty(each, timeMinGadget);
+                    } */                  
                 }
             }
             else{
@@ -699,25 +696,28 @@ public class Board extends TimerTask {
         
         StringBuilder boardText = new StringBuilder("");
         
-        BufferedReader fr = new BufferedReader(new FileReader("src/Parser/" + "ourBoard1.pb"));
+        BufferedReader fr = new BufferedReader(new FileReader("src/Parser/" + "sampleBoard.pb"));
         for (String line = fr.readLine(); line != null; line = fr.readLine()) {
             boardText.append('\n' + line);
         }
         String boardTextString = boardText.toString().substring(1);
         Board myBoard = BoardFileFactory.parse(boardTextString);
-        myBoard.addBall(new Ball("b", 19, 14, 0, 10, .25));
-        myBoard.connectWall(0, "ZulaaDana");
-        
+
         //Ball myBall = new  Ball("Zulaa", 7, 7, 0, 10);
         //myBoard.addBall(myBall);
-        Timer timer = new Timer();
+/*        Timer timer = new Timer();
        
         timer.schedule(myBoard, 0, 50);
-/*        
+        
         CircleBumper circle = new CircleBumper("C", 0, 0);
         Ball newBall = new Ball("A", 0.5, 0.5, 0, 1, 0.25);*/
-
- 
+        
+        for(Gadget gadget : myBoard.getGadgets()){
+            if(gadget.doesPort()){
+                System.out.println(gadget.getOtherBoard());
+            }
+        }
+        
     }
 
 
@@ -752,10 +752,6 @@ public class Board extends TimerTask {
         this.wallHit = "";
     }
 
-<<<<<<< HEAD
-    
-=======
->>>>>>> 6ebf16de2d340cfc12faf25174df4bd64f537608
     public Gadget getPortal(String portalName){
         for (Gadget gadget: this.gadgets){
             if(gadget.getName().equals(portalName)){
@@ -792,6 +788,10 @@ public class Board extends TimerTask {
         // TODO Auto-generated method stub
         return this.gadgets;
     }
-
+    
+    
+    public void updatePortalHit(){
+        this.portalHit = "";
+    }
 
 }

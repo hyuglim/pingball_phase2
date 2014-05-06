@@ -209,7 +209,7 @@ public class BoardFileFactory {
       int yCoord = Integer.parseInt(attributes.remove().toString());
       String otherBoard = "";
       String otherPortal = attributes.remove().toString();
-      if(otherPortal.equals("otherBoard")){
+      if(!attributes.isEmpty()){
           otherBoard = otherPortal;
           otherPortal = attributes.remove().toString();
       }

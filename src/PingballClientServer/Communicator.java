@@ -75,6 +75,17 @@ public class Communicator implements Runnable{
 								board.updateWallHit();
 							}	
 						}
+						
+						String portalHit = board.whichPortalGotHit();
+                        if(! portalHit.equals("")){//if ball hits a wall
+                            synchronized(out){
+                                // sample output: hit NAMEofBoard wallNum  NAMEofBall x y xVel yVel
+                                System.out.println(portalHit);
+                                
+                                out.println(portalHit);
+                                board.updatePortalHit();
+                            }   
+                        }
 					}
 					
 				}
@@ -90,6 +101,10 @@ public class Communicator implements Runnable{
 						System.out.println("I am killed");
 						board.clearAllBalls();
 						return;
+					}
+					
+					if (output.equals("create")){
+					    out.println(output);
 					}
 				}			
 			}
@@ -107,7 +122,8 @@ public class Communicator implements Runnable{
 	private String handleRequest(String input) {
 
 		String[] tokens = input.split(" ");
-
+	
+		
 		//CONFIRMING IF BALL HIT AN INVISIBLE WALL
 		if(tokens[0].equals("delete")) {
 		    
@@ -121,7 +137,7 @@ public class Communicator implements Runnable{
 		}
 		
 		//CONFIRMING IF BALL HIT a portal
-        if(tokens[0].equals("transfer")) {
+        if(tokens[0].equals("port")) {
 
             // sample input: invisible NAMEofBALL x y xVel yVel
             String originalBoardName = tokens[1];
@@ -131,14 +147,19 @@ public class Communicator implements Runnable{
             float y = Float.parseFloat(tokens[5]);
             float xVel = Float.parseFloat(tokens[6]);
             float yVel = Float.parseFloat(tokens[7]);
+            System.out.println(originalBoardName);
             
             if(board.getPortal(portalName) != null){
                 Gadget portal = board.getPortal(portalName);
-                board.insertBall(nameOfBall, portal.getX(), portal.getY(), xVel, yVel);
+                board.insertBall(nameOfBall, portal.getX()-0.5, portal.getY()-0.5, xVel, yVel);
                 return null;
             }
-
-            return "create " + originalBoardName + " " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel;
+            
+            
+            String messageToSend = "create " + originalBoardName + " " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel;
+            System.out.println(messageToSend);
+            
+            return messageToSend;
           
         }
         
@@ -171,7 +192,7 @@ public class Communicator implements Runnable{
 		}
 		
 		if(tokens[0].equals("mark")) {
-		    System.out.println(tokens);
+		
 			int wallNum = Integer.parseInt(tokens[1]);
 			String neighbor = tokens[2];
 			board.giveNeighborsName(wallNum, neighbor);
@@ -179,7 +200,7 @@ public class Communicator implements Runnable{
 			return null;
 		}
 
-		
+		System.out.println(input+"Boooooooooooooooooooo");
 
 		// Should never get here--make sure to return in each of the valid cases above.
 		throw new UnsupportedOperationException();

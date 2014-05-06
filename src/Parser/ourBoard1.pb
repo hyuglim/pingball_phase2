@@ -20,9 +20,8 @@ leftFlipper name=FlipL x=9 y=6 orientation=0
 rightFlipper name=FlipR x=12 y=5 orientation=0
 
 
-  portal name=Alpha x=19 y=8 otherPortal=Gamma
-  portal name=Beta x=19 y=16 otherPortal=Delta
-  portal name=Gamma x=9 y=16 otherPortal=Mui
+ portal name=Mui x=19 y=16 otherPortal=Delta
+
 
 # define an absorber to catch the ball
 absorber name=Abs x=10 y=8 width=10 height=2 
