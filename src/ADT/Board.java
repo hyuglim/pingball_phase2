@@ -484,8 +484,7 @@ public class Board extends TimerTask {
             uninvolvedBalls.addAll(uninvolved);  
             return uninvolvedBalls;
             }
-    }
-    
+    }    
     
     /**
      * Remove a ball when it hits an invisible wall
@@ -502,8 +501,7 @@ public class Board extends TimerTask {
         }
         balls.remove(ball);
         }
-    }
-    
+    }    
     
     /**
      * Add a ball to the board
@@ -712,11 +710,11 @@ public class Board extends TimerTask {
         CircleBumper circle = new CircleBumper("C", 0, 0);
         Ball newBall = new Ball("A", 0.5, 0.5, 0, 1, 0.25);*/
         
-        for(Gadget gadget : myBoard.getGadgets()){
+/*        for(Gadget gadget : myBoard.getGadgets()){
             if(gadget.doesPort()){
                 System.out.println(gadget.getOtherBoard());
             }
-        }
+        }*/
         
     }
 
@@ -726,6 +724,7 @@ public class Board extends TimerTask {
         this.addBall(ball);
 
     }
+    
     public void deleteBall(String nameFfBall){
         for (Ball b:this.balls){
             if (b.getName().equals(nameFfBall)){
@@ -734,8 +733,7 @@ public class Board extends TimerTask {
         }
 
     }
-    
-    
+   
     public String getName(){
         return this.boardname;
     }
@@ -767,26 +765,26 @@ public class Board extends TimerTask {
 
 
     public double getGravity() {
-        // TODO Auto-generated method stub
         return this.gravity;
     }
 
 
     public double getFriction1() {
-        // TODO Auto-generated method stub
         return this.mu;
     }
 
 
     public double getFriction2() {
-        // TODO Auto-generated method stub
         return this.mu2;
     }
 
 
     public List<Gadget> getGadgets() {
-        // TODO Auto-generated method stub
-        return this.gadgets;
+        ArrayList<Gadget> myGadgets = new ArrayList<Gadget>();
+        for(Gadget gadget: myGadgets){
+            myGadgets.add(gadget);
+        }
+        return myGadgets;
     }
     
     

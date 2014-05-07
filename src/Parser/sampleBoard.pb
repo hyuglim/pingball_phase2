@@ -15,6 +15,7 @@ board name=sampleBoard gravity=0.0 friction1 = 0.0 friction2 = 0.0
   # define some triangular bumpers
   triangleBumper name=Tri2 x=11 y=9 orientation=180
   
+  
   # add some flippers
   leftFlipper name=FlipL2 x=8 y=7 orientation=90
   rightFlipper name=FlipR2 x=10 y=7 orientation=0
@@ -24,7 +25,7 @@ board name=sampleBoard gravity=0.0 friction1 = 0.0 friction2 = 0.0
   
   portal name=Alpha x=19 y=8 otherPortal=Gamma
   portal name=Beta x=19 y=16 otherPortal=Delta
-  portal name=Gamma x=9 y=16 otherBoard = ourBoard1 otherPortal=Mui
+  portal name=Gamma x=9 y=16 otherBoard = ourBoard1 otherPortal=Moo
 
   # make the absorber self-triggering
   fire trigger=Abs action=Abs

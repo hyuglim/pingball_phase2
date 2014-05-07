@@ -341,32 +341,33 @@ public class PingballServer {
 
 		try{      
 			for (String line = in.readLine(); line != null; line = in.readLine()) {
+			    
+			    if(!line.equals("")){
+			        System.out.println(line);
+	                
+	                String[] tokens = line.split(" ");
+	                if (tokens[0].equals("name")) {
+	                    name = tokens[1];
+	                    System.out.println(name);
+	                    if (!neighbors.contains(name)) {
+	                        //top, bottom, left, right
+	                        List<String> adjacents = Arrays.asList(null, null, null, null);
+	                        List<Boolean> invisibles = Arrays.asList(false, false, false, false);
+	                        Triple<List<String>, List<Boolean>, Socket> triple 
+	                        = new Triple<List<String>, List<Boolean>,Socket>(adjacents, invisibles, socket);
 
+	                        neighbors.put(name, triple);
+	                    }
+	                    //printNeighbors();
+	                }               
+
+	                String output = handleRequest(line); 
+	                if (output != null) {
+	                    //out.println(output);
+	                }
+			    }
 				//System.out.println("line: " + line);
-				//When the client first connects, it passes in the name of the board
-			    
-			    System.out.println(line);
-			    
-				String[] tokens = line.split(" ");
-				if (tokens[0].equals("name")) {
-					name = tokens[1];
-					System.out.println(name);
-					if (!neighbors.contains(name)) {
-						//top, bottom, left, right
-						List<String> adjacents = Arrays.asList(null, null, null, null);
-						List<Boolean> invisibles = Arrays.asList(false, false, false, false);
-						Triple<List<String>, List<Boolean>, Socket> triple 
-						= new Triple<List<String>, List<Boolean>,Socket>(adjacents, invisibles, socket);
-
-						neighbors.put(name, triple);
-					}
-					//printNeighbors();
-				}				
-
-				String output = handleRequest(line); 
-				if (output != null) {
-				    //out.println(output);
-				}
+				//When the client first connects, it passes in the name of the board   
 			}
 			System.out.println("got out of for loop");
 			out.println("kill");
@@ -433,7 +434,9 @@ public class PingballServer {
 	 * @return
 	 */
 	private String handleRequest(String input) {
-
+	    
+	    
+	    System.out.println("input message: " + input);
 		//System.out.println("input from the client: " + input);
 		String[] tokens = input.split(" ");
 	
@@ -455,7 +458,7 @@ public class PingballServer {
 
             PrintWriter outReceiver;
             try {
-                System.out.println("Portal Does Not Exist");
+           
                 Socket socketReceiver = neighbors.get(otherBoardName).getThree();
 
                 outReceiver = new PrintWriter(socketReceiver.getOutputStream(), true);
@@ -463,6 +466,7 @@ public class PingballServer {
                 //String msgToSender = "delete " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel;
                 String msgToReceiver = "create " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel;
                 
+                System.out.println(msgToReceiver);
                 //outSender.println(msgToSender);
                 outReceiver.println(msgToReceiver);
 

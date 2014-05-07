@@ -93,20 +93,23 @@ public class Communicator implements Runnable{
 
 			//while server inputstream isn't closed
 			for (String line = in.readLine(); line != null; line = in.readLine()) { 
-				String output = handleRequest(line); 
-				if (output != null) {
-					
-					// when client disconnects, clear all balls
-					if (output.equals("kill")) {
-						System.out.println("I am killed");
-						board.clearAllBalls();
-						return;
-					}
-					
-					if (output.equals("create")){
-					    out.println(output);
-					}
-				}			
+			    if(!line.equals("")){
+			        String output = handleRequest(line); 
+	                if (output != null) {
+	                    
+	                    // when client disconnects, clear all balls
+	                    if (output.equals("kill")) {
+	                        System.out.println("I am killed");
+	                        board.clearAllBalls();
+	                        return;
+	                    }
+	                    
+	                    if (output.contains("create")){
+	                        out.println(output);
+	                        System.out.println(output);
+	                    }
+	                }   
+			    }				
 			}
 		} finally {
 			out.close();
@@ -147,18 +150,14 @@ public class Communicator implements Runnable{
             float y = Float.parseFloat(tokens[5]);
             float xVel = Float.parseFloat(tokens[6]);
             float yVel = Float.parseFloat(tokens[7]);
-            System.out.println(originalBoardName);
             
             if(board.getPortal(portalName) != null){
                 Gadget portal = board.getPortal(portalName);
                 board.insertBall(nameOfBall, portal.getX()-0.5, portal.getY()-0.5, xVel, yVel);
                 return null;
             }
-            
-            
-            String messageToSend = "create " + originalBoardName + " " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel;
-            System.out.println(messageToSend);
-            
+                       
+            String messageToSend = "create " + originalBoardName + " " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel;            
             return messageToSend;
           
         }
@@ -183,6 +182,7 @@ public class Communicator implements Runnable{
 			
 			// ADD A NEW BALL AT X,Y LOC IN THE CLIENT 			
 			board.insertBall(nameOfBall, x, y, xVel, yVel);
+			System.out.println(input);
 			return null;
 		}   
 
