@@ -243,7 +243,7 @@ public class Board extends TimerTask {
                         }
                     }else{
 
-                        this.portalHit = "port "+this.boardname+" " +g.getOtherBoard()+" "+g.getOtherPortal()+" "+each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+ " " + each.getRadius() + "\n";
+                        this.portalHit = "port "+this.boardname+" " +g.getOtherBoard()+" "+g.getOtherPortal()+" "+each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+ " " + each.getRadius();
                         ballOut = true;
                         ballsToRemove.add(each);
                   

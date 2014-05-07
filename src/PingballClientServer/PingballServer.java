@@ -505,7 +505,7 @@ public class PingballServer {
                     outReceiver = new PrintWriter(socketReceiver.getOutputStream(), true);
                                       
                     //String msgToSender = "delete " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel;
-                    String msgToReceiver = "port "+ nameOfBoard +" " + otherPortalName+" "+nameOfBall+" "+x+" "+y+" "+xVel+" "+yVel+ " " + radius + "\n";
+                    String msgToReceiver = "port "+ nameOfBoard +" " + otherPortalName+" "+nameOfBall+" "+x+" "+y+" "+xVel+" "+yVel+ " " + radius;
                     //outSender.println(msgToSender);
                     outReceiver.println(msgToReceiver);
 

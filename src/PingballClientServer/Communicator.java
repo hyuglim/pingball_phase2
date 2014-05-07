@@ -93,23 +93,21 @@ public class Communicator implements Runnable{
 
 			//while server inputstream isn't closed
 			for (String line = in.readLine(); line != null; line = in.readLine()) { 
-			    if(!line.equals("")){
-			        String output = handleRequest(line); 
-	                if (output != null) {
-	                    
-	                    // when client disconnects, clear all balls
-	                    if (output.equals("kill")) {
-	                        System.out.println("I am killed");
-	                        board.clearAllBalls();
-	                        return;
-	                    }
-	                    
-	                    if (output.contains("create")){
-	                        out.println(output);
-	                        System.out.println(output);
-	                    }
-	                }   
-			    }				
+			    String output = handleRequest(line); 
+			    if (output != null) {
+
+			        // when client disconnects, clear all balls
+			        if (output.equals("kill")) {
+			            System.out.println("I am killed");
+			            board.clearAllBalls();
+			            return;
+			        }
+
+			        if (output.contains("create")){
+			            out.println(output);
+			            System.out.println(output);
+			        }
+			    }   		
 			}
 		} finally {
 			out.close();

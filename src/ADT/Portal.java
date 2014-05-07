@@ -201,7 +201,7 @@ public class Portal implements Gadget{
      * @see Gadget#doesPort()
      */
     public boolean doesPort() {
-        return false;
+        return true;
     }
 
     /**
