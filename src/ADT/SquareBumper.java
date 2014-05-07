@@ -223,43 +223,51 @@ public class SquareBumper implements Gadget{
         return this.triggers;
     }
 
-    public void addKeyUp(String key) {
-        // TODO Auto-generated method stub
-        
+
+    /**
+     * @see Gadget#addKeyUp(key)
+     */
+    public void addKeyUp(String key) {        
     }
 
+    /**
+     * @see Gadget#addKeyUp(key)
+     */
     public void addKeyDown(String key) {
-        // TODO Auto-generated method stub
-        
     }
 
-
+    /**
+     * @see Gadget#getUpKeyTriggers()
+     */
     public ArrayList<String> getUpKeyTriggers() {
-        // TODO Auto-generated method stub
         return null;
     }
 
-
+    /**
+     * @see Gadget#getDownKeyTriggers()
+     */
     public ArrayList<String> getDownKeyTriggers() {
-        // TODO Auto-generated method stub
         return null;
     }
-
-    @Override
+    
+    /**
+     * @see Gadget#doesPort()
+     */
     public boolean doesPort() {
-        // TODO Auto-generated method stub
         return false;
     }
 
-    @Override
+    /**
+     * @see Gadget#getOtherBoard()
+     */
     public String getOtherBoard() {
-        // TODO Auto-generated method stub
         return null;
     }
 
-    @Override
+    /**
+     * @see Gadget#getOtherPortal()
+     */
     public String getOtherPortal() {
-        // TODO Auto-generated method stub
         return null;
     }
 

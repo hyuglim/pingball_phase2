@@ -325,41 +325,54 @@ public class RightFlipper implements Gadget{
     public ArrayList<Gadget> getTriggers() {
         return this.triggeredBy;
     }
-
+    /**
+     * @see Gadget#addKeyUp(key)
+     */
     public void addKeyUp(String key) {
         upTriggers.add(key);
         
     }
 
+    /**
+     * @see Gadget#addKeyUp(key)
+     */
     public void addKeyDown(String key) {
         downTriggers.add(key);
         
     }
 
+    /**
+     * @see Gadget#getUpKeyTriggers()
+     */
     public ArrayList<String> getUpKeyTriggers() {
         return upTriggers;
     }
 
+    /**
+     * @see Gadget#getDownKeyTriggers()
+     */
     public ArrayList<String> getDownKeyTriggers() {
         return downTriggers;
     }
-
-    @Override
+    
+    /**
+     * @see Gadget#doesPort()
+     */
     public boolean doesPort() {
-        // TODO Auto-generated method stub
         return false;
     }
 
-    @Override
+    /**
+     * @see Gadget#getOtherBoard()
+     */
     public String getOtherBoard() {
-        // TODO Auto-generated method stub
         return null;
     }
 
-    @Override
+    /**
+     * @see Gadget#getOtherPortal()
+     */
     public String getOtherPortal() {
-        // TODO Auto-generated method stub
         return null;
     }
-
 }

@@ -1,7 +1,6 @@
 package ADT;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.ArrayList; 
 import java.util.List;
 
 import physics.*;
@@ -9,8 +8,6 @@ import physics.*;
  * This represents a wall, it can be of four types depending on the orientation w.r.t the board.
  * Each wall can also be visible or not, if invisible: it has a board that it is connected to and
  * the toString method takes care of returning the name of the board it is connected to.
- * @author saadiyah
- *
  */
 
 public class Wall {
@@ -118,32 +115,63 @@ public class Wall {
         
     }
     
+    /**
+     * Returns the visibility of this wall
+     * @return true if this wall is visible, otherwise false
+     */
     public boolean getVisibility(){
         return this.visible; 
     }
     
+    
+    /**
+     * Sets the visibility of this wall to be
+     * @param b true if to make this wall visible, otherwise false
+     */
     public void setVisibility(boolean b){
         this.visible = b;
         
     }
-    
+       
+    /**
+     * If this wall is connected to a neighbor, then
+     * disconnects the connection
+     */
     public void removeConnection(){
         this.connectedTo = ".";
     }
     
+    /**
+     * Adds a connection to this wall, so that this wall is
+     * connected to a wall of a given board with a given String name
+     * @param name the name of the board to connect to
+     */
     public void addConnection(String name){
         this.connectedTo = name;
         this.visible = false;
     }
     
+    /**
+     * If this wall is connected to a neighbor, then
+     * disconnects the connection and makes this wall visible
+     */
     public void disconnectWall(){
         removeConnection();
         this.visible = true;
     }
     
+    /**
+     * Returns the neighbor name of the board that this wall's connected tp
+     * @return the connected neighbor name
+     */
     public String getConnectedTo(){
         return this.connectedTo;
     }
+    
+    /**
+     * Returns the location of this wall
+     * @return the location
+     */
     public String getLocation(){
         return this.location;
     }

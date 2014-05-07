@@ -64,16 +64,16 @@ public class Portal implements Gadget{
      * @see Gadget#getWidth()
      */
     public int getWidth(){
-        int WIDTH_OF_CIRCLE_BUMPER = 1;
-        return WIDTH_OF_CIRCLE_BUMPER;
+        int WIDTH_OF_PORTAL = 1;
+        return WIDTH_OF_PORTAL;
     }
 
     /**
      * @see Gadget#getHeight()
      */
     public int getHeight(){
-        int HEIGHT_OF_CIRCLE_BUMPER = 1;
-        return HEIGHT_OF_CIRCLE_BUMPER;
+        int HEIGHT_OF_PORTAL = 1;
+        return HEIGHT_OF_PORTAL;
     }
 
     /**
@@ -171,45 +171,50 @@ public class Portal implements Gadget{
         return this.triggeredBy;
     }
 
-
-    public void addKeyUp(String key) {
-        // TODO Auto-generated method stub
-
+    /**
+     * @see Gadget#addKeyUp(key)
+     */
+    public void addKeyUp(String key) {        
     }
 
-
+    /**
+     * @see Gadget#addKeyUp(key)
+     */
     public void addKeyDown(String key) {
-        // TODO Auto-generated method stub
-
     }
 
-
+    /**
+     * @see Gadget#getUpKeyTriggers()
+     */
     public ArrayList<String> getUpKeyTriggers() {
-        // TODO Auto-generated method stub
         return null;
     }
 
-
+    /**
+     * @see Gadget#getDownKeyTriggers()
+     */
     public ArrayList<String> getDownKeyTriggers() {
-        // TODO Auto-generated method stub
         return null;
     }
-
-    @Override
+    
+    /**
+     * @see Gadget#doesPort()
+     */
     public boolean doesPort() {
-        // TODO Auto-generated method stub
-        return true;
+        return false;
     }
 
-    @Override
+    /**
+     * @see Gadget#getOtherBoard()
+     */
     public String getOtherBoard() {
-        // TODO Auto-generated method stub
         return otherBoard;
     }
 
-    @Override
+    /**
+     * @see Gadget#getOtherPortal()
+     */
     public String getOtherPortal() {
-        // TODO Auto-generated method stub
         return otherPortal;
     }
 

@@ -236,8 +236,7 @@ public class Board extends TimerTask {
                             if(gadget.getName().equals(g.getOtherPortal())){
                                 otherPortalExists = true;
                                 each.updatePosition(gadget.getX()-0.5, gadget.getY()-0.5);
-                            }
-                            
+                            }                           
                         }
                         if(otherPortalExists == false){
                             updateEmpty(each, 0.05);
@@ -837,7 +836,7 @@ public class Board extends TimerTask {
         
         //myBoard.addGadget(rf);
         //myBoard.addGadget(lf);
-        
+   /*     
         StringBuilder boardText = new StringBuilder("");
         
         BufferedReader fr = new BufferedReader(new FileReader("src/Parser/" + "sampleBoard.pb"));
@@ -849,18 +848,25 @@ public class Board extends TimerTask {
 
         //Ball myBall = new  Ball("Zulaa", 7, 7, 0, 10);
         //myBoard.addBall(myBall);
-/*        Timer timer = new Timer();
+        Timer timer = new Timer();
        
         timer.schedule(myBoard, 0, 50);
         
         CircleBumper circle = new CircleBumper("C", 0, 0);
-        Ball newBall = new Ball("A", 0.5, 0.5, 0, 1, 0.25);*/
+        Ball newBall = new Ball("A", 0.5, 0.5, 0, 1, 0.25);
         
-/*        for(Gadget gadget : myBoard.getGadgets()){
+        for(Gadget gadget : myBoard.getGadgets()){
             if(gadget.doesPort()){
                 System.out.println(gadget.getOtherBoard());
             }
-        }*/
+        }
+        */
+        
+        
+        Ball myBall = new Ball("B", 0, 0.25, 1, 1, 0.25);
+        CircleBumper circle = new CircleBumper("C", 0, 0);
+        
+        System.out.println(circle.getCollisionTime(myBall));
         
     }
 
