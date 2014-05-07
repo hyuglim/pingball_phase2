@@ -802,7 +802,7 @@ public class Board extends TimerTask {
      */
     public List<Gadget> getGadgets() {
         ArrayList<Gadget> myGadgets = new ArrayList<Gadget>();
-        for(Gadget gadget: myGadgets){
+        for(Gadget gadget: this.gadgets){
             myGadgets.add(gadget);
         }
         return myGadgets;
