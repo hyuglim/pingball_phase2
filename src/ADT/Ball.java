@@ -18,12 +18,16 @@ public class Ball {
     private final double radius;
     private Geometry.DoublePair position;
     private boolean absorbed = false;
+
     /**
-     * make a new ball instance
-     * @param circle from the physics package
-     * @param velocity a vector (also from the physics package)
+     * Constructor for making a new ball
+     * @param name the name of the ball
+     * @param xCoord xCoordinate of the ball's center
+     * @param yCoord yCoordinate of the ball's center
+     * @param xVel xVelocity of the ball's velocity
+     * @param yVel yVelocity of the ball's velocity
+     * @param radius the radius of the ball
      */
-    
     public Ball(String name, double xCoord, double yCoord, double xVel, double yVel, double radius) {
         this.radius = radius;
         this.circle = new Circle(xCoord, yCoord, this.radius);
@@ -33,6 +37,11 @@ public class Ball {
         
     }
     
+    /**
+     * make a new ball instance
+     * @param circle from the physics package
+     * @param velocity a vector (also from the physics package)
+     */
     public Ball(String name, Circle circle, Vect vel){
         this.radius = circle.getRadius();
         this.circle = circle;
@@ -40,35 +49,55 @@ public class Ball {
         this.velocity = vel;
         this.name = name;
     }
+    
+    
+  
+    /**
+     * Updates this ball's position
+     * @param x the x coordinate of the new position
+     * @param y the y coordinate of the new position
+     */
     public void updatePosition(double x,double y){
         this.circle = new Circle(x, y, this.radius);
         this.position = new Geometry.DoublePair(x, y);
     }
     
+    
+    /**
+     * Updates this ball's velocity to the given new velocity newvel
+     * @param newvel the new velocity
+     */
     public void updateVelocity(Vect newVelocity){
         this.velocity = newVelocity;
     }
 
+    /**
+     * Returns the x axis location of this ball's center
+     * @return x coordinate of this ball's center
+     */
     public double getOriginX(){
         double originX = this.circle.getCenter().x();
         return originX;
     }
-
+    
+    /**
+     * Returns the y axis location of this ball's center
+     * @return y coordinate of this ball's center
+     */
     public double getOriginY(){
         double originY = this.circle.getCenter().y();
         return originY;
     }
-
+    
+    /**
+     * Returns DoublePair representation of this ball's current position
+     * @return the current position
+     */
     public DoublePair getCurrentPosition(){
         return new DoublePair(getOriginX(), getOriginY());
     }
 
-    public void setVelocity(Vect newvel) {
-        this.velocity = newvel;
         
-    }
-    
-    
     /**
      * Returns the x velocity passed in. Used for debugging antlr.
      * @return the x velocity passed in
@@ -195,5 +224,13 @@ public class Ball {
         Vect center2 = new Vect(ball.getBallPosition().d1, ball.getBallPosition().d2);
         VectPair afterVelocities = Geometry.reflectBalls(center1, 1,  this.velocity, center2, 1, ball.velocity);
         return afterVelocities.v1;
+    }
+    
+    /**
+     * Returns the radius of this ball
+     * @return the radius
+     */
+    public double getRadius(){
+        return this.radius;
     }
 }

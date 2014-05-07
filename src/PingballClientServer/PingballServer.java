@@ -455,6 +455,7 @@ public class PingballServer {
             double y = Double.parseDouble(tokens[4]);
             double xVel = Double.parseDouble(tokens[5]);
             double yVel = Double.parseDouble(tokens[6]);    
+            double radius = Double.parseDouble(tokens[7]);  
 
             PrintWriter outReceiver;
             try {
@@ -464,7 +465,7 @@ public class PingballServer {
                 outReceiver = new PrintWriter(socketReceiver.getOutputStream(), true);
 
                 //String msgToSender = "delete " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel;
-                String msgToReceiver = "create " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel;
+                String msgToReceiver = "create " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel + " " + radius;
                 
                 System.out.println(msgToReceiver);
                 //outSender.println(msgToSender);
@@ -492,6 +493,7 @@ public class PingballServer {
             double y = Double.parseDouble(tokens[6]);
             double xVel = Double.parseDouble(tokens[7]);
             double yVel = Double.parseDouble(tokens[8]);    
+            double radius = Double.parseDouble(tokens[9]); 
 
             PrintWriter outReceiver;
             try {
@@ -503,12 +505,20 @@ public class PingballServer {
                     outReceiver = new PrintWriter(socketReceiver.getOutputStream(), true);
                                       
                     //String msgToSender = "delete " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel;
-                    String msgToReceiver = "port "+ nameOfBoard +" " + otherPortalName+" "+nameOfBall+" "+x+" "+y+" "+xVel+" "+yVel+"\n";
+                    String msgToReceiver = "port "+ nameOfBoard +" " + otherPortalName+" "+nameOfBall+" "+x+" "+y+" "+xVel+" "+yVel+ " " + radius + "\n";
                     //outSender.println(msgToSender);
                     outReceiver.println(msgToReceiver);
 
                     return null;
                 }
+                
+                Socket socketReceiver = neighbors.get(nameOfBoard).getThree();
+
+                outReceiver = new PrintWriter(socketReceiver.getOutputStream(), true);
+                String msgToReceiver = "create " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel + " " + radius;
+
+                //outSender.println(msgToSender);
+                outReceiver.println(msgToReceiver);
                 return null;
             } catch (IOException e) {
                 // TODO Auto-generated catch block
@@ -528,6 +538,7 @@ public class PingballServer {
 			double y = Double.parseDouble(tokens[5]);
 			double xVel = Double.parseDouble(tokens[6]);
 			double yVel = Double.parseDouble(tokens[7]); 	
+			double radius = Double.parseDouble(tokens[8]); 
 
 			// TODO: 
 			// first, find the adjacent neighbor
@@ -567,7 +578,7 @@ public class PingballServer {
 					}
 
 					//String msgToSender = "delete " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel;
-					String msgToReceiver = "create " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel;
+					String msgToReceiver = "create " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel + " " + radius;
 
 					//outSender.println(msgToSender);
 					outReceiver.println(msgToReceiver);

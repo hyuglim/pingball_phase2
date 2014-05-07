@@ -125,20 +125,47 @@ public interface Gadget {
      */
     public ArrayList<Gadget> getTriggers();
     
-    
+    /**
+     * Adds the key to the list of this gadget's key triggers.
+     * @param key the key that triggers this gadget when released
+     */
     public void addKeyUp(String key);
     
+    /**
+     * Adds the key to the list of this gadget's key triggers.
+     * @param key the key that triggers this gadget when pressed.
+     */
     public void addKeyDown(String key);
     
+    /**
+     * Returns the list of keys that triggers this gadget when released.
+     * @return this gadgets' up trigger keys.
+     */
     public ArrayList<String> getUpKeyTriggers();
     
+    /**
+     * Returns the list of keys that triggers this gadget when pressed.
+     * @return this gadgets' down trigger keys.
+     */
     public ArrayList<String> getDownKeyTriggers();
     
+    /**
+     * Checks whether the gadget ports or not.
+     * @return true if the gadget ports whenever a ball hits it.
+     */
     public boolean doesPort();
     
-    
+    /**
+     * Returns the otherboard's name that this gadget is connected to
+     * @return the board name that this gadget is connected to
+     */
     public String getOtherBoard();
     
+    
+    /**
+     * Returns the other portal name that this gadget is connected to
+     * @return the portal name that this gadget is connected to
+     */
     public String getOtherPortal();
            
 }

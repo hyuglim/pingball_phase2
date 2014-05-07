@@ -25,7 +25,7 @@ board name=sampleBoard gravity=0.0 friction1 = 0.0 friction2 = 0.0
   
   portal name=Alpha x=19 y=8 otherPortal=Gamma
   portal name=Beta x=19 y=16 otherPortal=Delta
-  portal name=Gamma x=9 y=16 otherBoard = ourBoard1 otherPortal=Moo
+  portal name=Gamma x=9 y=16 otherBoard = ourBoard1 otherPortal=Heyhey
 
   # make the absorber self-triggering
   fire trigger=Abs action=Abs

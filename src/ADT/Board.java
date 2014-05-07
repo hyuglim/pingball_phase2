@@ -244,7 +244,7 @@ public class Board extends TimerTask {
                         }
                     }else{
 
-                        this.portalHit = "port "+this.boardname+" " +g.getOtherBoard()+" "+g.getOtherPortal()+" "+each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+"\n";
+                        this.portalHit = "port "+this.boardname+" " +g.getOtherBoard()+" "+g.getOtherPortal()+" "+each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+ " " + each.getRadius() + "\n";
                         ballOut = true;
                         ballsToRemove.add(each);
                   
@@ -642,20 +642,43 @@ public class Board extends TimerTask {
         }
     }
     
+    /**
+     * Returns a message representing which wall got hit by a which ball
+     * @return String representation of the message to be sent to the Server when 
+     * a ball hits a wall
+     */
     public String whichWallGotHit(){
         return this.wallHit;
         
     }
+    
+    /**
+     * Returns a message representing which portal got hit by a which ball
+     * @return String representation of the message to be sent to the Server when 
+     * a ball hits a portal
+     */
     public String whichPortalGotHit(){
         return this.portalHit;
     }
     
+    /**
+     * Sets the wall's neighbor to the given string neighbor name when two boards
+     * are connected, so that the wall knows its neighbor's name.
+     * @param wallNum the integer representing the particular wall of this board:
+     * 0 - top wall, 1 - bottom wall, 2 - left wall, 3 - right wall. 
+     * @param neighbor String name of the neighbor of this wall
+     */
     public void giveNeighborsName(int wallNum, String neighbor){
         this.neighbours [wallNum] = neighbor;
         this.walls.get(wallNum).addConnection(neighbor);
         
     }
     
+    /**
+     * Triggers the all gadgets that this board has that are
+     * triggered by the given key when released
+     * @param key the String name of the trigger key
+     */
     public void triggerUpKey(String key){
         for(Gadget gadget:gadgets){
             if(gadget.getUpKeyTriggers().contains(key)){
@@ -664,6 +687,11 @@ public class Board extends TimerTask {
         }
     }
     
+    /**
+     * Triggers the all gadgets that this board has that are
+     * triggered by the given key when pressed
+     * @param key the String name of the trigger key
+     */
     public void triggerDownKey(String key){
         for(Gadget gadget:gadgets){
             if(gadget.getDownKeyTriggers().contains(key)){
@@ -671,6 +699,124 @@ public class Board extends TimerTask {
             }
         }
     }
+
+    /**
+     * Inserts the ball with a given name to this board
+     * @param nameOfBall the String name of the ball to be inserted
+     */
+    public void insertBall(String nameOfBall, double x, double y, double xVel, double yVel, double radius){
+        Ball ball = new Ball(nameOfBall, x, x, xVel, yVel, radius);
+        this.addBall(ball);
+
+    }
+    
+    /**
+     * Deletes the ball with a given name from this board
+     * @param nameFfBall the String name of the ball to be deleted
+     */
+    public void deleteBall(String nameFfBall){
+        for (Ball b:this.balls){
+            if (b.getName().equals(nameFfBall)){
+                this.removeBall(b);
+            }
+        }
+
+    }
+   
+    /**
+     * Returns the String name of this board
+     * @return the name of this board
+     */
+    public String getName(){
+        return this.boardname;
+    }
+    
+    /**
+     * Removes all the balls in this board and updates its 
+     * ball's list to an empty list
+     */
+    public void clearAllBalls(){
+        this.balls = new ArrayList<Ball>();
+    }
+    
+    /**
+     * If no ball is hitting a wall, updates wallHit accordingly 
+     * to show that none of the balls are hitting a wall.
+     */
+    public void updateWallHit(){
+        this.wallHit = "";
+    }
+    
+    /**
+     * Finds a portal with the given name
+     * @param portalName the String name of the searching portal
+     * @return the portal if this board has the portal with the
+     * given name otherwise return null.
+     */
+    public Gadget getPortal(String portalName){
+        for (Gadget gadget: this.gadgets){
+            if(gadget.getName().equals(portalName)){
+                return gadget;
+            }
+        }
+        return null;
+    }
+    
+    /**
+     * Returns the list of balls that this board has
+     * @return the list of balls
+     */
+    public List<Ball> getBalls(){
+        return this.balls;
+    }
+
+    /**
+     * Returns the gravity coefficient of this board
+     * @return the gravity coefficient
+     */
+    public double getGravity() {
+        return this.gravity;
+    }
+
+    
+    /**
+     * Returns the first friction coefficient of this board
+     * @return the first friction coefficient
+     */
+    public double getFriction1() {
+        return this.mu;
+    }
+
+
+    /**
+     * Returns the second friction coefficient of this board
+     * @return the second friction coefficient
+     */
+    public double getFriction2() {
+        return this.mu2;
+    }
+
+
+    /**
+     * Returns the list of gadgets that this board has
+     * @return the list of gadgets.
+     */
+    public List<Gadget> getGadgets() {
+        ArrayList<Gadget> myGadgets = new ArrayList<Gadget>();
+        for(Gadget gadget: myGadgets){
+            myGadgets.add(gadget);
+        }
+        return myGadgets;
+    }
+    
+    /**
+     * If no ball is hitting a portal, updates portalHit accordingly 
+     * to show that none of the balls are hitting a portal.
+     */
+    public void updatePortalHit(){
+        this.portalHit = "";
+    }
+    
     
     
     public static void main(String[] args) throws IOException{
@@ -718,78 +864,5 @@ public class Board extends TimerTask {
         
     }
 
-
-    public void insertBall(String nameOfBall, double x, double y, double xVel, double yVel){
-        Ball ball = new Ball(nameOfBall, x, x, xVel, yVel, .25);
-        this.addBall(ball);
-
-    }
-    
-    public void deleteBall(String nameFfBall){
-        for (Ball b:this.balls){
-            if (b.getName().equals(nameFfBall)){
-                this.removeBall(b);
-            }
-        }
-
-    }
-   
-    public String getName(){
-        return this.boardname;
-    }
-
-    public void clearAllBalls(){
-        this.balls = new ArrayList<Ball>();
-    }
-    
-    public int getBallsSize(){
-        return this.balls.size();
-    }
-    
-    public void updateWallHit(){
-        this.wallHit = "";
-    }
-
-    public Gadget getPortal(String portalName){
-        for (Gadget gadget: this.gadgets){
-            if(gadget.getName().equals(portalName)){
-                return gadget;
-            }
-        }
-        return null;
-    }
-
-    public List<Ball> getBalls(){
-        return this.balls;
-    }
-
-
-    public double getGravity() {
-        return this.gravity;
-    }
-
-
-    public double getFriction1() {
-        return this.mu;
-    }
-
-
-    public double getFriction2() {
-        return this.mu2;
-    }
-
-
-    public List<Gadget> getGadgets() {
-        ArrayList<Gadget> myGadgets = new ArrayList<Gadget>();
-        for(Gadget gadget: myGadgets){
-            myGadgets.add(gadget);
-        }
-        return myGadgets;
-    }
-    
-    
-    public void updatePortalHit(){
-        this.portalHit = "";
-    }
 
 }

@@ -295,8 +295,8 @@ public class BoardTests {
      */
     @Test
     public void testRemoveBall(){
-        Ball ball1 = new Ball("ball1",new Circle(1,1,0.25), new Vect(0,1));
-        Ball ball3 = new Ball("ball2",new Circle(1,1.05,0.25), new Vect(0,-1));
+        Ball ball1 = new Ball("ball1", 1, 1, 0, 1, 0.25);
+        Ball ball3 = new Ball("ball2",1, 1.05, 0 ,- 1, 0.25);
         
         Ball ball2 = new Ball("ball3",new Circle(5,5.0,0.25), new Vect(1,0));
         Ball ball4 = new Ball("ball4",new Circle(5.04,5.0,0.25), new Vect(-1,0));
@@ -307,7 +307,7 @@ public class BoardTests {
         board.addBall(ball4);
         
         board.removeBall(ball1);
-        assertTrue(board.getBallsSize()==3);
+        assertTrue(board.getBalls().size()==3);
         assertFalse(board.getBalls().contains(ball1));
     }
     

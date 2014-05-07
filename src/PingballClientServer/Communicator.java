@@ -150,14 +150,15 @@ public class Communicator implements Runnable{
             float y = Float.parseFloat(tokens[5]);
             float xVel = Float.parseFloat(tokens[6]);
             float yVel = Float.parseFloat(tokens[7]);
+            float radius = Float.parseFloat(tokens[8]);
             
             if(board.getPortal(portalName) != null){
                 Gadget portal = board.getPortal(portalName);
-                board.insertBall(nameOfBall, portal.getX()-0.5, portal.getY()-0.5, xVel, yVel);
+                board.insertBall(nameOfBall, portal.getX()-0.5, portal.getY()-0.5, xVel, yVel, radius);
                 return null;
             }
                        
-            String messageToSend = "create " + originalBoardName + " " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel;            
+            String messageToSend = "create " + originalBoardName + " " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel + " " + radius;            
             return messageToSend;
           
         }
@@ -179,10 +180,10 @@ public class Communicator implements Runnable{
 			float y = Float.parseFloat(tokens[3]);
 			float xVel = Float.parseFloat(tokens[4]);
 			float yVel = Float.parseFloat(tokens[5]);
+			float radius = Float.parseFloat(tokens[6]);
 			
 			// ADD A NEW BALL AT X,Y LOC IN THE CLIENT 			
-			board.insertBall(nameOfBall, x, y, xVel, yVel);
-			System.out.println(input);
+			board.insertBall(nameOfBall, x, y, xVel, yVel, radius);
 			return null;
 		}   
 
