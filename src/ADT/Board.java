@@ -675,6 +675,20 @@ public class Board extends TimerTask {
     }
     
     /**
+     * Removes the wall's neighbor.
+     * @param wallNum the integer representing the particular wall of this board:
+     * 0 - top wall, 1 - bottom wall, 2 - left wall, 3 - right wall. 
+     * @param neighbor String name of the neighbor of this wall
+     */
+    public void removeNeighborsName(int wallNum, String neighbor) {
+    	System.out.println("****************************************************");
+    	System.out.println("removeNeighborsName called");
+    	System.out.println("****************************************************");
+    	this.neighbours [wallNum] = null;
+    	this.walls.get(wallNum).removeConnection();
+    }
+    
+    /**
      * Triggers the all gadgets that this board has that are
      * triggered by the given key when released
      * @param key the String name of the trigger key

@@ -122,6 +122,9 @@ public class Communicator implements Runnable{
 	 */
 	private String handleRequest(String input) {
 
+		System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+		System.out.println("input: " + input);
+		System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
 		String[] tokens = input.split(" ");
 	
 		
@@ -197,6 +200,14 @@ public class Communicator implements Runnable{
 			board.giveNeighborsName(wallNum, neighbor);
 			board.connectWall(wallNum, neighbor);
 			return null;
+		}
+		
+		if (tokens[0].equals("unmark")) {
+			System.out.println("********I am in unmark*************");
+			int wallNum = Integer.parseInt(tokens[1]);
+			String neighbor = tokens[2];
+			board.removeNeighborsName(wallNum, neighbor); //TODO: don't know if this is sufficient
+			return "kill";
 		}
 
 		System.out.println(input+"Boooooooooooooooooooo");

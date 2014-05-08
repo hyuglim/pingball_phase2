@@ -97,23 +97,52 @@ public class PingballServer {
 		this.serverSocket = new ServerSocket(port);
 
 	}
-	
-	private void notifyBoard(String name) throws IOException {
+
+	/**
+	 * Method used for telling clients that their wall has been joined
+	 * Gets all valid neighbors, get their sockets, and send messages.
+	 * 
+	 * @param name
+	 * @throws IOException
+	 */
+	private void notifyBoardJoin(String name) throws IOException {
 		Socket socket = neighbors.get(name).getThree();
 		List<String> adj = neighbors.get(name).getOne();
 		List<Boolean> invis = neighbors.get(name).getTwo();
 		PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-		
+
 		for (int i = 0; i < adj.size(); i++) {
 			if (invis.get(i)) {
 				String neigh = adj.get(i);
-				System.out.println("mark " + i + " " + neigh);
-				
+				//System.out.println("mark " + i + " " + neigh);
+
 				out.println("mark " + i + " " + neigh);
-				
+
 			}
 		}		
 	}
+	
+	/**
+	 * Method used for telling clients that their wall has been unjoined
+	 * @param name
+	 * @throws IOException
+	 */
+//	private void notifyBoardUnjoin(String name) throws IOException {
+//		Socket socket = neighbors.get(name).getThree();
+//		List<String> adj = neighbors.get(name).getOne();
+//		List<Boolean> invis = neighbors.get(name).getTwo();
+//		PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+//
+//		for (int i = 0; i < adj.size(); i++) {
+//			if (invis.get(i)) {
+//				String neigh = adj.get(i);
+//				System.out.println("unmark " + i + " " + neigh);
+//
+//				out.println("unmark " + i + " " + neigh);
+//
+//			}
+//		}		
+//	}
 
 
 	/**
@@ -152,19 +181,19 @@ public class PingballServer {
 		} else {
 			// send message to the left board
 			setNeighborBoards(left, right, 3);
-			notifyBoard(left);
+			notifyBoardJoin(left);
 
 			// send message to the right board
 			setNeighborBoards(right, left, 2);
-			notifyBoard(right);
-			
+			notifyBoardJoin(right);
+
 			return;
 		}
-		
-		
+
+
 
 	}
-	
+
 
 
 	/**
@@ -205,11 +234,11 @@ public class PingballServer {
 
 			// send message to the top board
 			setNeighborBoards(top, bottom, 1);
-			notifyBoard(top);
+			notifyBoardJoin(top);
 
 			// send message to the right board
 			setNeighborBoards(bottom, top, 0);
-			notifyBoard(bottom);
+			notifyBoardJoin(bottom);
 			return;
 
 		}
@@ -277,7 +306,7 @@ public class PingballServer {
 		} else if (words[0].equals("v")) {
 			makeVerticNeighbors(words);
 		}
-		
+
 	}
 
 	/**
@@ -341,81 +370,96 @@ public class PingballServer {
 
 		try{      
 			for (String line = in.readLine(); line != null; line = in.readLine()) {
-			    
-			    if(!line.equals("")){
-			        System.out.println(line);
-	                
-	                String[] tokens = line.split(" ");
-	                if (tokens[0].equals("name")) {
-	                    name = tokens[1];
-	                    System.out.println(name);
-	                    if (!neighbors.contains(name)) {
-	                        //top, bottom, left, right
-	                        List<String> adjacents = Arrays.asList(null, null, null, null);
-	                        List<Boolean> invisibles = Arrays.asList(false, false, false, false);
-	                        Triple<List<String>, List<Boolean>, Socket> triple 
-	                        = new Triple<List<String>, List<Boolean>,Socket>(adjacents, invisibles, socket);
 
-	                        neighbors.put(name, triple);
-	                    }
-	                    //printNeighbors();
-	                }               
+				if(!line.equals("")){
+					//System.out.println(line);
 
-	                String output = handleRequest(line); 
-	                if (output != null) {
-	                    //out.println(output);
-	                }
-			    }
+					String[] tokens = line.split(" ");
+					if (tokens[0].equals("name")) {
+						name = tokens[1];
+						System.out.println(name);
+						if (!neighbors.contains(name)) {
+							//top, bottom, left, right
+							List<String> adjacents = Arrays.asList(null, null, null, null);
+							List<Boolean> invisibles = Arrays.asList(false, false, false, false);
+							Triple<List<String>, List<Boolean>, Socket> triple 
+							= new Triple<List<String>, List<Boolean>,Socket>(adjacents, invisibles, socket);
+
+							neighbors.put(name, triple);
+						}
+						//printNeighbors();
+					}               
+
+					String output = handleRequest(line); 
+					if (output != null) {
+						//out.println(output);
+					}
+				}
 				//System.out.println("line: " + line);
 				//When the client first connects, it passes in the name of the board   
 			}
 			System.out.println("got out of for loop");
 			out.println("kill");
+			
+			//when a client disconnects, revert to solid walls
+			revertToSolidWalls(name);
+			System.out.println("revert walls: " + name);
 		} catch(Exception e) {
-		  //when the client disconnects, revert all boards to solid walls
-            revertToSolidWalls(name);
-            
-            
-            System.out.println("revert walls");
-		
+			//when the server thread specific to a client disconnects, revert the neighboring boards to solid walls
+			revertToSolidWalls(name);
+
+			System.out.println("revert walls!");
+			e.printStackTrace();
+
 		} finally {
 			out.close();
 			in.close();
 			socket.close();
-			
-			
-			
+
+
+
 			//when the client disconnects, all balls inside its board are lost
-			
-			
+
+
 		}
 	}
-	
+
 	/**
 	 * When a client disconnects, find all boards joined to it, and revert to solid walls
 	 * @param name
 	 */
-	private void revertToSolidWalls(String name) {
+	private void revertToSolidWalls(String name) throws IOException{
+		printNeighbors();
 		
 		List<String> adjacents = neighbors.get(name).getOne();		
 		List<Boolean> invisibles = neighbors.get(name).getTwo();
+
 		
 		//go through the neighbors and reset
 		for (int i = 0; i < adjacents.size(); i++) {
 			String neighbor = adjacents.get(i);
 			if (neighbor != null) {
+				Socket socket = neighbors.get(name).getThree();
+				PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+				
+				System.out.println("unmark " + i + " " + neighbor);
+				out.println("unmark " + i + " " + neighbor);
+				
 				List<String> nOfns = neighbors.get(neighbor).getOne();
 				List<Boolean> bOfns = neighbors.get(neighbor).getTwo();
 				int index = nOfns.indexOf(name);
-				
+
 				System.out.println("name when closed: " + name);
 				System.out.println("index of neighbor: " + index);
 				nOfns.set(index, null);
-				bOfns.set(index, false);
-			
+				bOfns.set(index, false);		
+				
+				
 			}
 		}	
 		
+		
+
 		// reset the board 
 		adjacents = Arrays.asList(null, null, null, null);
 		invisibles = Arrays.asList(false, false, false, false);
@@ -423,8 +467,10 @@ public class PingballServer {
 		= new Triple<List<String>, List<Boolean>,Socket>(adjacents, invisibles, null);
 		neighbors.put(name, triple);
 		
-		//System.out.println("**********");
-		//printNeighbors();
+		
+
+		System.out.println("**********");
+		printNeighbors();
 	}
 
 	/**
@@ -434,97 +480,97 @@ public class PingballServer {
 	 * @return
 	 */
 	private String handleRequest(String input) {
-	    
-	    
-	    System.out.println("input message: " + input);
+
+
+		//System.out.println("input message: " + input);
 		//System.out.println("input from the client: " + input);
 		String[] tokens = input.split(" ");
-	
+
 		//sample input: name 
 		if(tokens[0].equals("name")) {
-			System.out.println("name: " + input);
+			//System.out.println("name: " + input);
 			return input;
 		}
-		
+
 		if (tokens[0].equals("create")){
-            
-            String otherBoardName = tokens[1];
-            String nameOfBall = tokens[2];
 
-            double x = Double.parseDouble(tokens[3]);
-            double y = Double.parseDouble(tokens[4]);
-            double xVel = Double.parseDouble(tokens[5]);
-            double yVel = Double.parseDouble(tokens[6]);    
-            double radius = Double.parseDouble(tokens[7]);  
+			String otherBoardName = tokens[1];
+			String nameOfBall = tokens[2];
 
-            PrintWriter outReceiver;
-            try {
-           
-                Socket socketReceiver = neighbors.get(otherBoardName).getThree();
+			double x = Double.parseDouble(tokens[3]);
+			double y = Double.parseDouble(tokens[4]);
+			double xVel = Double.parseDouble(tokens[5]);
+			double yVel = Double.parseDouble(tokens[6]);    
+			double radius = Double.parseDouble(tokens[7]);  
 
-                outReceiver = new PrintWriter(socketReceiver.getOutputStream(), true);
+			PrintWriter outReceiver;
+			try {
 
-                //String msgToSender = "delete " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel;
-                String msgToReceiver = "create " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel + " " + radius;
-                
-                System.out.println(msgToReceiver);
-                //outSender.println(msgToSender);
-                outReceiver.println(msgToReceiver);
+				Socket socketReceiver = neighbors.get(otherBoardName).getThree();
 
-                return null;
+				outReceiver = new PrintWriter(socketReceiver.getOutputStream(), true);
 
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                System.out.println("custom print");
-                e.printStackTrace();
-            }
+				//String msgToSender = "delete " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel;
+				String msgToReceiver = "create " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel + " " + radius;
 
-        }
+				//System.out.println(msgToReceiver);
+				//outSender.println(msgToSender);
+				outReceiver.println(msgToReceiver);
+
+				return null;
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				System.out.println("custom print");
+				e.printStackTrace();
+			}
+
+		}
 
 		//port hit:
 		if (tokens[0].equals("port")){
-		  
-		    String nameOfBoard = tokens[1];
-            String otherBoardName = tokens[2];
-            String otherPortalName = tokens[3];
-            String nameOfBall = tokens[4];
 
-            double x = Double.parseDouble(tokens[5]);
-            double y = Double.parseDouble(tokens[6]);
-            double xVel = Double.parseDouble(tokens[7]);
-            double yVel = Double.parseDouble(tokens[8]);    
-            double radius = Double.parseDouble(tokens[9]); 
+			String nameOfBoard = tokens[1];
+			String otherBoardName = tokens[2];
+			String otherPortalName = tokens[3];
+			String nameOfBall = tokens[4];
 
-            PrintWriter outReceiver;
-            try {
-                System.out.println("Portal Transfer");
-                //System.out.println("ffffffffffffffffffffffffffffffffffffffffff");
-                if(neighbors.containsKey(otherBoardName)){
-                    Socket socketReceiver = neighbors.get(otherBoardName).getThree();
+			double x = Double.parseDouble(tokens[5]);
+			double y = Double.parseDouble(tokens[6]);
+			double xVel = Double.parseDouble(tokens[7]);
+			double yVel = Double.parseDouble(tokens[8]);    
+			double radius = Double.parseDouble(tokens[9]); 
 
-                    outReceiver = new PrintWriter(socketReceiver.getOutputStream(), true);
-                                      
-                    //String msgToSender = "delete " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel;
-                    String msgToReceiver = "port "+ nameOfBoard +" " + otherPortalName+" "+nameOfBall+" "+x+" "+y+" "+xVel+" "+yVel+ " " + radius;
-                    //outSender.println(msgToSender);
-                    outReceiver.println(msgToReceiver);
+			PrintWriter outReceiver;
+			try {
+				//System.out.println("Portal Transfer");
+				//System.out.println("ffffffffffffffffffffffffffffffffffffffffff");
+				if(neighbors.containsKey(otherBoardName)){
+					Socket socketReceiver = neighbors.get(otherBoardName).getThree();
 
-                    return null;
-                }
-                
-                Socket socketReceiver = neighbors.get(nameOfBoard).getThree();
+					outReceiver = new PrintWriter(socketReceiver.getOutputStream(), true);
 
-                outReceiver = new PrintWriter(socketReceiver.getOutputStream(), true);
-                String msgToReceiver = "create " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel + " " + radius;
+					//String msgToSender = "delete " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel;
+					String msgToReceiver = "port "+ nameOfBoard +" " + otherPortalName+" "+nameOfBall+" "+x+" "+y+" "+xVel+" "+yVel+ " " + radius;
+					//outSender.println(msgToSender);
+					outReceiver.println(msgToReceiver);
 
-                //outSender.println(msgToSender);
-                outReceiver.println(msgToReceiver);
-                return null;
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                System.out.println("custom print");
-                e.printStackTrace();
-            }
+					return null;
+				}
+
+				Socket socketReceiver = neighbors.get(nameOfBoard).getThree();
+
+				outReceiver = new PrintWriter(socketReceiver.getOutputStream(), true);
+				String msgToReceiver = "create " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel + " " + radius;
+
+				//outSender.println(msgToSender);
+				outReceiver.println(msgToReceiver);
+				return null;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				System.out.println("custom print");
+				e.printStackTrace();
+			}
 
 		}
 		// sample input: hit NAMEofBoard wallNum  NAMEofBall x y xVel yVel
@@ -558,9 +604,9 @@ public class PingballServer {
 					//System.out.println("hit invisible MAANN");
 					String neighbor = neighbors.get(nameOfBoard).getOne().get(wallNum);
 					Socket socketReceiver = neighbors.get(neighbor).getThree();
-                    
+
 					outReceiver = new PrintWriter(socketReceiver.getOutputStream(), true);
-					
+
 					switch(wallNum){
 					case 0: 
 						y += 15;
@@ -625,7 +671,7 @@ public class PingballServer {
 				try {
 					if (flag.equals("--port")) {
 						port = Integer.parseInt(arguments.remove());
-						System.out.println("port: " + port);
+						//System.out.println("port: " + port);
 					}
 
 				} catch (Exception e) {
