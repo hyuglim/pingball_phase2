@@ -1,7 +1,5 @@
 package ADT;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
 import java.util.ArrayList;  
 
 import ADT.Ball;
@@ -165,7 +163,6 @@ public class RightFlipper implements Gadget{
     * @param ball the ball that hit this flipper
     */
     public void reflect(Ball ball){
-        
         double angularVelocity = 0;
         
         //If its self-triggering rotate it
@@ -377,47 +374,5 @@ public class RightFlipper implements Gadget{
      */
     public String getOtherPortal() {
         return null;
-    }
-
-    @Override
-    public void draw(Graphics2D g2) {
-        Color c = new Color(53, 199, 104); //light green
-        g2.setColor(c);
-        final int OFFSET = 20;
-        int x = (int) (center.x() * 20);
-        int y = (int) (center.y() * 20);
-        if (!(this.rotated)) {
-            if (orientation == 0) {
-                g2.fillRoundRect(x + OFFSET - 10, y + OFFSET, 10, 40, 10, 10);
-            }
-            if (orientation == 90) {
-
-                g2.fillRoundRect(x + OFFSET - 40, y + OFFSET - 10, 40, 10, 10, 10);
-            }
-            if (orientation == 180) {
-                g2.fillRoundRect(x + OFFSET, y + OFFSET - 40, 10, 40, 10,
-                        10);
-            }
-            if (orientation == 270) {
-                g2.fillRoundRect(x + OFFSET, y + OFFSET, 40, 10, 10, 10);
-            }
-        } else {
-            if (orientation == 0) {
-                g2.fillRoundRect(x + OFFSET - 40, y + OFFSET, 40, 10, 10, 10);
-            }
-            if (orientation == 90) {
-
-                g2.fillRoundRect(x + OFFSET - 10, y + OFFSET - 40, 10, 40, 10, 10);
-            }
-            if (orientation == 180) {
-                g2.fillRoundRect(x + OFFSET, y + OFFSET - 10, 40, 10, 10,
-                        10);
-            }
-            if (orientation == 270) {
-                g2.fillRoundRect(x + OFFSET, y + OFFSET, 10, 40, 10, 10);
-            }
-
-        }
-        
     }
 }

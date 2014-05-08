@@ -1,10 +1,6 @@
 package ADT;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
 import java.util.ArrayList;   
-
-import javax.swing.JPanel;
 
 import ADT.Ball;
 import physics.Circle;
@@ -275,12 +271,4 @@ public class SquareBumper implements Gadget{
         return null;
     }
 
-    @Override
-    public void draw(Graphics2D g2) {
-        g2.setColor(Color.RED);
-        g2.fillRect(x*20+20, y*20+20, getWidth()*20, getHeight()*20);
-        
-    }
-    
-    
 }

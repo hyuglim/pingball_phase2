@@ -1,7 +1,5 @@
 package ADT;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
 import java.util.ArrayList;   
 
 import ADT.Ball;
@@ -296,54 +294,6 @@ public class TriangularBumper implements Gadget{
      */
     public String getOtherPortal() {
         return null;
-    }
-
-    @Override
-    public void draw(Graphics2D g2) {
-        Color c = new Color(229, 131, 116);//salmon
-        g2.setColor(c);
-        int x = this.x;
-        int y = this.y;
-        int[] xCoords = {1,2,3};
-        int[] yCoords={1,1,1};
-        if (this.orientation==0){
-            xCoords[0] = x*20+20; 
-            xCoords[1] = x*20+20; 
-            xCoords[2] = (x+1)*20+20;
-            yCoords[0] = x*20+20; 
-            yCoords[1] = (y+1)*20+20;
-            yCoords[2] = y*20; 
-            
-        }
-        if (this.orientation==90){
-            xCoords[0] = x*20+20; 
-            xCoords[1] = (x+1)*20+20; 
-            xCoords[2] = (x+1)*20+20;
-            yCoords[0] = y*20+20; 
-            yCoords[1] = y*20+20; 
-            yCoords[2] = (y+1)*20+20;
-            
-        }
-        if (this.orientation==180){
-            xCoords[0] = x*20+20; 
-            xCoords[1] = (x+1)*20+20; 
-            xCoords[2] = (x+1)*20+20;
-            yCoords[0] = (y+1)*20+20; 
-            yCoords[1] = (y+1)*20+20; 
-            yCoords[2] = y*20+20;
-            
-        }
-        else{
-            xCoords[0] = x*20+20; 
-            xCoords[1] = x*20+20; 
-            xCoords[2] = (x+1)*20+20;
-            yCoords[0] = y*20+20; 
-            yCoords[1] = (y+1)*20+20; 
-            yCoords[2] = (y+1)*20+20;
-        
-        }
-        g2.fillPolygon(xCoords, yCoords, 3);
-        
     }
 
 }

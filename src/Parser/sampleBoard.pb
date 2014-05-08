@@ -7,7 +7,7 @@ board name=sampleBoard gravity=0.0 friction1 = 0.0 friction2 = 0.0
   ball name=Ball x=0.5 y=5.5 xVelocity=5 yVelocity=5 radius=0.25
   
   # define a series of circle bumpers
-  circleBumper name=Circle5 x=5 y=4 
+  circleBumper name=Circle5 x=5 y=10 
   
   # define a series of square bumpers
   squareBumper name=Square1 x=1 y=2
@@ -22,10 +22,7 @@ board name=sampleBoard gravity=0.0 friction1 = 0.0 friction2 = 0.0
 
   # define an absorber to catch the ball at the bottom
   absorber name=Abs x=0 y=19 width=20 height=1 
-  
-  portal name=Alpha x=19 y=8 otherPortal=Gamma
-  portal name=Beta x=19 y=16 otherPortal=Delta
-  portal name=Gamma x=9 y=16 otherBoard = ourBoard1 otherPortal=Heyhey
+
 
   # make the absorber self-triggering
   fire trigger=Abs action=Abs

@@ -123,7 +123,7 @@ public class Communicator implements Runnable{
 	private String handleRequest(String input) {
 
 		String[] tokens = input.split(" ");
-	
+		System.out.println(input);
 		
 		//CONFIRMING IF BALL HIT AN INVISIBLE WALL
 		if(tokens[0].equals("delete")) {
