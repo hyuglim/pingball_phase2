@@ -400,6 +400,7 @@ public class PingballServer {
 			}
 			System.out.println("got out of for loop");
 			out.println("kill");
+<<<<<<< HEAD
 			
 			//when a client disconnects, revert to solid walls
 			revertToSolidWalls(name);
@@ -411,6 +412,16 @@ public class PingballServer {
 			System.out.println("revert walls!");
 			e.printStackTrace();
 
+=======
+			revertToSolidWalls(name);
+            
+            
+            System.out.println("revert walls");
+		} catch(Exception e) {
+		  //when the client disconnects, revert all boards to solid walls
+            
+		
+>>>>>>> dac54f968b32f8e3358f38b67e1ddc674ed3c0d0
 		} finally {
 			out.close();
 			in.close();
@@ -600,7 +611,7 @@ public class PingballServer {
 			PrintWriter outReceiver;
 			try {
 				outSender = new PrintWriter(socketSender.getOutputStream(), true);
-				if (hitInvisible) {
+
 					//System.out.println("hit invisible MAANN");
 					String neighbor = neighbors.get(nameOfBoard).getOne().get(wallNum);
 					Socket socketReceiver = neighbors.get(neighbor).getThree();
@@ -628,14 +639,9 @@ public class PingballServer {
 
 					//outSender.println(msgToSender);
 					outReceiver.println(msgToReceiver);
+					System.out.println(msgToReceiver);
 
-					//return null;
-				} else {
-					//System.out.println("hit is visible MAAYN!");
 
-					outSender.println("visible");
-					return null;
-				}
 				return null;
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

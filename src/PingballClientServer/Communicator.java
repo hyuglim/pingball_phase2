@@ -126,7 +126,7 @@ public class Communicator implements Runnable{
 		System.out.println("input: " + input);
 		System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
 		String[] tokens = input.split(" ");
-	
+		System.out.println(input);
 		
 		//CONFIRMING IF BALL HIT AN INVISIBLE WALL
 		if(tokens[0].equals("delete")) {

@@ -1,11 +1,5 @@
 package ADT;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.geom.Ellipse2D;
-
-import javax.swing.JPanel;
 import physics.Circle;
 import physics.Geometry;
 import physics.LineSegment;
@@ -25,7 +19,6 @@ public class Ball {
     private Geometry.DoublePair position;
     private boolean absorbed = false;
 
-
     /**
      * Constructor for making a new ball
      * @param name the name of the ball
@@ -41,12 +34,9 @@ public class Ball {
         this.position = new Geometry.DoublePair(xCoord, yCoord);
         this.velocity = new Vect(xVel, yVel);
         this.name = name;
-
         
     }
-   
     
-
     /**
      * make a new ball instance
      * @param circle from the physics package
@@ -242,11 +232,5 @@ public class Ball {
      */
     public double getRadius(){
         return this.radius;
-    }
-    
-    public void draw(Graphics2D g){
-        g.setColor(Color.YELLOW);
-        g.fillOval((int)(Math.round(getOriginX()*20+20)), (int) (Math.round(getOriginY()*20+20)), (int)(getRadius()*40),(int)(getRadius()*40));
-        
     }
 }
