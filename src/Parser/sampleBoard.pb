@@ -22,15 +22,10 @@ board name=sampleBoard gravity=0.0 friction1 = 0.0 friction2 = 0.0
 
   # define an absorber to catch the ball at the bottom
   absorber name=Abs x=0 y=19 width=20 height=1 
-<<<<<<< HEAD
   
   #portal name=Alpha x=19 y=8 otherPortal=Gamma
   #portal name=Beta x=19 y=16 otherPortal=Delta
   #portal name=Gamma x=9 y=16 otherBoard = ourBoard1 otherPortal=Heyhey
-=======
-
->>>>>>> 4600304de2dedd63f560c39ecf6f823152c9855a
-
   # make the absorber self-triggering
   fire trigger=Abs action=Abs
   fire trigger=FlipL2 action=FlipL2

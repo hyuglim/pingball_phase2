@@ -1,5 +1,7 @@
 package ADT;  
 
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.util.ArrayList; 
 
 import ADT.Ball;
@@ -231,5 +233,13 @@ public class CircleBumper implements Gadget{
      */
     public String getOtherPortal() {
         return null;
+    }
+
+    @Override
+    public void draw(Graphics2D g2) {
+        Color c = new Color(208, 45, 99);//pink
+        g2.setColor(c);
+        g2.fillOval(x*20+20, y*20+20, getWidth()*20, getHeight()*20);
+        
     }
 }

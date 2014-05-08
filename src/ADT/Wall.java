@@ -1,5 +1,7 @@
 package ADT;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.util.ArrayList; 
 import java.util.List;
 
@@ -176,5 +178,22 @@ public class Wall {
         return this.location;
     }
     
-
+    public void draw(Graphics2D g){
+        Color c = new Color(252, 48, 48); //red
+        g.setColor(c);
+        
+        if (this.location.equals("top")){
+            g.fillRect(0, 0, 440, 20);
+        }
+        else if (this.location.equals("bottom")){
+            g.fillRect(0, 420, 440, 20);
+        }
+        else if (this.location.equals("left")){
+            g.fillRect(0, 20, 20, 400);
+        }
+        else{
+            g.fillRect(420, 20, 20, 400);
+            
+        }
+    }
 }
