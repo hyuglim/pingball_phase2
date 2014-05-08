@@ -187,8 +187,8 @@ public class Board extends TimerTask {
         double newX = oldX + ball.getVelocity().times(time).x();
         double newY = oldY + ball.getVelocity().times(time).y();
         
-        System.out.println(newX);
-        System.out.println(newY);
+        //System.out.println(newX);
+        //System.out.println(newY);
         
         ball.updatePosition(newX, newY);
         
@@ -227,7 +227,7 @@ public class Board extends TimerTask {
             }
             else if(timeMinGadget<timeMinWall){
                 if(each.isAbsorbed()){
-                    updateEmpty(each, 0.05);
+                    //updateEmpty(each, 0.05);
                     g.release(each);                
                 }else if(g.doesPort()){
                     if(g.getOtherBoard().equals("")){
@@ -310,6 +310,7 @@ public class Board extends TimerTask {
     private void boardRepRemoveBall(Ball ball){
         int x = (int) Math.floor(ball.getOriginX());
         int y = (int) Math.floor(ball.getOriginY());
+        
         if (boardRep.get(y + 1).get(x + 1).equals("*")){
             boardRep.get(y+1).remove(x+1);
             boardRep.get(y+1).add(x+1, " ");
@@ -862,12 +863,34 @@ public class Board extends TimerTask {
         }
         */
         
+        final Board board = new Board("b", 25, .025, .025);
+        Ball ball = new Ball("b", 2.5,1,0,10,.25);
+        //board.addGadget(new SquareBumper("sq", 1, 1));
+        //board.addGadget(new CircleBumper("c", 1, 2));
+        board.addBall(ball);
+        board.addGadget(new TriangularBumper("tr", 11, 11, 90));
+        board.addGadget(new Portal("p", 10, 10, "", ""));
+        board.addGadget(new Absorber("a", 0, 19, 19, 1));
+        Gadget lf = new LeftFlipper("lf", 2, 12, 90);
+        lf.triggers(lf);
         
+        //abs.triggers(abs);
+        //board.addGadget(abs);
+        board.addGadget(lf);
+        Timer timer = new Timer();
+        
+        timer.schedule(board, 0, 50);
         Ball myBall = new Ball("B", 0, 0.25, 1, 1, 0.25);
         CircleBumper circle = new CircleBumper("C", 0, 0);
         
-        System.out.println(circle.getCollisionTime(myBall));
+        //System.out.println(circle.getCollisionTime(myBall));
         
+    }
+
+
+    public List<Wall> getWalls() {
+        // TODO Auto-generated method stub
+        return this.walls;
     }
 
 

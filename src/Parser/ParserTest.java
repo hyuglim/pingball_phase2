@@ -77,6 +77,8 @@ public class ParserTest {
         assertTrue(board.getGravity() == 20.0);
         assertTrue(board.getFriction1() == 0.020);
         assertTrue(board.getFriction2() == 0.020);
+        
+        System.out.println(board.toString());
         assertTrue(board.getGadgets().size() == 1);
         Gadget squareBumper = board.getGadgets().get(0);
         assertEquals(squareBumper.getName(), "Square0");

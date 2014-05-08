@@ -1,8 +1,12 @@
 package ADT;
 
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.util.ArrayList; 
 
 import ADT.Ball;
+
+import javax.swing.JPanel;
 
 /**
  *
@@ -167,5 +171,13 @@ public interface Gadget {
      * @return the portal name that this gadget is connected to
      */
     public String getOtherPortal();
+    
+
+
+    /**
+     * Draws a graphical representation of the object in BoardJPanel
+     * @param g2
+     */
+    public void draw(Graphics2D g2);
            
 }

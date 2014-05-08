@@ -1,6 +1,12 @@
 package ADT;
 
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
 
 import physics.Circle;
 import physics.Geometry;
@@ -217,5 +223,18 @@ public class Portal implements Gadget{
     public String getOtherPortal() {
         return otherPortal;
     }
+
+    @Override
+    public void draw(Graphics2D g2) {
+        BufferedImage img = null;
+        //swirl picture
+        try {
+            img = ImageIO.read(new File("src/ADT/portal.jpg"));
+        } catch (IOException e) {
+            System.err.println("No image");
+        }
+        g2.drawImage(img, x*20+20, y*20+20, 20, 20, null);
+    }
+    
 
 }
