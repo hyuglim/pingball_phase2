@@ -19,10 +19,6 @@ triangleBumper name=Tri x=0 y=0 orientation=0
 leftFlipper name=FlipL x=9 y=6 orientation=0 
 rightFlipper name=FlipR x=12 y=5 orientation=0
 
-
- portal name=Heyhey x=19 y=16 otherPortal=Beta
-
-
 # define an absorber to catch the ball
 absorber name=Abs x=10 y=8 width=10 height=2 
 

@@ -1,7 +1,5 @@
 package ADT;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
 import java.util.ArrayList; 
 import java.util.List;
 
@@ -332,16 +330,6 @@ public class Absorber implements Gadget{
     public String getOtherPortal() {
         // TODO Auto-generated method stub
         return null;
-    }
-
-    @Override
-    public void draw(Graphics2D g2) {
-        Color c = new Color(104,223, 96);//bright green boundary with a line
-        g2.setColor(c);
-        g2.drawRect(x*20+20, y*20+20, width*20, height*20);
-        g2.drawLine( x*20+20,y*20+20+height*10,x*20+20+width*20,y*20+20+height*10);
-        
-        
     }
     
 }
