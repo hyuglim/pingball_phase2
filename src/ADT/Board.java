@@ -227,7 +227,7 @@ public class Board extends TimerTask {
             }
             else if(timeMinGadget<timeMinWall){
                 if(each.isAbsorbed()){
-                    //updateEmpty(each, 0.05);
+                    updateEmpty(each, 0.05);
                     g.release(each);                
                 }else if(g.doesPort()){
                     if(g.getOtherBoard().equals("")){

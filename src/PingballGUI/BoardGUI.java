@@ -88,7 +88,7 @@ public class BoardGUI extends JPanel {
                 window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 window.setLayout(new BorderLayout());
                 final Board board = new Board("b", 25, .025, .025);
-                Ball ball = new Ball("b", 3.5,13.5,10,0,.25);
+                Ball ball = new Ball("b", 5,0,0,4,.25);
                 board.addGadget(new SquareBumper("sq", 4, 17));
                 board.addGadget(new CircleBumper("c", 16, 8));
                 board.addBall(ball);
@@ -96,7 +96,7 @@ public class BoardGUI extends JPanel {
                 board.addGadget(new Portal("p", 10, 10, "", ""));
                 Gadget abs = new Absorber("a", 0, 19, 20, 1);
                 Gadget lf = new LeftFlipper("lf", 2, 2, 270);
-                Gadget rf = new RightFlipper("rf", 4, 13, 180);
+                Gadget rf = new RightFlipper("rf", 4, 13, 90);
                 lf.triggers(lf);
                 rf.triggers(rf);
                 abs.triggers(abs);
