@@ -24,7 +24,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
 
-import com.apple.mrj.macos.carbon.Timer;
 
 import ADT.Ball;
 import ADT.Board;
