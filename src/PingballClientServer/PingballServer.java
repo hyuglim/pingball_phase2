@@ -154,16 +154,15 @@ public class PingballServer {
 	 * @throws IOException 
 	 */
 	private void makeHorizNeighbors(String []words) throws IllegalArgumentException, IOException{
+		if(!words[1].contains("_left") || !words[2].contains("_right")) {
+			throw new IllegalArgumentException("Enter: h board1_left board2_right");
+		}
+		
 		String left = words[1].split("_left")[0];
 		String right = words[2].split("_right")[0];
 
 		if (!neighbors.containsKey(left) || !neighbors.containsKey(right)) {
 			throw new IllegalArgumentException("cannot join uncreated board");
-		}
-
-		//if both of them are already joined
-		else if(neighbors.get(left).getTwo().get(3) && neighbors.get(right).getTwo().get(2)) {
-			return;
 		}
 
 		//if left is in the dictionary, and the existing right neighbor does not 
@@ -204,16 +203,15 @@ public class PingballServer {
 	 * @throws IOException 
 	 */
 	private void makeVerticNeighbors(String []words) throws IllegalArgumentException, IOException{
+		if(!words[1].contains("_top") || !words[2].contains("_bottom")) {
+			throw new IllegalArgumentException("Enter: v board1_top board2_bottom");
+		}
+		
 		String top = words[1].split("_top")[0];
 		String bottom = words[2].split("_bottom")[0];
 		if (!neighbors.containsKey(top) || !neighbors.containsKey(bottom)) {
 			//printNeighbors();
 			throw new IllegalArgumentException("cannot join uncreated board");
-		}
-
-		//if both of them are already joined
-		else if (neighbors.get(top).getTwo().get(1) && neighbors.get(bottom).getTwo().get(0)) {
-			return;
 		}
 
 		//if top is in the dictionary, and the existing bottom neighbor does not 
@@ -276,6 +274,7 @@ public class PingballServer {
 	 * prints out the contents of the map
 	 */
 	private void printNeighbors() {
+		System.out.println("*********printNeighbors*********");
 		for (String client : neighbors.keySet()) {
 			System.out.println("client: " + client);
 			for (String neighbor : neighbors.get(client).getOne()) {
@@ -287,6 +286,7 @@ public class PingballServer {
 			}
 			System.out.println();
 		}
+		System.out.println("******************************");
 	}
 
 	/**
@@ -404,18 +404,13 @@ public class PingballServer {
 			
 			//when a client disconnects, revert to solid walls
 			revertToSolidWalls(name);
-			System.out.println("revert walls: " + name);
+			System.out.println("revert walls: inside try " + name);
 		} catch(Exception e) {
 			//when the server thread specific to a client disconnects, revert the neighboring boards to solid walls
-			revertToSolidWalls(name);
-
-			System.out.println("revert walls!");
-			e.printStackTrace();
-
-			revertToSolidWalls(name);
-            
-            
-            System.out.println("revert walls");
+//			revertToSolidWalls(name);
+//
+//			System.out.println("revert walls: inside catch1 " + name);
+			e.printStackTrace(); 
 		}   finally {
 			out.close();
 			in.close();
@@ -433,22 +428,34 @@ public class PingballServer {
 	 * When a client disconnects, find all boards joined to it, and revert to solid walls
 	 * @param name
 	 */
-	private void revertToSolidWalls(String name) throws IOException{
+	private void revertToSolidWalls(String name) {
+		System.out.println();
+		System.out.println("***************revertToSolidWalls method****************");
 		printNeighbors();
 		
 		List<String> adjacents = neighbors.get(name).getOne();		
 		List<Boolean> invisibles = neighbors.get(name).getTwo();
 
+		System.out.println("who called this method: " + name);
 		
 		//go through the neighbors and reset
 		for (int i = 0; i < adjacents.size(); i++) {
 			String neighbor = adjacents.get(i);
+			
 			if (neighbor != null) {
-				Socket socket = neighbors.get(name).getThree();
-				PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+				System.out.println("neighbor's name: " + neighbor);
+				Socket socket = neighbors.get(neighbor).getThree();
+				PrintWriter out;
+				try {
+					out = new PrintWriter(socket.getOutputStream(), true);
+					System.out.println("unmark " + i + " " + neighbor);
+					out.println("unmark " + i + " " + neighbor);
+				} catch (IOException e) {
+					System.out.println("catch2");
+					e.printStackTrace();
+				}
 				
-				System.out.println("unmark " + i + " " + neighbor);
-				out.println("unmark " + i + " " + neighbor);
+				
 				
 				List<String> nOfns = neighbors.get(neighbor).getOne();
 				List<Boolean> bOfns = neighbors.get(neighbor).getTwo();
@@ -474,8 +481,10 @@ public class PingballServer {
 		
 		
 
-		System.out.println("**********");
+		
 		printNeighbors();
+		System.out.println("**********");
+		System.out.println();
 	}
 
 	/**
@@ -506,6 +515,7 @@ public class PingballServer {
 			double y = Double.parseDouble(tokens[4]);
 			double xVel = Double.parseDouble(tokens[5]);
 			double yVel = Double.parseDouble(tokens[6]);    
+		
 			double radius = Double.parseDouble(tokens[7]);  
 
 			PrintWriter outReceiver;
@@ -607,7 +617,9 @@ public class PingballServer {
 				outSender = new PrintWriter(socketSender.getOutputStream(), true);
 
 					//System.out.println("hit invisible MAANN");
+					
 					String neighbor = neighbors.get(nameOfBoard).getOne().get(wallNum);
+					System.out.println("NEIGHBOR: " + neighbor);
 					Socket socketReceiver = neighbors.get(neighbor).getThree();
 
 					outReceiver = new PrintWriter(socketReceiver.getOutputStream(), true);
@@ -633,7 +645,7 @@ public class PingballServer {
 
 					//outSender.println(msgToSender);
 					outReceiver.println(msgToReceiver);
-					System.out.println(msgToReceiver);
+					//System.out.println(msgToReceiver);
 
 
 				return null;
@@ -641,6 +653,8 @@ public class PingballServer {
 				// TODO Auto-generated catch block
 				System.out.println("custom print");
 				e.printStackTrace();
+			} catch (NullPointerException e) {
+				return null; 
 			}
 
 

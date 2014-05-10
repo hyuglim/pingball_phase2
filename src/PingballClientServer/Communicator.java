@@ -198,6 +198,14 @@ public class Communicator implements Runnable{
 			board.connectWall(wallNum, neighbor);
 			return null;
 		}
+		
+		if(tokens[0].equals("unmark")) {
+			
+			int wallNum = Integer.parseInt(tokens[1]);
+			String neighbor = tokens[2];
+			board.removeNeighborsName(wallNum, neighbor);
+			return null;
+		}
 
 		System.out.println(input+"Boooooooooooooooooooo");
 

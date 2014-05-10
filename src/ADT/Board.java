@@ -268,22 +268,22 @@ public class Board extends TimerTask {
                     if (w.getLocation().equals("top")){
                         
                 
-                        this.wallHit = "hit "+this.boardname+" 0 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+"\n";
+                        this.wallHit = "hit "+this.boardname+" 0 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+" " + each.getRadius() + "\n";
                     }
                     else if (w.getLocation().equals("bottom")){
                         
                         
-                        this.wallHit = "hit "+this.boardname+" 1 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+"\n";
+                        this.wallHit = "hit "+this.boardname+" 1 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+" " + each.getRadius() +"\n";
                     }
                     else if (w.getLocation().equals("right")){
                         
                         
-                        this.wallHit = "hit "+this.boardname+" 3 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+"\n";
+                        this.wallHit = "hit "+this.boardname+" 3 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+" " + each.getRadius() +"\n";
                     }
                     else{//left
                         
                         
-                        this.wallHit = "hit "+this.boardname+" 2 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+"\n";
+                        this.wallHit = "hit "+this.boardname+" 2 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+" " + each.getRadius() +"\n";
                     }
                     ballsToRemove.add(each);
                 }
@@ -672,6 +672,17 @@ public class Board extends TimerTask {
         this.neighbours [wallNum] = neighbor;
         this.walls.get(wallNum).addConnection(neighbor);
         
+    }
+    
+    /**
+     * get rid of the neighbors walls 
+     * @param wallNum the integer representing the particular wall of this board:
+     * 0 - top wall, 1 - bottom wall, 2 - left wall, 3 - right wall. 
+     * @param neighbor String name of the neighbor of this wall
+     */
+    public void removeNeighborsName(int wallNum, String neighbor) {
+    	this.neighbours [wallNum] = null;
+        this.walls.get(wallNum).removeConnection();
     }
     
     /**
