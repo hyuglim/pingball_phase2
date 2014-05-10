@@ -268,22 +268,38 @@ public class Board extends TimerTask {
                     if (w.getLocation().equals("top")){
                         
                 
+<<<<<<< HEAD
                         this.wallHit = "hit "+this.boardname+" 0 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+" " + each.getRadius() + "\n";
+=======
+                        this.wallHit = "hit "+this.boardname+" 0 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+" " + each.getRadius();
+>>>>>>> 85f0c679c0c2585aecaf4ffe601c94c9896c3fb1
                     }
                     else if (w.getLocation().equals("bottom")){
                         
                         
+<<<<<<< HEAD
                         this.wallHit = "hit "+this.boardname+" 1 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+" " + each.getRadius() +"\n";
+=======
+                        this.wallHit = "hit "+this.boardname+" 1 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+" " + each.getRadius();
+>>>>>>> 85f0c679c0c2585aecaf4ffe601c94c9896c3fb1
                     }
                     else if (w.getLocation().equals("right")){
                         
                         
+<<<<<<< HEAD
                         this.wallHit = "hit "+this.boardname+" 3 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+" " + each.getRadius() +"\n";
+=======
+                        this.wallHit = "hit "+this.boardname+" 3 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+" " + each.getRadius();
+>>>>>>> 85f0c679c0c2585aecaf4ffe601c94c9896c3fb1
                     }
                     else{//left
                         
                         
+<<<<<<< HEAD
                         this.wallHit = "hit "+this.boardname+" 2 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+" " + each.getRadius() +"\n";
+=======
+                        this.wallHit = "hit "+this.boardname+" 2 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+" " + each.getRadius();
+>>>>>>> 85f0c679c0c2585aecaf4ffe601c94c9896c3fb1
                     }
                     ballsToRemove.add(each);
                 }

@@ -645,9 +645,12 @@ public class PingballServer {
 
 					//outSender.println(msgToSender);
 					outReceiver.println(msgToReceiver);
+<<<<<<< HEAD
 					//System.out.println(msgToReceiver);
 
 
+=======
+>>>>>>> 85f0c679c0c2585aecaf4ffe601c94c9896c3fb1
 				return null;
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
