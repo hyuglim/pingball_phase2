@@ -216,7 +216,7 @@ public class PingballGUI extends JFrame {
                
 
                 main.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                main.setSize(1000, 0);
+                main.setSize(500, 400);
             
                 
                 JMenuBar menubar = new JMenuBar();

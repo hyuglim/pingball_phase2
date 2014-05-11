@@ -24,7 +24,7 @@ public class draw extends JPanel implements ActionListener, KeyListener{
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-        g2.fille(new Ellipse2D.Double(x, y, 40, 40));
+       // g2.fille(new Ellipse2D.Double(x, y, 40, 40));
     }
 
     public void keyTyped(KeyEvent e) {
