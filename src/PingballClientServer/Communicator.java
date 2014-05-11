@@ -99,6 +99,7 @@ public class Communicator implements Runnable{
 			        // when client disconnects, clear all balls
 			        if (output.equals("kill")) {
 			            System.out.println("I am killed");
+			            board.die();
 			            board.clearAllBalls();
 			            return;
 			        }
@@ -200,7 +201,7 @@ public class Communicator implements Runnable{
 		}
 		
 		if(tokens[0].equals("unmark")) {
-			
+			System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
 			int wallNum = Integer.parseInt(tokens[1]);
 			String neighbor = tokens[2];
 			board.removeNeighborsName(wallNum, neighbor);

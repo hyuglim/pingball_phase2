@@ -47,7 +47,7 @@ public class Board extends TimerTask {
     private String wallHit;
     private String portalHit;
     private String[] neighbours = new String[4];
-    
+    private boolean die = false;
     /**
      * The constructor for a board
      * 
@@ -267,39 +267,35 @@ public class Board extends TimerTask {
                     //XXXX is used for splitting purposes to indicate the beginning of information about a new ball
                     if (w.getLocation().equals("top")){
                         
-                
-<<<<<<< HEAD
+
                         this.wallHit = "hit "+this.boardname+" 0 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+" " + each.getRadius() + "\n";
-=======
+
                         this.wallHit = "hit "+this.boardname+" 0 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+" " + each.getRadius();
->>>>>>> 85f0c679c0c2585aecaf4ffe601c94c9896c3fb1
+
                     }
                     else if (w.getLocation().equals("bottom")){
-                        
-                        
-<<<<<<< HEAD
+
                         this.wallHit = "hit "+this.boardname+" 1 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+" " + each.getRadius() +"\n";
-=======
+
                         this.wallHit = "hit "+this.boardname+" 1 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+" " + each.getRadius();
->>>>>>> 85f0c679c0c2585aecaf4ffe601c94c9896c3fb1
+
                     }
                     else if (w.getLocation().equals("right")){
                         
                         
-<<<<<<< HEAD
                         this.wallHit = "hit "+this.boardname+" 3 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+" " + each.getRadius() +"\n";
-=======
+
                         this.wallHit = "hit "+this.boardname+" 3 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+" " + each.getRadius();
->>>>>>> 85f0c679c0c2585aecaf4ffe601c94c9896c3fb1
+
                     }
                     else{//left
                         
                         
-<<<<<<< HEAD
+
                         this.wallHit = "hit "+this.boardname+" 2 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+" " + each.getRadius() +"\n";
-=======
+
                         this.wallHit = "hit "+this.boardname+" 2 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+" " + each.getRadius();
->>>>>>> 85f0c679c0c2585aecaf4ffe601c94c9896c3fb1
+
                     }
                     ballsToRemove.add(each);
                 }
@@ -414,8 +410,15 @@ public class Board extends TimerTask {
     @Override
     public void run() {
         this.update();
+        if (die == true) {
+        	this.cancel();
+        }
         System.out.println(this.toString());
         
+    }
+    
+    public void die(){
+    	this.die = true;
     }
     
     
@@ -617,16 +620,15 @@ public class Board extends TimerTask {
      */
     @Override
     public String toString(){
+    	this.UpdateBoardRep();
         String output = "";
         for (int i = 0; i<22; i++){
             for (int j = 0; j<22; j++){
                 output = output+boardRep.get(i).get(j);
             }
             output =  output + "\n";
-        }
-        
-        return output;
-        
+        }        
+        return output;      
     }
     
 

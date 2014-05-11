@@ -121,28 +121,28 @@ public class PingballServer {
 			}
 		}		
 	}
-	
+
 	/**
 	 * Method used for telling clients that their wall has been unjoined
 	 * @param name
 	 * @throws IOException
 	 */
-//	private void notifyBoardUnjoin(String name) throws IOException {
-//		Socket socket = neighbors.get(name).getThree();
-//		List<String> adj = neighbors.get(name).getOne();
-//		List<Boolean> invis = neighbors.get(name).getTwo();
-//		PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-//
-//		for (int i = 0; i < adj.size(); i++) {
-//			if (invis.get(i)) {
-//				String neigh = adj.get(i);
-//				System.out.println("unmark " + i + " " + neigh);
-//
-//				out.println("unmark " + i + " " + neigh);
-//
-//			}
-//		}		
-//	}
+	//	private void notifyBoardUnjoin(String name) throws IOException {
+	//		Socket socket = neighbors.get(name).getThree();
+	//		List<String> adj = neighbors.get(name).getOne();
+	//		List<Boolean> invis = neighbors.get(name).getTwo();
+	//		PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+	//
+	//		for (int i = 0; i < adj.size(); i++) {
+	//			if (invis.get(i)) {
+	//				String neigh = adj.get(i);
+	//				System.out.println("unmark " + i + " " + neigh);
+	//
+	//				out.println("unmark " + i + " " + neigh);
+	//
+	//			}
+	//		}		
+	//	}
 
 
 	/**
@@ -157,7 +157,7 @@ public class PingballServer {
 		if(!words[1].contains("_left") || !words[2].contains("_right")) {
 			throw new IllegalArgumentException("Enter: h board1_left board2_right");
 		}
-		
+
 		String left = words[1].split("_left")[0];
 		String right = words[2].split("_right")[0];
 
@@ -206,7 +206,7 @@ public class PingballServer {
 		if(!words[1].contains("_top") || !words[2].contains("_bottom")) {
 			throw new IllegalArgumentException("Enter: v board1_top board2_bottom");
 		}
-		
+
 		String top = words[1].split("_top")[0];
 		String bottom = words[2].split("_bottom")[0];
 		if (!neighbors.containsKey(top) || !neighbors.containsKey(bottom)) {
@@ -401,15 +401,15 @@ public class PingballServer {
 			System.out.println("got out of for loop");
 			out.println("kill");
 
-			
+
 			//when a client disconnects, revert to solid walls
 			revertToSolidWalls(name);
 			System.out.println("revert walls: inside try " + name);
 		} catch(Exception e) {
 			//when the server thread specific to a client disconnects, revert the neighboring boards to solid walls
-//			revertToSolidWalls(name);
-//
-//			System.out.println("revert walls: inside catch1 " + name);
+			//			revertToSolidWalls(name);
+			//
+			//			System.out.println("revert walls: inside catch1 " + name);
 			e.printStackTrace(); 
 		}   finally {
 			out.close();
@@ -432,45 +432,42 @@ public class PingballServer {
 		System.out.println();
 		System.out.println("***************revertToSolidWalls method****************");
 		printNeighbors();
-		
+
 		List<String> adjacents = neighbors.get(name).getOne();		
 		List<Boolean> invisibles = neighbors.get(name).getTwo();
 
 		System.out.println("who called this method: " + name);
-		
+
 		//go through the neighbors and reset
 		for (int i = 0; i < adjacents.size(); i++) {
 			String neighbor = adjacents.get(i);
-			
+
 			if (neighbor != null) {
+				List<String> nOfns = neighbors.get(neighbor).getOne();
+				List<Boolean> bOfns = neighbors.get(neighbor).getTwo();
+				int index = nOfns.indexOf(name);
 				System.out.println("neighbor's name: " + neighbor);
 				Socket socket = neighbors.get(neighbor).getThree();
 				PrintWriter out;
 				try {
 					out = new PrintWriter(socket.getOutputStream(), true);
-					System.out.println("unmark " + i + " " + neighbor);
-					out.println("unmark " + i + " " + neighbor);
+					System.out.println("unmark " + index + " " + neighbor);
+					out.println("unmark " + index + " " + neighbor);
 				} catch (IOException e) {
 					System.out.println("catch2");
 					e.printStackTrace();
 				}
-				
-				
-				
-				List<String> nOfns = neighbors.get(neighbor).getOne();
-				List<Boolean> bOfns = neighbors.get(neighbor).getTwo();
-				int index = nOfns.indexOf(name);
 
 				System.out.println("name when closed: " + name);
 				System.out.println("index of neighbor: " + index);
 				nOfns.set(index, null);
 				bOfns.set(index, false);		
-				
-				
+
+
 			}
 		}	
-		
-		
+
+
 
 		// reset the board 
 		adjacents = Arrays.asList(null, null, null, null);
@@ -478,10 +475,10 @@ public class PingballServer {
 		Triple<List<String>, List<Boolean>, Socket> triple 
 		= new Triple<List<String>, List<Boolean>,Socket>(adjacents, invisibles, null);
 		neighbors.put(name, triple);
-		
-		
 
-		
+
+
+
 		printNeighbors();
 		System.out.println("**********");
 		System.out.println();
@@ -492,8 +489,9 @@ public class PingballServer {
 	 * such as choosing the neighbor clients to pass the ball to.
 	 * @param input
 	 * @return
+	 * @throws IOException 
 	 */
-	private String handleRequest(String input) {
+	private String handleRequest(String input) throws IOException {
 
 
 		//System.out.println("input message: " + input);
@@ -515,7 +513,7 @@ public class PingballServer {
 			double y = Double.parseDouble(tokens[4]);
 			double xVel = Double.parseDouble(tokens[5]);
 			double yVel = Double.parseDouble(tokens[6]);    
-		
+
 			double radius = Double.parseDouble(tokens[7]);  
 
 			PrintWriter outReceiver;
@@ -616,48 +614,44 @@ public class PingballServer {
 			try {
 				outSender = new PrintWriter(socketSender.getOutputStream(), true);
 
-					//System.out.println("hit invisible MAANN");
-					
-					String neighbor = neighbors.get(nameOfBoard).getOne().get(wallNum);
-					System.out.println("NEIGHBOR: " + neighbor);
-					Socket socketReceiver = neighbors.get(neighbor).getThree();
+				//System.out.println("hit invisible MAANN");
 
-					outReceiver = new PrintWriter(socketReceiver.getOutputStream(), true);
+				String neighbor = neighbors.get(nameOfBoard).getOne().get(wallNum);
+				System.out.println("NEIGHBOR: " + neighbor);
+				Socket socketReceiver = neighbors.get(neighbor).getThree();
 
-					switch(wallNum){
-					case 0: 
-						y += 15;
-						break;
-					case 1:
-						y -= 15;
-						break;
-					case 2:
-						x += 15;
-						break;
-					case 3:
-						x -= 15;
-						break;					
+				outReceiver = new PrintWriter(socketReceiver.getOutputStream(), true);
 
-					}
+				switch(wallNum){
+				case 0: 
+					y += 15;
+					break;
+				case 1:
+					y -= 15;
+					break;
+				case 2:
+					x += 15;
+					break;
+				case 3:
+					x -= 15;
+					break;					
 
-					//String msgToSender = "delete " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel;
-					String msgToReceiver = "create " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel + " " + radius;
+				}
 
-					//outSender.println(msgToSender);
-					outReceiver.println(msgToReceiver);
-<<<<<<< HEAD
-					//System.out.println(msgToReceiver);
+				//String msgToSender = "delete " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel;
+				String msgToReceiver = "create " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel + " " + radius;
 
-
-=======
->>>>>>> 85f0c679c0c2585aecaf4ffe601c94c9896c3fb1
+				//outSender.println(msgToSender);
+				outReceiver.println(msgToReceiver);
 				return null;
-			} catch (IOException e) {
+			}  catch (NullPointerException e) {
+				outSender = new PrintWriter(socketSender.getOutputStream(), true);
+				String msgToReceiver = "create " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel + " " + radius;
+				outSender.println(msgToReceiver); 
+			}catch (IOException e) {
 				// TODO Auto-generated catch block
 				System.out.println("custom print");
 				e.printStackTrace();
-			} catch (NullPointerException e) {
-				return null; 
 			}
 
 

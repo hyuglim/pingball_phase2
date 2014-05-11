@@ -141,6 +141,7 @@ public class Wall {
      */
     public void removeConnection(){
         this.connectedTo = ".";
+        this.visible = true;
     }
     
     /**
