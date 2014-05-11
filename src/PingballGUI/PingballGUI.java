@@ -2,6 +2,10 @@ package PingballGUI;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.CancellationException;
@@ -11,11 +15,17 @@ import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
+
+import ADT.Board;
+import Parser.BoardFileFactory;
 
 public class PingballGUI extends JFrame {
 
@@ -28,6 +38,14 @@ public class PingballGUI extends JFrame {
     private final JTextField guess;
     private final JTable guessTable;
     private final JLabel guessLabel;
+    
+    
+    private final JButton loadFileButton ;
+    private final JButton pauseButton;
+    private final JButton resumeButton;
+    private final JButton restartButton;
+    private final JButton exitButton;
+    
     
     private ArrayList<SwingWorker<String, Void>> myWorkers = new ArrayList<SwingWorker<String, Void>>();
 
@@ -44,7 +62,30 @@ public class PingballGUI extends JFrame {
         // components must be named with "setName" as specified in the problem set
         // remember to use these objects in your GUI!
         newPuzzleButton = new JButton();
-        newPuzzleButton.setName("newPuzzleButton");
+        
+        loadFileButton = new JButton();
+        loadFileButton.setName("loadFileButton");
+        loadFileButton.setText("load File:");
+        
+        pauseButton = new JButton();
+        pauseButton.setName("pauseButton");
+        pauseButton.setText("pause");
+        
+        resumeButton = new JButton();
+        resumeButton.setName("resumeButton");
+        resumeButton.setText("resume");
+        
+        restartButton = new JButton();
+        restartButton.setName("restartButton");
+        restartButton.setText("restart");
+        
+        exitButton = new JButton();
+        exitButton.setName("exitButton");
+        exitButton.setText("exit");
+        
+        
+        
+        
         newPuzzleNumber = new JTextField();
         newPuzzleNumber.setName("newPuzzleNumber");
 
@@ -82,26 +123,23 @@ public class PingballGUI extends JFrame {
         layout.setHorizontalGroup(
                 layout.createParallelGroup()
                 .addGroup(layout.createSequentialGroup()
-                        .addComponent(puzzleNumber, 110, 110, 110)
-                        .addComponent(newPuzzleButton)
-                        .addComponent(newPuzzleNumber))
-                        .addGroup(layout.createSequentialGroup()
-                                .addComponent(guessLabel)
-                                .addComponent(guess))
-                                .addComponent(guessTable, 0, GroupLayout.PREFERRED_SIZE, Integer.MAX_VALUE)
+                        .addComponent(loadFileButton)
+                        .addComponent(pauseButton)
+                        .addComponent(resumeButton)
+                        .addComponent(restartButton)
+                        .addComponent(exitButton))
                 );
 
         layout.setVerticalGroup(
                 layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup()
-                        .addComponent(puzzleNumber)
-                        .addComponent(newPuzzleButton)
-                        .addComponent(newPuzzleNumber,  GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-                        .addGroup(layout.createParallelGroup()
-                                .addComponent(guessLabel)
-                                .addComponent(guess, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))    
-                                .addComponent(guessTable, 0, GroupLayout.PREFERRED_SIZE, Integer.MAX_VALUE)
-                );
+
+                        .addComponent(loadFileButton)
+                        .addComponent(pauseButton)
+                        .addComponent(resumeButton)
+                        .addComponent(restartButton)
+                        .addComponent(exitButton))
+                  );
         
         
         /**
@@ -174,11 +212,53 @@ public class PingballGUI extends JFrame {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 PingballGUI main = new PingballGUI();
+                
+               
 
                 main.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                main.setSize(500, 250);
+                main.setSize(1000, 0);
+            
+                
+                JMenuBar menubar = new JMenuBar();
+                main.setJMenuBar(menubar);
+                StringBuilder boardText = new StringBuilder("");
+                BufferedReader br;
+                try {
+                    br = new BufferedReader(new FileReader("/Users/zulsarbatmunkh/pingball-phase2/src/Parser/sampleBoard.pb"));
+                    for(String line = br.readLine(); line != null; line = br.readLine()){
+                        boardText.append('\n'+line);
+                    }
+                } catch (FileNotFoundException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+               
+                String boardTextString = boardText.toString().substring(1);
+                Board board = BoardFileFactory.parse(boardTextString);           
+                BoardGUI boardGUI = new BoardGUI(board);
+                main.add(boardGUI);
                 main.setVisible(true);
-                main.setTitle("Jotto Game");
+                   
+                JMenu file = new JMenu("Menu");
+                menubar.add(file);
+                JMenuItem exit = new JMenuItem("Exit");
+                file.add(exit);
+                                
+                JMenu help = new JMenu("help");
+                menubar.add(help);
+                JMenuItem about = new JMenuItem("About");
+                help.add(about);
+                
+                class exitAction implements ActionListener{
+                    public void actionPerformed(ActionEvent e) {
+                        System.exit(0);
+                    }                  
+                }
+                
+                exit.addActionListener(new exitAction());
             }
         });
 
