@@ -53,20 +53,17 @@ public class BoardGUI extends JPanel {
     private Board board;
     //double buffer variables
     Image dbImage;
-    private Image dbInitialImage;
-    
-    private Graphics dbgInitial;
-    
     Graphics dbGraphics;
     
-    private final Board initialBoard;
+    private String boardText;
     
-    public BoardGUI(Board board) {
-        this.board = board;
-        this.initialBoard = board;
+    
+    
+    public BoardGUI(String boardText) {
+        this.board =  BoardFileFactory.parse(boardText);  
+        this.boardText = boardText;
         this.setPreferredSize(new Dimension(440, 440));
-        setBackground(backgroundColor);
-       
+        setBackground(backgroundColor);     
         setFocusable(true);
         requestFocusInWindow();
         repaint();
@@ -137,8 +134,7 @@ public class BoardGUI extends JPanel {
        public void actionPerformed(ActionEvent e){
            synchronized(board){
                board.update();
-           }
-           
+           }          
            repaint();
        }
    };
@@ -170,24 +166,7 @@ public class BoardGUI extends JPanel {
    
    public void restart(){
        synchronized(board){
-           StringBuilder boardText = new StringBuilder("");
-           BufferedReader br;
-           try {
-               br = new BufferedReader(new FileReader("/Users/zulsarbatmunkh/pingball-phase2/src/Parser/sampleBoard.pb"));
-               for(String line = br.readLine(); line != null; line = br.readLine()){
-                   boardText.append('\n'+line);
-               }
-           } catch (FileNotFoundException e) {
-               // TODO Auto-generated catch block
-               e.printStackTrace();
-           } catch (IOException e) {
-               // TODO Auto-generated catch block
-               e.printStackTrace();
-           }
-
-           String boardTextString = boardText.toString().substring(1);
-           board = BoardFileFactory.parse(boardTextString); 
-           
+           board = BoardFileFactory.parse(boardText);
        }
        myTimer.start();
        
