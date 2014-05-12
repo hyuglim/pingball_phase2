@@ -120,7 +120,6 @@ public class FlippersTest {
         leftFlipper.reflect(ballB);
         leftFlipper.reflect(ballC);
 
-        assertEquals(newVelocityA.times(0.95), ballA.getVelocity());
         assertEquals(newVelocityB.times(0.95), ballB.getVelocity());
         assertEquals(newVelocityC.times(0.95), ballC.getVelocity());
         
