@@ -59,8 +59,8 @@ public class BoardGUI extends JPanel {
     
     
     
-    public BoardGUI(String boardText) {
-        this.board =  BoardFileFactory.parse(boardText);  
+    public BoardGUI(Board board, String boardText) {
+        this.board =  board;
         this.boardText = boardText;
         this.setPreferredSize(new Dimension(440, 440));
         setBackground(backgroundColor);     

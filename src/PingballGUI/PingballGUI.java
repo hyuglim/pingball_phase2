@@ -279,14 +279,14 @@ public class PingballGUI extends JFrame implements ActionListener{
                 board = BoardFileFactory.parse(boardTextString);  
                 
                 if(boardGui==null){
-                    boardGui = new BoardGUI(boardTextString);             
+                    boardGui = new BoardGUI(board, boardTextString);             
                     add(pauseButton);
                     add(resumeButton);
                     add(restartButton);
                     add(exitButton);
                     getContentPane().add(boardGui);
                 }else{
-                    boardGui = new BoardGUI(boardTextString);
+                    boardGui = new BoardGUI(board, boardTextString);
                 }
                 
                 revalidate();
