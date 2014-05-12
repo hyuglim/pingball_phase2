@@ -85,7 +85,7 @@ public class BoardTests {
         String[] rows = boardToString.split("\n");
         
         assertEquals(rows[0], "......................");
-        assertEquals(rows[1], ". O/\\| -- |   |  | --.");
+        assertEquals(rows[1], ".*O/\\| -- |   |  | --.");
         assertEquals(rows[2], ". #  |    |-- |--|   .");
         assertEquals(rows[3], ".====================.");
         for (int row = 4; row < 21; row++){

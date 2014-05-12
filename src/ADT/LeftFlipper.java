@@ -3,8 +3,10 @@ package ADT;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;  
+import java.util.Timer;
 
 import ADT.Ball;
+import physics.Angle;
 import physics.Circle;
 import physics.Geometry;
 import physics.LineSegment;
@@ -32,6 +34,10 @@ public class LeftFlipper implements Gadget{
     private final double reflection = 0.95;
     private Circle end1;
     private Circle end2;
+    
+    private double angularVelocity = 0;
+    
+    private LineSegment line;
     
     private ArrayList<String> upTriggers = new ArrayList<String>();
     private ArrayList<String> downTriggers = new ArrayList<String>();
@@ -63,24 +69,35 @@ public class LeftFlipper implements Gadget{
         if(orientation == 0){
             this.center = new Vect(x, y);
             this.segment = new LineSegment(x, y, x, y+2);
-            this.end1 = new Circle(x, y, 0);
-            this.end2 = new Circle(x, y+2, 0);
+            line = new LineSegment(x, y, x, y+2);
+            this.end1 = new Circle(line.p1().x(), line.p1().y(), 0);
+            this.end2 = new Circle(line.p2().x(), line.p2().y(), 0);
         }else if(orientation == 90){
             this.center = new Vect(x+2, y);
             this.segment = new LineSegment(x, y, x+2, y);
-            this.end1 = new Circle(x, y, 0);
-            this.end2 = new Circle(x+2, y, 0);
+            
+            line = new LineSegment(x, y, x+2, y);
+            
+            this.end1 = new Circle(line.p1().x(), line.p1().y(), 0);
+            this.end2 = new Circle(line.p2().x(), line.p2().y(), 0);
         }else if(orientation == 180){
             this.center = new Vect(x+2, y+2);
             this.segment = new LineSegment(x+2, y, x+2, y+2);
-            this.end1 = new Circle(x+2, y, 0);
-            this.end2 = new Circle(x+2, y+2, 0);
+            
+            line = new LineSegment(x+2, y, x+2, y+2);
+            
+            this.end1 = new Circle(line.p1().x(), line.p1().y(), 0);
+            this.end2 = new Circle(line.p2().x(), line.p2().y(), 0);
         }else{
             this.center = new Vect(x, y+2);
             this.segment = new LineSegment(x, y+2, x+2, y+2);
-            this.end1 = new Circle(x, y+2, 0);
-            this.end2 = new Circle(x+2, y+2, 0);
+            
+            line = new LineSegment(x, y+2, x+2, y+2);
+            
+            this.end1 = new Circle(line.p1().x(), line.p1().y(), 0);
+            this.end2 = new Circle(line.p2().x(), line.p2().y(), 0);
         }
+        
         checkRep();
     }
 
@@ -177,8 +194,6 @@ public class LeftFlipper implements Gadget{
     public void reflect(Ball ball) {
         
         int velocityInRadian = 6;
-        double angularVelocity = 0;
-        
         //If its self-triggering rotate it
         if(this.triggers.contains(this)){
             angularVelocity = Math.PI * velocityInRadian;
@@ -186,6 +201,7 @@ public class LeftFlipper implements Gadget{
                 angularVelocity = - angularVelocity;
             }
         }
+        
         
         double minTime = this.getCollisionTime(ball);
         
@@ -219,10 +235,28 @@ public class LeftFlipper implements Gadget{
      */
 
     public double getCollisionTime(Ball ball) {
-        double minTimeToCollision = Geometry.timeUntilWallCollision(segment, ball.getBallCircle(), ball.getVelocity());
-        double timeToEnd1 = Geometry.timeUntilCircleCollision(end1, ball.getBallCircle(), ball.getVelocity());
+      /*  public static LineSegment rotateAround(LineSegment line, Vect cor, Angle a) {
+            return geometry.rotateAround(line, cor, a);
+        }
+        
+        public static double timeUntilRotatingWallCollision(LineSegment line,
+                Vect center,
+                double angularVelocity,
+                Circle ball,
+                Vect velocity)
+        {
+            return geometry.timeUntilRotatingWallCollision(line,
+                    center,
+                    angularVelocity,
+                    ball,
+                    velocity);
+        }
+        */
+        double minTimeToCollision = Geometry.timeUntilRotatingWallCollision(line, center, angularVelocity, ball.getBallCircle(), ball.getVelocity());       
+      //  double minTimeToCollision = Geometry.timeUntilWallCollision(line, ball.getBallCircle(), ball.getVelocity());
+        double timeToEnd1 = Geometry.timeUntilRotatingCircleCollision(end1, end1.getCenter(), angularVelocity, ball.getBallCircle(), ball.getVelocity());
         minTimeToCollision = Math.min(minTimeToCollision, timeToEnd1);
-        double timeToEnd2 = Geometry.timeUntilCircleCollision(end2, ball.getBallCircle(), ball.getVelocity());
+        double timeToEnd2 = Geometry.timeUntilRotatingCircleCollision(end2, end2.getCenter(), angularVelocity, ball.getBallCircle(), ball.getVelocity());
         minTimeToCollision = Math.min(minTimeToCollision, timeToEnd2);
         return minTimeToCollision;
     }
@@ -288,6 +322,25 @@ public class LeftFlipper implements Gadget{
      * 1080 degrees per second.
      */
     public void action() {
+        
+        int velocityInRadian = 6;
+        angularVelocity = Math.PI * velocityInRadian;
+        if(this.rotated){
+            angularVelocity = - angularVelocity;
+        }
+        Thread myThread = new Thread(){
+            public void run(){
+             /*   if(line.angle()!=new 90){
+                    
+                }*/
+                /*  public static LineSegment rotateAround(LineSegment line, Vect cor, Angle a) {
+                return geometry.rotateAround(line, cor, a);
+            */
+                line = Geometry.rotateAround(line, center, new Angle(angularVelocity));  
+            }
+        };
+        myThread.start();
+        
         if(this.rotated){
             this.rotated = false;
             if(orientation == 0){
@@ -386,6 +439,9 @@ public class LeftFlipper implements Gadget{
         return null;
     }
 
+    public double getAngularVelocity(){
+        return angularVelocity;
+    }
     @Override
     public void draw(Graphics2D g2) {
         Color c = new Color(53, 185, 199); //light blue
@@ -426,6 +482,11 @@ public class LeftFlipper implements Gadget{
 
         }
         
+    }
+    
+    public static void main(String[] args){
+        Angle angle = new Angle(Math.PI);
+        LineSegment segment = new LineSegment(0, 0, 1, 3);
     }
 
 }

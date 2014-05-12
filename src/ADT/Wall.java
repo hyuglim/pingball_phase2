@@ -1,6 +1,7 @@
 package ADT;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.util.ArrayList; 
 import java.util.List;
@@ -184,17 +185,56 @@ public class Wall {
         g.setColor(c);
         
         if (this.location.equals("top")){
-            g.fillRect(0, 0, 440, 20);
+            if(this.visible){
+                g.fillRect(0, 0, 440, 20);
+            }else{
+                g.setColor(Color.ORANGE);
+                g.setFont(new Font("Verdana", 1, 20));
+                
+                int initialX = (440 - this.getConnectedTo().length()*20)/2;
+                g.drawString(this.getConnectedTo(), initialX, 16);
+            }
         }
         else if (this.location.equals("bottom")){
-            g.fillRect(0, 420, 440, 20);
+            if(this.visible){
+                g.fillRect(0, 420, 440, 20);
+            }else{
+                g.setColor(Color.ORANGE);
+                g.setFont(new Font("Verdana", 1, 20));
+                
+                int initialX = (440 - this.getConnectedTo().length()*20)/2;
+                g.drawString(this.getConnectedTo(), initialX, 438);
+            }
         }
         else if (this.location.equals("left")){
-            g.fillRect(0, 20, 20, 400);
+            if(this.visible){
+                g.fillRect(0, 20, 20, 400);
+            }else{
+                g.setColor(Color.ORANGE);
+                g.setFont(new Font("Verdana", 1, 20));
+                int initialY = (440 - this.getConnectedTo().length()*20)/2;
+                
+                String[] charArray = this.getConnectedTo().split("");
+                for(String character: charArray){
+                    g.drawString(character, 4, initialY);
+                    initialY+=20;
+                }
+            }
         }
         else{
-            g.fillRect(420, 20, 20, 400);
-            
+            if(this.visible){
+                g.fillRect(420, 20, 20, 400);             
+            }else{
+                g.setColor(Color.ORANGE);
+                g.setFont(new Font("Verdana", 1, 20));
+                
+                int initialY = (440 - this.getConnectedTo().length()*20)/2;
+                String[] charArray = this.getConnectedTo().split("");
+                for(String character: charArray){
+                    g.drawString(character, 423, initialY);
+                    initialY+=20;
+                }
+            }
         }
     }
 }

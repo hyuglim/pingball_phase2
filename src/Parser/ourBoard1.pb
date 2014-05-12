@@ -2,7 +2,7 @@ board name=ourBoard1 friction1=0.040 friction2=0.040
 
 # define a ball
 ball name=BallA x=3 y=2.5 xVelocity=1.0 yVelocity=1.2 radius=0.25
-ball name=BallB x=18 y=15 xVelocity=0.0 yVelocity=-10 radius = 0.5
+ball name=BallB x=18 y=15 xVelocity=0.0 yVelocity=-10 radius = 1
 
 # define some bumpers
 squareBumper name=Square1 x=12 y=11

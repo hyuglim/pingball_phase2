@@ -710,8 +710,10 @@ public class Board extends TimerTask {
      */
     public void triggerUpKey(String key){
         for(Gadget gadget:gadgets){
-            if(gadget.getUpKeyTriggers().contains(key)){
-                gadget.action();
+            if(gadget.getUpKeyTriggers().size()!=0){
+                if(gadget.getUpKeyTriggers().contains(key)){
+                    gadget.action();
+                }
             }
         }
     }
@@ -722,10 +724,13 @@ public class Board extends TimerTask {
      * @param key the String name of the trigger key
      */
     public void triggerDownKey(String key){
-        for(Gadget gadget:gadgets){
-            if(gadget.getDownKeyTriggers().contains(key)){
-                gadget.action();
+        for(Gadget gadget: gadgets){
+            if(gadget.getDownKeyTriggers().size()!=0){
+                if(gadget.getDownKeyTriggers().contains(key)){
+                    gadget.action();
+                }
             }
+            
         }
     }
 
@@ -902,15 +907,20 @@ public class Board extends TimerTask {
         board.addGadget(new Absorber("a", 0, 19, 19, 1));
         Gadget lf = new LeftFlipper("lf", 2, 12, 90);
         lf.triggers(lf);
+        lf.addKeyDown("ctrl");
         
         //abs.triggers(abs);
         //board.addGadget(abs);
         board.addGadget(lf);
-        Timer timer = new Timer();
+/*        Timer timer = new Timer();
         
         timer.schedule(board, 0, 50);
         Ball myBall = new Ball("B", 0, 0.25, 1, 1, 0.25);
-        CircleBumper circle = new CircleBumper("C", 0, 0);
+        CircleBumper circle = new CircleBumper("C", 0, 0);*/
+        System.out.println(board.getGadgets());
+        System.out.println(board.toString());
+        board.triggerDownKey("ctrl");
+        System.out.println(board.toString());
         
         //System.out.println(circle.getCollisionTime(myBall));
         

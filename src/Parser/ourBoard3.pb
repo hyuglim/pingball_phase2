@@ -1,8 +1,8 @@
 board name=sampleBoard2 gravity=20.0
 
   # define a ball
-  ball name=Ball1 x=0.5 y=5.5 xVelocity=1 yVelocity=0
-  ball name=Ball2 x=6.0 y=5.0 xVelocity=3.5 yVelocity=-1.4
+  ball name=Ball1 x=0.5 y=5.5 xVelocity=1 yVelocity=0 radius = 0.25
+  ball name=Ball2 x=6.0 y=5.0 xVelocity=3.5 yVelocity=-1.4 radius = 0.5
   
   # define a series of circle bumpers
   circleBumper name=Circle1 x=14 y=9

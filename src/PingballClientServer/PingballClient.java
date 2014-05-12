@@ -1,6 +1,6 @@
 package PingballClientServer;
 
-import java.io.BufferedReader; 
+import java.io.BufferedReader;  
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -34,6 +34,7 @@ public class PingballClient{
 	private GamePlayer player;
 	private Communicator messenger;
 
+	private static Socket socket;
 	// -1: no wall hit, 0: top wall hit,
 	// 1: bottom wall hit, 2: right wall hit
 	private int whichWallHit = -1;
@@ -44,11 +45,16 @@ public class PingballClient{
 	 * @param socket
 	 * @param board
 	 */
-	PingballClient(Socket socket, Board board) {
+	
+	public PingballClient(Socket socket){
+	}
+	
+	public PingballClient(Socket socket, Board board) {
+	    this.socket = socket;
 		this.player = new GamePlayer(board);
 		this.messenger = new Communicator(socket, board);
 		
-		new Thread(player).start();
+		//new Thread(player).start();
 		new Thread(messenger).start();
 	}
 
@@ -56,13 +62,11 @@ public class PingballClient{
 	 * singleplayer constructor
 	 * @param board
 	 */
-	PingballClient(Board board) {
-		this.player = new GamePlayer(board);
-		
+	public PingballClient(Board board) {
+		this.player = new GamePlayer(board);		
 		new Thread(player).start();
 	}	
-	
-
+	   
 	/**
 	 * 
 	 * @return single player
@@ -159,7 +163,7 @@ public class PingballClient{
                 }
                 String boardTextString = boardText.toString().substring(1);
                 board = BoardFileFactory.parse(boardTextString);
-				Socket socket = new Socket(host, port);
+				socket = new Socket(host, port);
 				PingballClient player = new PingballClient(socket, board);
 				
 				
@@ -175,5 +179,13 @@ public class PingballClient{
                 e.printStackTrace();
             }
         }
+	}
+	
+	public void setBoard(Board board){
+	    this.player = new GamePlayer(board);
+	}
+	
+	public void close() throws IOException{
+	    socket.close();
 	}
 }
