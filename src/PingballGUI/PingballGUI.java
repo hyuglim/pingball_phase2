@@ -263,11 +263,11 @@ public class PingballGUI extends JFrame implements ActionListener{
                 StringBuilder boardText = new StringBuilder("");
                 BufferedReader br;
                 try {
-<<<<<<< HEAD
+
                     br = new BufferedReader(new FileReader("/home/jonathan/Documents/Sophomore_Spring/6.005/workspace/pingball-phase2/src/Parser/sampleBoard.pb"));
-=======
+
                     br = new BufferedReader(new FileReader(filePath));
->>>>>>> 3952c9e4dba9ac2b6bf22e78882ab5040fe324ef
+                    
                     for(String line = br.readLine(); line != null; line = br.readLine()){
                         boardText.append('\n'+line);
                     }

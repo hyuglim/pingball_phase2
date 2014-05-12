@@ -167,27 +167,30 @@ public class PingballServer {
 
 		//if left is in the dictionary, and the existing right neighbor does not 
 		//match the current bottom neighbor
-		else if (neighbors.get(left).getTwo().get(3)
-				&& !neighbors.get(left).getOne().get(3).equals(right)) {
-			setNullifyBoards(right, 2);
+		String prevRight = neighbors.get(left).getOne().get(3);
+		if (neighbors.get(left).getTwo().get(3)
+				&& !prevRight.equals(right)) {
+			setNullifyBoards(prevRight, 2);
 		}
 
-		//if right is in the dictionary, and the existing right neighbor does not
+		//if right is in the dictionary, and the existing left neighbor does not
 		//match the current left neighbor
-		else if (neighbors.get(right).getTwo().get(2)
-				&& !neighbors.get(right).getOne().get(2).equals(right)) {
-			setNullifyBoards(left, 3);
-		} else {
-			// send message to the left board
-			setNeighborBoards(left, right, 3);
-			notifyBoardJoin(left);
+		String prevLeft = neighbors.get(right).getOne().get(2);
+		if (neighbors.get(right).getTwo().get(2)
+				&& !prevLeft.equals(right)) {
+			setNullifyBoards(prevLeft, 3);
+		} 
 
-			// send message to the right board
-			setNeighborBoards(right, left, 2);
-			notifyBoardJoin(right);
+		// send message to the left board
+		setNeighborBoards(left, right, 3);
+		notifyBoardJoin(left);
 
-			return;
-		}
+		// send message to the right board
+		setNeighborBoards(right, left, 2);
+		notifyBoardJoin(right);
+
+		return;
+
 
 
 
@@ -216,30 +219,29 @@ public class PingballServer {
 
 		//if top is in the dictionary, and the existing bottom neighbor does not 
 		//match the current bottom neighbor
-		else if (neighbors.get(top).getTwo().get(1)
-				&& !neighbors.get(top).getOne().get(1).equals(bottom)) {
-			setNullifyBoards(bottom, 0);
+		String prevBottom = neighbors.get(top).getOne().get(1);
+		if (neighbors.get(top).getTwo().get(1)
+				&& !prevBottom.equals(bottom)) {
+			
+			setNullifyBoards(prevBottom, 0);
 		}
 
 		//if bottom is in the dictionary, and the existing top neighbor does not
 		//match the current top neighbor
-		else if (neighbors.get(bottom).getTwo().get(0)
-				&& !neighbors.get(bottom).getOne().get(0).equals(top)) {
-			setNullifyBoards(top, 1);
+		String prevTop = neighbors.get(bottom).getOne().get(0);
+		if (neighbors.get(bottom).getTwo().get(0)
+				&& !prevTop.equals(top)) {
+			setNullifyBoards(prevTop, 1);
 		}
 
-		else {
+		// send message to the top board
+		setNeighborBoards(top, bottom, 1);
+		notifyBoardJoin(top);
 
-			// send message to the top board
-			setNeighborBoards(top, bottom, 1);
-			notifyBoardJoin(top);
-
-			// send message to the right board
-			setNeighborBoards(bottom, top, 0);
-			notifyBoardJoin(bottom);
-			return;
-
-		}
+		// send message to the right board
+		setNeighborBoards(bottom, top, 0);
+		notifyBoardJoin(bottom);
+		return;
 
 	}
 
@@ -262,12 +264,31 @@ public class PingballServer {
 	 * set a certain neighbor to be solid wall
 	 * @param board
 	 * @param loc
+	 * @throws IOException 
 	 */
 	private void setNullifyBoards(String board, int loc) {
+		System.out.println("setNullifyBoards called: " + board);
 		List<String> adjBoardNames = neighbors.get(board).getOne();
 		List<Boolean> isInvisible = neighbors.get(board).getTwo();
+		String neighbor = adjBoardNames.get(loc);
+		System.out.println("jod neighbor: " + neighbor);
+
+
+		Socket socket = neighbors.get(board).getThree();
+		PrintWriter out;
+		try {
+			out = new PrintWriter(socket.getOutputStream(), true);
+			
+			System.out.println("unmark " + loc + " " + neighbor);
+			out.println("unmark " + loc + " " + neighbor);
+		} catch (IOException e) {
+			System.out.println("CATCH 21");
+			e.printStackTrace();
+		}
 		adjBoardNames.set(loc, null);
 		isInvisible.set(loc, false);
+		
+
 	}
 
 	/**
@@ -617,7 +638,7 @@ public class PingballServer {
 				//System.out.println("hit invisible MAANN");
 
 				String neighbor = neighbors.get(nameOfBoard).getOne().get(wallNum);
-				System.out.println("NEIGHBOR: " + neighbor);
+				//System.out.println("NEIGHBOR: " + neighbor);
 				Socket socketReceiver = neighbors.get(neighbor).getThree();
 
 				outReceiver = new PrintWriter(socketReceiver.getOutputStream(), true);
