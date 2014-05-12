@@ -339,9 +339,7 @@ public class Absorber implements Gadget{
         Color c = new Color(104,223, 96);//bright green boundary with a line
         g2.setColor(c);
         g2.drawRect(x*20+20, y*20+20, width*20, height*20);
-        g2.drawLine( x*20+20,y*20+20+height*10,x*20+20+width*20,y*20+20+height*10);
-        
-        
+        g2.drawLine( x*20+20,y*20+20+height*10,x*20+20+width*20,y*20+20+height*10); 
     }
     
 }

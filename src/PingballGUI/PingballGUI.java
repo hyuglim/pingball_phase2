@@ -66,10 +66,6 @@ public class PingballGUI extends JFrame implements ActionListener{
     private PingballClient myClient;
     
     private Board board = new Board("Sample", 0, 0, 0);
-
-
-    private ArrayList<SwingWorker<String, Void>> myWorkers = new ArrayList<SwingWorker<String, Void>>();
-
     /**
      * Constructor for the Jotto playing GUI. Creates a JottoGui() with
      * JButton() newPuzzleButton, JTextField() newPuzzleNumber that let the user
