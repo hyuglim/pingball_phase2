@@ -35,7 +35,6 @@ public class Communicator implements Runnable{
 
 		} catch (IOException e) {
 			System.out.println("in or out failed");
-			System.exit(-1);
 		}
 	}
 

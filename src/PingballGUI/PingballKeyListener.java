@@ -1,18 +1,16 @@
 package PingballGUI;
 
-import java.awt.event.KeyEvent;
+import java.awt.event.KeyEvent; 
+import java.awt.event.KeyListener;
 
 import javax.swing.JTextField;
 
 import ADT.Board;
 
-public class PingballKeyListener {
-    
-    private JTextField commandTypingArea;
+public class PingballKeyListener implements KeyListener{
     private Board board;
 
-    public PingballKeyListener(JTextField commandTypingArea, Board board){
-        this.commandTypingArea = commandTypingArea;
+    public PingballKeyListener(Board board){
         this.board = board;
     }
   
@@ -45,18 +43,8 @@ public class PingballKeyListener {
 
         //You should only rely on the key char if the event
         //is a key typed event.
-        int id = e.getID();
-        String keyString;
-        if (id == KeyEvent.KEY_TYPED) {
-            char c = e.getKeyChar();
-            keyString = "key character = '" + c + "'";
-        } else {
-            int keyCode = e.getKeyCode();
-            keyString = "key code = " + keyCode
-                    + " ("
-                    + KeyEvent.getKeyText(keyCode)
-                    + ")";
-        }
+        System.out.println(keyStatus + KeyEvent.getKeyText(e.getKeyCode()));
+
     }
 
 }

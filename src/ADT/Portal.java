@@ -193,14 +193,14 @@ public class Portal implements Gadget{
      * @see Gadget#getUpKeyTriggers()
      */
     public ArrayList<String> getUpKeyTriggers() {
-        return null;
+        return new ArrayList<String>();
     }
 
     /**
      * @see Gadget#getDownKeyTriggers()
      */
     public ArrayList<String> getDownKeyTriggers() {
-        return null;
+        return new ArrayList<String>();
     }
     
     /**

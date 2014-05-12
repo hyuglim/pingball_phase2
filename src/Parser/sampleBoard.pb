@@ -7,7 +7,7 @@ board name=sampleBoard gravity=0.0 friction1 = 0.0 friction2 = 0.0
   ball name=Ball x=0.5 y=5.5 xVelocity=5 yVelocity=5 radius=0.25
   
   # define a series of circle bumpers
-  circleBumper name=Circle5 x=5 y=10 
+  #circleBumper name=Circle5 x=5 y=10 
   
   # define a series of square bumpers
   squareBumper name=Square1 x=1 y=2
@@ -17,11 +17,11 @@ board name=sampleBoard gravity=0.0 friction1 = 0.0 friction2 = 0.0
   
   
   # add some flippers
-  leftFlipper name=FlipL2 x=8 y=7 orientation=90
-  rightFlipper name=FlipR2 x=10 y=7 orientation=0
+  leftFlipper name=FlipL2 x=5 y=10 orientation=90
+  rightFlipper name=FlipR2 x=7 y=8 orientation=90
 
   # define an absorber to catch the ball at the bottom
-  absorber name=Abs x=0 y=19 width=20 height=1 
+  #absorber name=Abs x=0 y=19 width=20 height=1 
   
   #portal name=Alpha x=19 y=8 otherPortal=Gamma
   #portal name=Beta x=19 y=16 otherPortal=Delta
@@ -30,5 +30,5 @@ board name=sampleBoard gravity=0.0 friction1 = 0.0 friction2 = 0.0
   fire trigger=Abs action=Abs
   fire trigger=FlipL2 action=FlipL2
   
-  keydown key=shift action=Abs
-  keyup key=ctrl action=Abs
+  keydown key=shift action=FlipL2
+  keyup key=ctrl action=FlipR2

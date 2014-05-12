@@ -6,10 +6,11 @@ package PingballGUI;
  * 
  * Ratio: one board cell = 20 pixels!!!
  */
-import java.awt.BasicStroke;
+import java.awt.BasicStroke; 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -18,10 +19,16 @@ import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
@@ -37,26 +44,37 @@ import ADT.RightFlipper;
 import ADT.SquareBumper;
 import ADT.TriangularBumper;
 import ADT.Wall;
+import Parser.BoardFileFactory;
 
-public class BoardGUI extends JPanel {
+
+public class BoardGUI extends JPanel {    
+    private final Timer myTimer;
     Color backgroundColor = Color.BLACK;
-    private final Board board;
+    private Board board;
     //double buffer variables
     Image dbImage;
+    private Image dbInitialImage;
+    
+    private Graphics dbgInitial;
+    
     Graphics dbGraphics;
+    
+    private final Board initialBoard;
     
     public BoardGUI(Board board) {
         this.board = board;
+        this.initialBoard = board;
         this.setPreferredSize(new Dimension(440, 440));
         setBackground(backgroundColor);
        
         setFocusable(true);
         requestFocusInWindow();
         repaint();
-        new Timer(50, paintTimer).start();
-
-
+        myTimer = new Timer(50, paintTimer);
+        myTimer.start();
+             
     }
+    
     @Override
     public void paintComponent(Graphics g) {
         
@@ -70,16 +88,16 @@ public class BoardGUI extends JPanel {
             ball.draw(g2);
         }
         for (Wall wall:board.getWalls()){
-            wall.draw(g2);
+                wall.draw(g2);
+            
         }
-        
-        
+  
     }
     private void fillWindow(final Graphics2D g) {
         g.setColor(backgroundColor);
         g.fillRect(0,  0,  getWidth(), getHeight());
     }
-    
+  /*  
     public static void main(String[] args) {
         
         SwingUtilities.invokeLater(new Runnable() {
@@ -113,29 +131,66 @@ public class BoardGUI extends JPanel {
         });
         
     
-    }   
+    }   */
     
     Action paintTimer = new AbstractAction(){
        public void actionPerformed(ActionEvent e){
-           board.update();
+           synchronized(board){
+               board.update();
+           }
+           
            repaint();
        }
    };
+   
    /**
     * Method for double buffering, so the image doesn't flicker
     */
-   public void update(Graphics g){
-        
-       if (dbImage==null){
+   
+   public void update(Graphics g){      
+       if (dbImage == null){
            dbImage = createImage(this.getSize().width, this.getSize().height);
            dbGraphics = dbImage.getGraphics();
        }
+       
        dbGraphics.setColor(this.getBackground());
        dbGraphics.fillRect(0, 0, this.getSize().width, this.getSize().height);
        dbGraphics.setColor(getForeground());
        paint(dbGraphics);
-       g.drawImage(dbImage,0,0,this);
-       
+       g.drawImage(dbImage, 0, 0, this);   
+   }
+
+   public void stop(){
+       myTimer.stop();
    }
    
+   public void start(){
+       myTimer.start();
+   }
+   
+   public void restart(){
+       synchronized(board){
+           StringBuilder boardText = new StringBuilder("");
+           BufferedReader br;
+           try {
+               br = new BufferedReader(new FileReader("/Users/zulsarbatmunkh/pingball-phase2/src/Parser/sampleBoard.pb"));
+               for(String line = br.readLine(); line != null; line = br.readLine()){
+                   boardText.append('\n'+line);
+               }
+           } catch (FileNotFoundException e) {
+               // TODO Auto-generated catch block
+               e.printStackTrace();
+           } catch (IOException e) {
+               // TODO Auto-generated catch block
+               e.printStackTrace();
+           }
+
+           String boardTextString = boardText.toString().substring(1);
+           board = BoardFileFactory.parse(boardTextString); 
+           
+       }
+       myTimer.start();
+       
+   }
+
 }
