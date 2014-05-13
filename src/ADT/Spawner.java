@@ -245,10 +245,14 @@ public class Spawner implements Gadget{
       */
      @Override
      public void draw(Graphics2D g2) {
+<<<<<<< HEAD
          Color c = Color.BLUE;//pink
          g2.setColor(c);
          g2.fillOval(x*20+20, y*20+20, getWidth()*20, getHeight()*20);
          
+=======
+
+>>>>>>> a0ca1f764c0db430f02198f6d3e9e5e6766bdd9a
          BufferedImage img = null;
          //swirl picture
          try {
@@ -257,6 +261,10 @@ public class Spawner implements Gadget{
              System.err.println("No image");
          }
              g2.drawImage(img, x*20+20, y*20+20, 20, 20, null);
+<<<<<<< HEAD
+=======
+
+>>>>>>> a0ca1f764c0db430f02198f6d3e9e5e6766bdd9a
      }
      
      /**
@@ -274,7 +282,7 @@ public class Spawner implements Gadget{
     //dummy method, spawner doesn't glow
     @Override
     public boolean isHit() {
-        return this.isHit;
+        return false;
     }
    
     /**
@@ -288,7 +296,7 @@ public class Spawner implements Gadget{
             in = new FileInputStream(fileName);
 
         } catch (FileNotFoundException e) {
-            System.err.println("Can't find wv file");
+            System.err.println("Can't find wav file");
             e.printStackTrace();
         }
 
@@ -296,7 +304,7 @@ public class Spawner implements Gadget{
         try {
             as = new AudioStream(in);
         } catch (IOException e) {
-            System.err.println("Can't play wv file");
+            System.err.println("Can't play wav file");
             e.printStackTrace();
         }
 
@@ -309,6 +317,5 @@ public class Spawner implements Gadget{
     //dummy method, spawner doesn't glow
     @Override
     public void setNotHit() {    
-        this.isHit = false;
     }
 }
