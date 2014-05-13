@@ -176,7 +176,7 @@ public class PingballGUI extends JFrame implements ActionListener{
                     if(board!=null){
                         myClient = new PingballClient(new Socket(serverName, Integer.parseInt(serverId)), board);
                     }
-                    
+   
                 } catch (UnknownHostException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -263,9 +263,6 @@ public class PingballGUI extends JFrame implements ActionListener{
                 StringBuilder boardText = new StringBuilder("");
                 BufferedReader br;
                 try {
-
-                    br = new BufferedReader(new FileReader("/home/jonathan/Documents/Sophomore_Spring/6.005/workspace/pingball-phase2/src/Parser/sampleBoard.pb"));
-
                     br = new BufferedReader(new FileReader(filePath));
                     
                     for(String line = br.readLine(); line != null; line = br.readLine()){

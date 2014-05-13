@@ -122,27 +122,6 @@ public class PingballServer {
 		}		
 	}
 
-	/**
-	 * Method used for telling clients that their wall has been unjoined
-	 * @param name
-	 * @throws IOException
-	 */
-	//	private void notifyBoardUnjoin(String name) throws IOException {
-	//		Socket socket = neighbors.get(name).getThree();
-	//		List<String> adj = neighbors.get(name).getOne();
-	//		List<Boolean> invis = neighbors.get(name).getTwo();
-	//		PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-	//
-	//		for (int i = 0; i < adj.size(); i++) {
-	//			if (invis.get(i)) {
-	//				String neigh = adj.get(i);
-	//				System.out.println("unmark " + i + " " + neigh);
-	//
-	//				out.println("unmark " + i + " " + neigh);
-	//
-	//			}
-	//		}		
-	//	}
 
 
 	/**

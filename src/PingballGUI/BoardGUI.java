@@ -49,6 +49,7 @@ import Parser.BoardFileFactory;
 
 public class BoardGUI extends JPanel {    
     private final Timer myTimer;
+    private final Timer myChatTimer;
     Color backgroundColor = Color.BLACK;
     private Board board;
     //double buffer variables
@@ -69,6 +70,17 @@ public class BoardGUI extends JPanel {
         repaint();
         myTimer = new Timer(50, paintTimer);
         myTimer.start();
+        
+        Action chatTimer = new AbstractAction() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				
+			}
+		};
+        myChatTimer = new Timer(50, chatTimer);
+        myChatTimer.start();
              
     }
     
@@ -85,8 +97,7 @@ public class BoardGUI extends JPanel {
             ball.draw(g2);
         }
         for (Wall wall:board.getWalls()){
-                wall.draw(g2);
-            
+                wall.draw(g2);          
         }
   
     }
