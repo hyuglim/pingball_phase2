@@ -176,5 +176,8 @@ public interface Gadget {
      * @param g2
      */
     public void draw(Graphics2D g2);
-           
+    public void drawAnother(Graphics2D g2);
+    public boolean isHit();
+    public void makeNoise();
+    public void setNotHit();       
 }

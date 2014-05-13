@@ -233,4 +233,28 @@ public class Spawner implements Gadget{
          
      }
 
+    @Override
+    public void drawAnother(Graphics2D g2) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public boolean isHit() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public void makeNoise() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void setNotHit() {
+        // TODO Auto-generated method stub
+        
+    }
+
 }

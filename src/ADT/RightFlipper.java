@@ -2,6 +2,10 @@ package ADT;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;  
 
 import ADT.Ball;
@@ -9,6 +13,8 @@ import physics.Circle;
 import physics.Geometry;
 import physics.LineSegment;
 import physics.Vect;
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
 
 /**
  * RightFlipper represents a right flipper in the pingball board.
@@ -273,6 +279,7 @@ public class RightFlipper implements Gadget{
      * to its final state. 
      */
     public void action() {
+        makeNoise();
         if(this.rotated){
             this.rotated = false;
             if(orientation == 0){
@@ -418,6 +425,47 @@ public class RightFlipper implements Gadget{
             }
 
         }
+        
+    }
+
+    @Override
+    public void drawAnother(Graphics2D g2) {
+        
+    }
+
+    @Override
+    public boolean isHit() {
+        return false;
+    }
+
+    @Override
+    public void makeNoise() {
+        String fileName = "/Users/danamukusheva/6.005/pingball-phase2/src/ADT/Flipper.wav";
+        InputStream in = null;
+        try {
+            in = new FileInputStream(fileName);
+  
+
+       } catch (FileNotFoundException e) {
+            System.err.println("Can't find wav file");
+            
+            e.printStackTrace();
+       }
+
+       AudioStream as = null;
+       try {
+            as = new AudioStream(in);
+       } catch (IOException e) {
+            e.printStackTrace();
+       }
+
+       AudioPlayer.player.start(as);
+        
+        
+    }
+
+    @Override
+    public void setNotHit() {
         
     }
 }

@@ -2,6 +2,10 @@ package ADT;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList; 
 import java.util.List;
 
@@ -10,6 +14,8 @@ import physics.Circle;
 import physics.Geometry;
 import physics.LineSegment;
 import physics.Vect;
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
 
 /**
  * Absorber represents an absorber in the pingball board.
@@ -180,6 +186,7 @@ public class Absorber implements Gadget{
      * @param ball the ball that hit this absorber
      */
     public void reflect(Ball ball){
+        makeNoise();
         myBalls.add(ball);
         ball.getsAbsorbed();
         double xPosition = x + getWidth() - 0.25;
@@ -248,6 +255,7 @@ public class Absorber implements Gadget{
      * Gadget#action()
      */
     public void action() {
+        makeNoise();
         if(this.myBalls.size() >= 1 && this.myBalls.get(0).getVelocity().length() == 0){
             this.myBalls.get(0).updateBallVelocity(new Vect(0, -50));
         }
@@ -312,7 +320,6 @@ public class Absorber implements Gadget{
      */
     @Override
     public boolean doesPort() {
-        // TODO Auto-generated method stub
         return false;
     }
 
@@ -321,7 +328,6 @@ public class Absorber implements Gadget{
      */
     @Override
     public String getOtherBoard() {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -330,7 +336,6 @@ public class Absorber implements Gadget{
      */
     @Override
     public String getOtherPortal() {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -340,6 +345,43 @@ public class Absorber implements Gadget{
         g2.setColor(c);
         g2.drawRect(x*20+20, y*20+20, width*20, height*20);
         g2.drawLine( x*20+20,y*20+20+height*10,x*20+20+width*20,y*20+20+height*10); 
+    }
+
+    @Override
+    public void drawAnother(Graphics2D g2) {
+        
+    }
+
+    @Override
+    public boolean isHit() {
+        return false;
+    }
+
+    @Override
+    public void makeNoise() {
+        String fileName = "/Users/danamukusheva/6.005/pingball-phase2/src/ADT/Absorber.wav";
+        InputStream in = null;
+        try {
+            in = new FileInputStream(fileName);
+       } catch (FileNotFoundException e) {
+            System.err.println("Can't find wav file");
+            
+            e.printStackTrace();
+       }
+
+       AudioStream as = null;
+       try {
+            as = new AudioStream(in);
+       } catch (IOException e) {
+            e.printStackTrace();
+       }
+
+       AudioPlayer.player.start(as);
+      
+    }
+    
+    @Override
+    public void setNotHit() {   
     }
     
 }

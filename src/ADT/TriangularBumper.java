@@ -2,6 +2,10 @@ package ADT;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;   
 
 import ADT.Ball;
@@ -9,6 +13,8 @@ import physics.Circle;
 import physics.Geometry;
 import physics.LineSegment;
 import physics.Vect;
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
 
 /**
  * TriangularBumper represents a triangle bumper in the pingball board.
@@ -31,7 +37,7 @@ public class TriangularBumper implements Gadget{
     private final ArrayList<Circle> corners = new ArrayList<Circle>();
     private final ArrayList<Gadget> triggeredBy = new ArrayList<Gadget>();
     private final ArrayList<Gadget> triggers = new ArrayList<Gadget>();
-    
+    private boolean isHit;
     /**
      * Constructor for a TriangularBumper
      * @param x the x coordinate of this triangular bumper in the board.
@@ -71,6 +77,7 @@ public class TriangularBumper implements Gadget{
                 segments.add(new LineSegment(x, y, x, y+1));
             }
         }
+        isHit = false;
         checkRep();
     }
     
@@ -181,6 +188,8 @@ public class TriangularBumper implements Gadget{
      * @param ball the ball that collided with this triangular bumper
      */
     public void reflect(Ball ball) {
+        this.isHit = true;
+        makeNoise();
         double minTime = this.getCollisionTime(ball);
         Vect newVelocity = new Vect(0, 0);
         for(LineSegment segment : this.segments){
@@ -344,6 +353,89 @@ public class TriangularBumper implements Gadget{
         }
         g2.fillPolygon(xCoords, yCoords, 3);
         
+    }
+    @Override
+    public void makeNoise() {
+        String fileName = "/Users/danamukusheva/6.005/pingball-phase2/src/ADT/Bumper.wav";
+        InputStream in = null;
+        try {
+            in = new FileInputStream(fileName);
+  
+
+       } catch (FileNotFoundException e) {
+            System.err.println("Can't find wv file");
+            
+            e.printStackTrace();
+       }
+
+       AudioStream as = null;
+       try {
+            as = new AudioStream(in);
+       } catch (IOException e) {
+            e.printStackTrace();
+       }
+
+       AudioPlayer.player.start(as);
+        
+        
+    }
+
+    @Override
+    public void drawAnother(Graphics2D g2) {
+        
+            g2.setColor(Color.WHITE);  
+            int x = this.x;
+            int y = this.y;
+            int[] xCoords = {1,2,3};
+            int[] yCoords={1,1,1};
+            if (this.orientation==0){
+                xCoords[0] = x*20+20; 
+                xCoords[1] = x*20+20; 
+                xCoords[2] = (x+1)*20+20;
+                yCoords[0] = x*20+20; 
+                yCoords[1] = (y+1)*20+20;
+                yCoords[2] = y*20; 
+                
+            }
+            if (this.orientation==90){
+                xCoords[0] = x*20+20; 
+                xCoords[1] = (x+1)*20+20; 
+                xCoords[2] = (x+1)*20+20;
+                yCoords[0] = y*20+20; 
+                yCoords[1] = y*20+20; 
+                yCoords[2] = (y+1)*20+20;
+                
+            }
+            if (this.orientation==180){
+                xCoords[0] = x*20+20; 
+                xCoords[1] = (x+1)*20+20; 
+                xCoords[2] = (x+1)*20+20;
+                yCoords[0] = (y+1)*20+20; 
+                yCoords[1] = (y+1)*20+20; 
+                yCoords[2] = y*20+20;
+                
+            }
+            else{
+                xCoords[0] = x*20+20; 
+                xCoords[1] = x*20+20; 
+                xCoords[2] = (x+1)*20+20;
+                yCoords[0] = y*20+20; 
+                yCoords[1] = (y+1)*20+20; 
+                yCoords[2] = (y+1)*20+20;
+            
+            }
+            g2.fillPolygon(xCoords, yCoords, 3);
+        
+    }
+
+    @Override
+    public boolean isHit() {
+        return this.isHit;
+    }
+
+    @Override
+    public void setNotHit() {  
+        this.isHit = false;
     }
 
 }
