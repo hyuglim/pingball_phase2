@@ -1,6 +1,6 @@
 package ADT;
 
-import java.awt.Color;
+import java.awt.Color; 
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 
@@ -37,9 +37,10 @@ public class Spawner implements Gadget{
     
     private void checkRep() throws RuntimeException{
         if (this.x<0 || this.x>19 || this.y<0 || this.y>19){
-            throw new RuntimeException("CircleBumper's position cannot be outside of the board's bounds!!!");
+            throw new RuntimeException("Spawner's position cannot be outside of the board's bounds!!!");
         }
     }
+    
     /**
      * @see Gadget#getX()
      */
@@ -116,8 +117,7 @@ public class Spawner implements Gadget{
       * Action: None 
       * @param ball the ball to be released
       */
-     public void release(Ball ball) {
-         
+     public void release(Ball ball) {   
      }
 
      /**

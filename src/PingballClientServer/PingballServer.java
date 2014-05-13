@@ -617,7 +617,6 @@ public class PingballServer {
 				//System.out.println("hit invisible MAANN");
 
 				String neighbor = neighbors.get(nameOfBoard).getOne().get(wallNum);
-				System.out.println("NEIGHBOR: " + neighbor);
 				Socket socketReceiver = neighbors.get(neighbor).getThree();
 
 				outReceiver = new PrintWriter(socketReceiver.getOutputStream(), true);
