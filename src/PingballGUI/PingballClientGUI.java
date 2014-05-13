@@ -1,12 +1,29 @@
 package PingballGUI;
 
-import java.awt.Color;
-import java.awt.Dimension;
+/**
+ * The Pingball playing GUI user interface that displays the running game as a  
+ * graphical user interface that pops up in a new window. 
+ * 
+ * The commands for the operations: loading a board from a file, connecting to 
+ * a server by specifying a host and port, disconnecting from a server 
+ * and exiting from the user interface are respectively supported
+ * through the menu items: loadFile, connectToServer, disconnectFromServer and exit.
+ * 
+ * Once a valid board file is loaded, starts displaying the board game corresponding 
+ * to the chosen board file and adds new JButtons to the user interface: pauseButton, 
+ * resumeButton, restartButton and exitButtion that support the commands for the operations: 
+ * pausing the game, resuming the game, restarting the game from the initial state of the board
+ * and exiting from the user interface. 
+ * 
+ * Furthermore, has additional about section in the help section of the menu that
+ * gives the users directions on how to play the game and a JMenuBar on the user interface
+ * that lets the user change the background color of the user interface.
+ */
+import java.awt.Color; 
 import java.awt.FlowLayout;
-import java.awt.KeyEventDispatcher;
-import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.BufferedReader;
@@ -16,154 +33,120 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.concurrent.CancellationException;
-import java.util.concurrent.ExecutionException;
-
 import javax.swing.ButtonGroup;
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JRadioButtonMenuItem;
-import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
-import javax.swing.SwingWorker;
-import javax.swing.table.DefaultTableModel;
-
 import ADT.Board;
 import Parser.*;
 import PingballClientServer.PingballClient;
 
-public class PingballGUI extends JFrame implements ActionListener{
+public class PingballClientGUI extends JFrame implements ActionListener{
 
     private static final long serialVersionUID = 1L; // required by Serializable
-
-    private final JButton loadFileButton ;
+    
     private final JButton pauseButton;
     private final JButton resumeButton;
     private final JButton restartButton;
     private final JButton exitButton;
-    
 
     private final JMenuBar bar;
+    private final JMenuItem loadFile;
+    private final JMenuItem connectToServer;
+    private final JMenuItem disconnectFromServer;
+    private final JMenuItem exit;
+    
+    private final JMenu myMenu;
     private final JRadioButtonMenuItem red;
     private final JRadioButtonMenuItem blue;
     private final JRadioButtonMenuItem green;
-    private BoardGUI boardGui;
-
-    private JPanel boardPanel;
-    private final JMenu myMenu;
-    private PingballClient myClient;
     
-    private Board board = new Board("Sample", 0, 0, 0);
-    /**
-     * Constructor for the Jotto playing GUI. Creates a JottoGui() with
-     * JButton() newPuzzleButton, JTextField() newPuzzleNumber that let the user
-     * choose a new puzzle ID number,
-     * JLabel() puzzleNumber that displays the puzzle number that the user put in,
-     * JTextField() guess with a JLabel() guessLabel that let the user type the guess,
-     * JTable() guessTable that displays the guesses that the user made for a
-     * particular puzzleNumber,
-     */
-    public PingballGUI() {
-        // components must be named with "setName" as specified in the problem set
-        // remember to use these objects in your GUI!
-
-        loadFileButton = new JButton();
-        loadFileButton.setName("loadFileButton");
-        loadFileButton.setText("load File:");
-
+    private BoardGUI boardGui;
+    private PingballClient myClient; 
+    private Board board;
+    
+    public PingballClientGUI() {
+        
+        /* The following buttons are added to the user interface screen only 
+         * when a valid board file is loaded.
+         */
         pauseButton = new JButton();
         pauseButton.setName("pauseButton");
         pauseButton.setText("pause");
-
         resumeButton = new JButton();
         resumeButton.setName("resumeButton");
         resumeButton.setText("resume");
-
         restartButton = new JButton();
         restartButton.setName("restartButton");
         restartButton.setText("restart");
-
         exitButton = new JButton();
         exitButton.setName("exitButton");
         exitButton.setText("exit");
-
-        myMenu = new JMenu("Background Color");
-        bar = new JMenuBar();
-
-        boardPanel = new JPanel();
-        boardPanel.setPreferredSize(new Dimension(440, 440));
         
+        /*
+         * 
+         */
+        bar = new JMenuBar();
+        myMenu = new JMenu("Background Color");
+        myMenu.setName("Background color chooser");
+        bar.setName("menu bar");
+        bar.add(myMenu);
+        red = new JRadioButtonMenuItem("Red");
+        blue = new JRadioButtonMenuItem("Blue");
+        green= new JRadioButtonMenuItem("Green");
+        myMenu.add(red); 
+        myMenu.add(blue);
+        myMenu.add(green);
+        ButtonGroup group = new ButtonGroup();
+        group.add(red);
+        group.add(blue);
+        group.add(green);
+        add(bar);
+        red.addActionListener(this);
+        blue.addActionListener(this);
+        green.addActionListener(this);
+        
+        /*
+         * 
+         */
         JMenuBar menubar = new JMenuBar();     
         setJMenuBar(menubar);      
         JMenu file = new JMenu("Menu");
-
-        JMenuItem loadFile = new JMenuItem("Load a file");
+        loadFile = new JMenuItem("Load a file");
+        connectToServer = new JMenuItem("Connect To Server");  
+        disconnectFromServer = new JMenuItem("Disconnect From Server"); 
+        exit = new JMenuItem("Exit");
         file.add(loadFile);
-        
-        JMenuItem connectToServer = new JMenuItem("Connect To Server");
         file.add(connectToServer);
-        
-        JMenuItem disconnectFromServer = new JMenuItem("Disconnect From Server");
         file.add(disconnectFromServer);
-        
-        JMenuItem exit = new JMenuItem("Exit");
         file.add(exit);
-        
         menubar.add(file);
         
+        /* Help Section in the menu.
+         */
         JMenu help = new JMenu("help");
         menubar.add(help);
         JMenuItem about = new JMenuItem("About");
         help.add(about);
 
-        class exitAction implements ActionListener{
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }                  
-        }
-        exit.addActionListener(new exitAction());
-        
-        red = new JRadioButtonMenuItem("Red");
-        blue = new JRadioButtonMenuItem("Blue");
-        green= new JRadioButtonMenuItem("Green");
-
-        bar.add(myMenu);
-        myMenu.add(red); 
-        myMenu.add(blue);
-        myMenu.add(green);
-
-        ButtonGroup group = new ButtonGroup();
-        group.add(red);
-        group.add(blue);
-        group.add(green);
-
-        add(bar);
-
-        red.addActionListener(this);
-        blue.addActionListener(this);
-        green.addActionListener(this);
-        
         this.pack();
-
         setLayout(new FlowLayout());
         
         /**
          * Registers an action listener for the connectToServer button, so that
          * when the button is clicked, opens up a pop-up JOption window asking for user input for
          * the Server name and port number and then, connects the user interface with the 
-         * given Server.
+         * given Server by creating an instance of PingBallClient and connecting it
+         * to the server specified by user input and a boardGui that displays 
+         * the board of the PingBallClient.
+         * If the user input for the Server name and port are invalid, or the connection
+         * is refused opens up a pop-up windows showing the corresponding error messages.
          */
 
         connectToServer.addActionListener(new ActionListener(){
@@ -185,6 +168,9 @@ public class PingballGUI extends JFrame implements ActionListener{
                             }
                             try {
                                 if(board!=null){
+                                    JOptionPane.showMessageDialog(null, "Succesfully connected to the Server: " +
+                                            serverName + " with port: " + serverId);
+                                
                                     myClient = new PingballClient(new Socket(serverName, serverId), board);
                                 }    
                             } catch (UnknownHostException e) {
@@ -198,6 +184,10 @@ public class PingballGUI extends JFrame implements ActionListener{
                                     + "range 0 to 65535 inclusive, Connect again!", "Warning!", JOptionPane.WARNING_MESSAGE);
                         }
                     }
+                    
+                }
+                if(boardGui!=null){
+                    boardGui.start();
                 }
             }
         });
@@ -214,7 +204,6 @@ public class PingballGUI extends JFrame implements ActionListener{
                         myClient.close();
                     }
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             }
@@ -222,7 +211,7 @@ public class PingballGUI extends JFrame implements ActionListener{
         
         /**
          * Registers an action listener for the pauseButton, so that
-         * when the button is clicked, pauses the currently running board.
+         * when the button is clicked, pauses the currently running boardGui.
          */
         
         pauseButton.addActionListener(new ActionListener(){
@@ -233,7 +222,7 @@ public class PingballGUI extends JFrame implements ActionListener{
 
         /**
          * Registers an action listener for the pauseButton, so that
-         * when the button is clicked, resumes the currently running board.
+         * when the button is clicked, resumes the currently running boardGui.
          */
         resumeButton.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent event){
@@ -266,18 +255,23 @@ public class PingballGUI extends JFrame implements ActionListener{
         });
         
         /**
-         * Pop up a chat window
+         * Registers an action listener for the exit JMenuItem in the JMenubar,
+         * so that when this item is selected, exits the user interface.
          */
-        
+        exit.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }                  
+        });
         
         
         /**
          * Registers an action listener for the loadFile JMenuItem, so that
          * when this item is selected from the menu, opens a file chooser
-         * and lets the user to choose a board file.
-         */
+         * and lets the user to choose a board file. If the chosen file is invalid, then
+         * opens up a message saying that the board file is invalid. 
+         */       
         loadFile.addActionListener(new ActionListener(){
-            
             public void actionPerformed(ActionEvent event){
                 if(boardGui!=null){
                     boardGui.stop();
@@ -285,84 +279,71 @@ public class PingballGUI extends JFrame implements ActionListener{
                 JFileChooser fc = new JFileChooser();
                 fc.showOpenDialog(null);
                 File file = fc.getSelectedFile();
-                String filePath = file.getPath();
-                StringBuilder boardText = new StringBuilder("");
-                BufferedReader br;
-                try {
-
-                    br = new BufferedReader(new FileReader(filePath));
-                    
-                    for(String line = br.readLine(); line != null; line = br.readLine()){
-                        boardText.append('\n'+line);
+                if(file!=null){
+                    String filePath = file.getPath();
+                    StringBuilder boardText = new StringBuilder("");
+                    BufferedReader br;
+                    try {
+                        br = new BufferedReader(new FileReader(filePath));
+                        for(String line = br.readLine(); line != null; line = br.readLine()){
+                            boardText.append('\n'+line);
+                        }
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                } catch (FileNotFoundException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    
+                    String boardTextString = boardText.toString().substring(1);
+                    try{
+                        Board newBoard = BoardFileFactory.parse(boardTextString); 
+                        if(boardGui==null){                
+                            boardGui = new BoardGUI(newBoard, boardTextString);     
+                            board = boardGui.getBoard();
+                            add(pauseButton);
+                            add(resumeButton);
+                            add(restartButton);
+                            add(exitButton);
+                            getContentPane().add(boardGui);
+                            boardGui.start();
+                        }else{
+                            boardGui.updateBoard(newBoard);
+                            boardGui.updateBoardString(boardTextString);
+                        }
+                        revalidate();
+                    } catch (Exception e){
+                        JOptionPane.showMessageDialog(null, "Invalid board file! Load a valid board file!",
+                                "Warning!", JOptionPane.WARNING_MESSAGE);
+                    }                    
                 }
-
-                String boardTextString = boardText.toString().substring(1);
-                Board newBoard = BoardFileFactory.parse(boardTextString);  
-                
-                if(boardGui==null){                
-                    boardGui = new BoardGUI(newBoard, boardTextString);     
-                    board = boardGui.getBoard();
-                    add(pauseButton);
-                    add(resumeButton);
-                    add(restartButton);
-                    add(exitButton);
-                    getContentPane().add(boardGui);
-                    boardGui.start();
-                }else{
-                    boardGui.updateBoard(newBoard);
-                    boardGui.updateBoardString(boardTextString);
-                }
-                
-                revalidate();
-                
             }
         });
         
-        KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
-        manager.addKeyEventDispatcher(new MyDispatcher());
 
-    }
-
-    /**
-     * Class for key listener:
-     * Listens for the key events: typed, pressed or released and checks
-     * if the key triggers gadgets in the board and triggers those gadgets.
-     * @author zulsarbatmunkh
-     *
-     */
-    private class MyDispatcher implements KeyEventDispatcher{
-        @Override
-        public boolean dispatchKeyEvent(KeyEvent e) {
-            if(boardGui!=null){
-                if(!boardGui.isRunning()){
-                    if (e.getID() == KeyEvent.KEY_PRESSED) {
-                        String key = KeyEvent.getKeyText(e.getKeyCode());
-                        String keyString = key.replaceAll(" ", "").toLowerCase();
-                            boardGui.getBoard().triggerDownKey(keyString);
-                        System.out.println("Key Pressed: " + keyString);
-                    } else if (e.getID() == KeyEvent.KEY_RELEASED) {
-                        String key = KeyEvent.getKeyText(e.getKeyCode());
-                        String keyString = key.replaceAll(" ", "").toLowerCase();
-                            boardGui.getBoard().triggerUpKey(keyString);           
-                        System.out.println("Key Released: " + keyString);
-                    } else if (e.getID() == KeyEvent.KEY_TYPED) {
-                        System.out.println("Key Typed: " + KeyEvent.getKeyText(e.getKeyCode()));
-                    }
-                   
+        /**
+         * Key listener:
+         * Listens for the key events: typed, pressed or released and triggers gadgets in 
+         * this PingballClientGUI's board that are triggered by the key.
+         */
+        KeyListener listener = new KeyAdapter() {
+                public void keyPressed(KeyEvent e) {
+                    String key = KeyEvent.getKeyText(e.getKeyCode());
+                    String keyString = key.replaceAll(" ", "").toLowerCase();
+                    boardGui.getBoard().triggerDownKey(keyString);
+                    System.out.println("Key Pressed: " + keyString);
                 }
-            }
-            return false;
-            
-        }
-   }
 
+                public void keyReleased(KeyEvent e) {
+                    String key = KeyEvent.getKeyText(e.getKeyCode());
+                    String keyString = key.replaceAll(" ", "").toLowerCase();
+                    boardGui.getBoard().triggerUpKey(keyString);           
+                    System.out.println("Key Released: " + keyString);
+                }
+        };
+
+        KeyListener magical = new MagicKeyListener(listener);
+        addKeyListener(magical);
+    }
 
     /**
      * Lets the user to change the background color of the user interface.
@@ -381,8 +362,6 @@ public class PingballGUI extends JFrame implements ActionListener{
         }   
     } 
     
-
-
     /**
      * Start the GUI Pingball client.
      * @param args unused
@@ -390,7 +369,8 @@ public class PingballGUI extends JFrame implements ActionListener{
     public static void main(final String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                PingballGUI main = new PingballGUI();
+                PingballClientGUI main = new PingballClientGUI();
+                main.setTitle("PingballGUI Client");
                 main.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 main.setVisible(true);
                 main.setSize(600, 600);

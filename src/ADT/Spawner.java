@@ -1,5 +1,10 @@
 package ADT;
  
+/**
+ * A Spawner represents a gadget in the pingball board, whose action shrinks a big ball or 
+ * enlarges a small ball.
+ */
+import java.awt.Color; 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -8,9 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-
 import javax.imageio.ImageIO;
-
 import physics.Circle;
 import physics.Geometry;
 import physics.Vect;
@@ -27,10 +30,10 @@ public class Spawner implements Gadget{
     private final ArrayList<Gadget> triggers = new ArrayList<Gadget>();
     private boolean isHit;
     /**
-     * Constructor for a CircleBumper
-     * @param x the x coordinate of this circle bumper in the board.
-     * @param y the y coordinate of this circle bumper in the board
-     * @param name the name of this circle bumper
+     * Constructor for a Spawner
+     * @param x the x coordinate of this spawner in the board.
+     * @param y the y coordinate of this spawner in the board
+     * @param name the name of this spawner
      */
     public Spawner(String name, int x, int y){
         this.name = name;
@@ -242,12 +245,10 @@ public class Spawner implements Gadget{
       */
      @Override
      public void draw(Graphics2D g2) {
-<<<<<<< HEAD
          Color c = Color.BLUE;//pink
          g2.setColor(c);
          g2.fillOval(x*20+20, y*20+20, getWidth()*20, getHeight()*20);
          
-=======
          BufferedImage img = null;
          //swirl picture
          try {
@@ -256,7 +257,6 @@ public class Spawner implements Gadget{
              System.err.println("No image");
          }
              g2.drawImage(img, x*20+20, y*20+20, 20, 20, null);
->>>>>>> f7a0721df581096e72f12c8d73190a12c7bf73e5
      }
      
      /**

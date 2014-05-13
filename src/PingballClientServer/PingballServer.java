@@ -317,17 +317,17 @@ public class PingballServer {
 	 * @throws IOException 
 	 * @throws IllegalArgumentException 
 	 */
-	private void joinBoards(String command) throws IllegalArgumentException, IOException {
+	public void joinBoards(String command) throws IllegalArgumentException, IOException {
 		// sample input: h NAME_left NAME_right
 		//               v NAME_top NAME_bottom
 		String []words = command.split(" ");
+		System.out.println(command);
 
 		if (words[0].equals("h")) {
 			makeHorizNeighbors(words);
 		} else if (words[0].equals("v")) {
 			makeVerticNeighbors(words);
 		}
-
 	}
 
 	/**
