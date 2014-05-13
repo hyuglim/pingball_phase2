@@ -389,8 +389,7 @@ public class Board extends TimerTask {
      */
     private List<List<String>> UpdateBoardRep(){
         // Update the walls (in case of joining walls etc)
-        boardRepUpdateWalls();
-        
+        boardRepUpdateWalls();        
         //ensures that each ball is represented on the board 
         //(unless if it is in a square that already contains another gadget
         for(Ball ball:balls){
@@ -399,8 +398,7 @@ public class Board extends TimerTask {
                 boardRepAddBall(ball);
         }
         // Update the boardRep to represent the flippers in their right states
-        updateFlipperStringPosition();
-        
+        updateFlipperStringPosition();        
         return boardRep;
     }
     
@@ -415,8 +413,7 @@ public class Board extends TimerTask {
         if (die == true) {
         	this.cancel();
         }
-        System.out.println(this.toString());
-        
+        System.out.println(this.toString());     
     }
     
     public void die(){
@@ -443,11 +440,7 @@ public class Board extends TimerTask {
         updateEmpty(ball1, time);
         updateEmpty(ball2, time);
         ball1.updateVelocity(velocities.v1);
-
-        ball2.updateVelocity(velocities.v2);
-
-        
-        
+        ball2.updateVelocity(velocities.v2);  
     }
     
     
