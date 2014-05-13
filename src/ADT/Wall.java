@@ -247,7 +247,7 @@ public class Wall {
         }
     }
     public void makeNoise() {
-        String fileName = "/Users/danamukusheva/6.005/pingball-phase2/src/ADT/Wall.wav";
+        String fileName ="src/ADT/Wall.wav";
         InputStream in = null;
         try {
             in = new FileInputStream(fileName);

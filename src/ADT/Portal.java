@@ -255,7 +255,7 @@ public class Portal implements Gadget{
 
     @Override
     public void makeNoise() {
-        String fileName = "/Users/danamukusheva/6.005/pingball-phase2/src/ADT/Portal.wav";
+        String fileName = "src/ADT/Portal.wav";
         InputStream in = null;
         try {
             in = new FileInputStream(fileName);

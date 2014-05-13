@@ -297,7 +297,7 @@ public class SquareBumper implements Gadget{
 
     @Override
     public void makeNoise() {
-        String fileName = "/Users/danamukusheva/6.005/pingball-phase2/src/ADT/Bumper.wav";
+        String fileName = "src/ADT/Bumper.wav";
         InputStream in = null;
         try {
             in = new FileInputStream(fileName);
