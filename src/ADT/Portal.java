@@ -283,6 +283,4 @@ public class Portal implements Gadget{
     public void setNotHit() {
         
     }
-    
-
 }

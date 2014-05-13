@@ -61,7 +61,7 @@ public class Spawner implements Gadget{
       * @see Gadget#getChar()
       */
      public String getChar(){
-         return "O";
+         return "S";
      }
      
      /**
@@ -256,5 +256,4 @@ public class Spawner implements Gadget{
         // TODO Auto-generated method stub
         
     }
-
 }

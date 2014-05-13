@@ -383,5 +383,4 @@ public class Absorber implements Gadget{
     @Override
     public void setNotHit() {   
     }
-    
 }

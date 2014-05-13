@@ -250,6 +250,12 @@ public class PingballGUI extends JFrame implements ActionListener{
         });
         
         /**
+         * Pop up a chat window
+         */
+        
+        
+        
+        /**
          * Registers an action listener for the loadFile JMenuItem, so that
          * when this item is selected from the menu, opens a file chooser
          * and lets the user to choose a board file.

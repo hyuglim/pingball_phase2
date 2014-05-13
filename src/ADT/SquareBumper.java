@@ -339,7 +339,4 @@ public class SquareBumper implements Gadget{
         this.isHit = false;
         
     }
-    
-    
-    
 }

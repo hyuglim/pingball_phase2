@@ -531,5 +531,4 @@ public class LeftFlipper implements Gadget{
     public void setNotHit() {
         
     }
-
 }

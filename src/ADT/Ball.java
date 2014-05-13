@@ -21,7 +21,7 @@ public class Ball {
     public String name;
     private Circle circle;
     private Vect velocity;
-    private final double radius;
+    private double radius;
     private Geometry.DoublePair position;
     private boolean absorbed = false;
 
@@ -248,5 +248,13 @@ public class Ball {
         g.setColor(Color.YELLOW);
         g.fillOval((int)(Math.round(getOriginX()*20+20)), (int) (Math.round(getOriginY()*20+20)), (int)(getRadius()*40),(int)(getRadius()*40));
         
+    }
+    
+    public void changeRadius(){
+        if(this.radius == 0.25){
+            this.radius = 0.5;
+        }else{
+            this.radius = 0.25;
+        }
     }
 }

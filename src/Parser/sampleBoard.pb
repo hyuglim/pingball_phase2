@@ -18,6 +18,7 @@ board name=sampleBoard gravity=0.0 friction1 = 0.0 friction2 = 0.0
   # add some flippers
   leftFlipper name=FlipL2 x=5 y=10 orientation=90
   rightFlipper name=FlipR2 x=7 y=8 orientation=90
+  
   portal name=p x=11 y=15 otherPortal=k
   portal name=k x= 15 y = 17 otherPortal=p
   #define an absorber to catch the ball at the bottom

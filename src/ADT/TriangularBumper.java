@@ -437,5 +437,4 @@ public class TriangularBumper implements Gadget{
     public void setNotHit() {  
         this.isHit = false;
     }
-
 }
