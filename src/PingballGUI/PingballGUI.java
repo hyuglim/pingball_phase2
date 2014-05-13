@@ -41,7 +41,7 @@ import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
 
 import ADT.Board;
-import Parser.BoardFileFactory;
+import Parser.*;
 import PingballClientServer.PingballClient;
 
 public class PingballGUI extends JFrame implements ActionListener{
@@ -264,7 +264,7 @@ public class PingballGUI extends JFrame implements ActionListener{
                 BufferedReader br;
                 try {
 
-                    br = new BufferedReader(new FileReader("/home/jonathan/Documents/Sophomore_Spring/6.005/workspace/pingball-phase2/src/Parser/sampleBoard.pb"));
+                    br = new BufferedReader(new FileReader("src/Parser/sampleBoard.pb"));
 
                     br = new BufferedReader(new FileReader(filePath));
                     
