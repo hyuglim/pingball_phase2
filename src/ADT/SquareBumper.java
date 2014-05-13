@@ -1,14 +1,19 @@
 package ADT;
 
+import java.applet.Applet;
+import java.applet.AudioClip;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.util.ArrayList;   
+import java.io.*;
+import java.util.ArrayList;  
 
 import ADT.Ball;
 import physics.Circle;
 import physics.Geometry;
 import physics.LineSegment;
 import physics.Vect;
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
 
 /**
  * SquareBumper represents a square bumper in the pingball board.
@@ -22,7 +27,7 @@ public class SquareBumper implements Gadget{
      * 0 <= y <= 19
      * 
      */
-    
+    private boolean isHit;
     private final int x;
     private final int y;
     private final ArrayList<LineSegment> segments = new ArrayList<LineSegment>();
@@ -30,6 +35,8 @@ public class SquareBumper implements Gadget{
     private final String name;
     private final ArrayList<Gadget> triggeredBy = new ArrayList<Gadget>();
     private final ArrayList<Gadget> triggers = new ArrayList<Gadget>();
+    private AudioClip sound;
+    
     /**
      * Constructor for a SquareBumper
      * @param x the x coordinate of this square bumper in the board.
@@ -40,7 +47,7 @@ public class SquareBumper implements Gadget{
         this.x = x;
         this.y = y;
         this.name = name;
-        
+        this.isHit = false;
         segments.add(new LineSegment(x, y, x, y+1));
         segments.add(new LineSegment(x+1, y, x+1, y+1));
         segments.add(new LineSegment(x, y, x+1, y));
@@ -49,6 +56,7 @@ public class SquareBumper implements Gadget{
         corners.add(new Circle(x, y+1, 0));
         corners.add(new Circle(x+1, y, 0));
         corners.add(new Circle(x+1, y+1, 0));
+        
         checkRep();
         
     }
@@ -161,6 +169,8 @@ public class SquareBumper implements Gadget{
      * @param ball the ball that collided with this square bumper
      */
     public void reflect(Ball ball) { 
+        isHit = true;
+        makeNoise();
         double minTimeToCollision = this.getCollisionTime(ball);
         Vect newVelocity = new Vect(0, 0);
         
@@ -182,6 +192,8 @@ public class SquareBumper implements Gadget{
         for(Gadget gadget: this.triggers){
             gadget.action();
         }
+        
+        
     }
 
     /**
@@ -275,10 +287,59 @@ public class SquareBumper implements Gadget{
 
     @Override
     public void draw(Graphics2D g2) {
+        
         g2.setColor(Color.RED);
+        
         g2.fillRect(x*20+20, y*20+20, getWidth()*20, getHeight()*20);
         
     }
+
+
+    @Override
+    public void makeNoise() {
+        String fileName = "/Users/danamukusheva/6.005/pingball-phase2/src/ADT/Bumper.wav";
+        InputStream in = null;
+        try {
+            in = new FileInputStream(fileName);
+  
+
+       } catch (FileNotFoundException e) {
+            System.err.println("Can't find wav file");
+            
+            e.printStackTrace();
+       }
+
+       AudioStream as = null;
+       try {
+            as = new AudioStream(in);
+       } catch (IOException e) {
+            e.printStackTrace();
+       }
+
+       AudioPlayer.player.start(as);
+        
+        
+    }
+
+    @Override
+    public void drawAnother(Graphics2D g2) {
+            
+            g2.setColor(Color.WHITE);  
+            g2.fillRect(x*20+20, y*20+20, getWidth()*20, getHeight()*20);
+        
+    }
+
+    @Override
+    public boolean isHit() {
+        return this.isHit;
+    }
+
+    @Override
+    public void setNotHit() {
+        this.isHit = false;
+        
+    }
+    
     
     
 }

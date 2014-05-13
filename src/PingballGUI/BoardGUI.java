@@ -78,7 +78,13 @@ public class BoardGUI extends JPanel {
         Graphics2D g2 = (Graphics2D) g;
         fillWindow(g2);
         for (Gadget gadget: board.getGadgets()){
-            gadget.draw(g2);
+            if (gadget.isHit()){
+                gadget.drawAnother(g2);
+                gadget.setNotHit();
+            }
+            else{
+                gadget.draw(g2);
+            }
         }
       
         for (Ball ball:board.getBalls()){

@@ -2,12 +2,18 @@ package ADT;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList; 
 
 import ADT.Ball;
 import physics.Circle;
 import physics.Geometry;
 import physics.Vect;
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
 
 public class CircleBumper implements Gadget{
     
@@ -25,6 +31,7 @@ public class CircleBumper implements Gadget{
     private final Circle circle;
     private final ArrayList<Gadget> triggeredBy = new ArrayList<Gadget>();
     private final ArrayList<Gadget> triggers = new ArrayList<Gadget>();
+    private boolean isHit;
     /**
      * Constructor for a CircleBumper
      * @param x the x coordinate of this circle bumper in the board.
@@ -36,6 +43,7 @@ public class CircleBumper implements Gadget{
         this.x = x;
         this.y = y;
         this.circle = new Circle(x+0.5, y+0.5, 0.5);
+        this.isHit = false;
         checkRep();
     }
 
@@ -115,6 +123,8 @@ public class CircleBumper implements Gadget{
      * @param ball the ball that collided with this circle bumper
      */
     public void reflect(Ball ball) {
+        isHit = true;
+        makeNoise();
         Vect newVelocity = Geometry.reflectCircle((this.circle).getCenter(), ball.getBallCircle().getCenter(), ball.getVelocity()); 
         ball.updateBallVelocity(newVelocity);
         for(Gadget gadget: this.triggers){
@@ -240,6 +250,52 @@ public class CircleBumper implements Gadget{
         Color c = new Color(208, 45, 99);//pink
         g2.setColor(c);
         g2.fillOval(x*20+20, y*20+20, getWidth()*20, getHeight()*20);
+        
+    }
+
+    @Override
+    public void makeNoise() {
+        String fileName = "/Users/danamukusheva/6.005/pingball-phase2/src/ADT/Bumper.wav";
+        InputStream in = null;
+        try {
+            in = new FileInputStream(fileName);
+  
+
+       } catch (FileNotFoundException e) {
+            System.err.println("Can't find wav file");
+            
+            e.printStackTrace();
+       }
+
+       AudioStream as = null;
+       try {
+            as = new AudioStream(in);
+       } catch (IOException e) {
+            e.printStackTrace();
+       }
+
+       AudioPlayer.player.start(as);
+        
+        
+    }
+
+    @Override
+    public void drawAnother(Graphics2D g2) {
+        
+            g2.setColor(Color.WHITE);  
+            g2.fillOval(x*20+20, y*20+20, getWidth()*20, getHeight()*20);
+        
+    }
+
+    @Override
+    public boolean isHit() {
+
+        return this.isHit;
+    }
+
+    @Override
+    public void setNotHit() {
+        this.isHit = false;
         
     }
 }

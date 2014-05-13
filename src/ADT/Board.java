@@ -235,6 +235,7 @@ public class Board extends TimerTask {
                         for(Gadget gadget: this.gadgets){
                             if(gadget.getName().equals(g.getOtherPortal())){
                                 otherPortalExists = true;
+                                g.makeNoise();
                                 each.updatePosition(gadget.getX()-0.5, gadget.getY()-0.5);
                             }                           
                         }
@@ -259,6 +260,7 @@ public class Board extends TimerTask {
                 // CASE 1: if the wall is solid, then merely bounce of it
                 if (w.getVisibility()){
                     w.update(each);
+                    w.makeNoise();
                 }
                 // CASE 2: If the wall is connected to another board, remove the ball for current
                 //board and send encode the outgoing wall in a string (to be tackled by server)

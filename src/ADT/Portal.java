@@ -3,7 +3,10 @@ package ADT;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
@@ -11,6 +14,8 @@ import javax.imageio.ImageIO;
 import physics.Circle;
 import physics.Geometry;
 import physics.Vect;
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
 
 public class Portal implements Gadget{
     private final int x;
@@ -101,6 +106,7 @@ public class Portal implements Gadget{
      * @param ball the ball that collided with this circle bumper
      */
     public void reflect(Ball ball) {
+        makeNoise();
         if(otherBoard.equals("")){
             
         }
@@ -233,7 +239,49 @@ public class Portal implements Gadget{
         } catch (IOException e) {
             System.err.println("No image");
         }
-        g2.drawImage(img, x*20+20, y*20+20, 20, 20, null);
+            g2.drawImage(img, x*20+20, y*20+20, 20, 20, null);
+    }
+
+    @Override
+    public void drawAnother(Graphics2D g2) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public boolean isHit() {
+        return false;
+    }
+
+    @Override
+    public void makeNoise() {
+        String fileName = "/Users/danamukusheva/6.005/pingball-phase2/src/ADT/Portal.wav";
+        InputStream in = null;
+        try {
+            in = new FileInputStream(fileName);
+  
+
+       } catch (FileNotFoundException e) {
+            System.err.println("Can't find wav file");
+            
+            e.printStackTrace();
+       }
+
+       AudioStream as = null;
+       try {
+            as = new AudioStream(in);
+       } catch (IOException e) {
+            e.printStackTrace();
+       }
+
+       AudioPlayer.player.start(as);
+        
+        
+    }
+
+    @Override
+    public void setNotHit() {
+        
     }
     
 

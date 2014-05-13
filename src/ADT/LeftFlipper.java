@@ -2,6 +2,10 @@ package ADT;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;  
 import java.util.Timer;
 
@@ -11,6 +15,8 @@ import physics.Circle;
 import physics.Geometry;
 import physics.LineSegment;
 import physics.Vect;
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
 
 /**
  * Flipper represents a flipper in the pingball board.
@@ -192,7 +198,7 @@ public class LeftFlipper implements Gadget{
      * @param ball the ball that hit this flipper
      */
     public void reflect(Ball ball) {
-        
+
         int velocityInRadian = 6;
         //If its self-triggering rotate it
         if(this.triggers.contains(this)){
@@ -322,7 +328,7 @@ public class LeftFlipper implements Gadget{
      * 1080 degrees per second.
      */
     public void action() {
-        
+        makeNoise();
         int velocityInRadian = 6;
         angularVelocity = Math.PI * velocityInRadian;
         if(this.rotated){
@@ -484,9 +490,46 @@ public class LeftFlipper implements Gadget{
         
     }
     
-    public static void main(String[] args){
-        Angle angle = new Angle(Math.PI);
-        LineSegment segment = new LineSegment(0, 0, 1, 3);
+
+    @Override
+    public void drawAnother(Graphics2D g2) {
+        
+    }
+
+    @Override
+    public boolean isHit() {
+        return false;
+    }
+
+    @Override
+    public void makeNoise() {
+        String fileName = "/Users/danamukusheva/6.005/pingball-phase2/src/ADT/Flipper.wav";
+        InputStream in = null;
+        try {
+            in = new FileInputStream(fileName);
+  
+
+       } catch (FileNotFoundException e) {
+            System.err.println("Can't find wav file");
+            
+            e.printStackTrace();
+       }
+
+       AudioStream as = null;
+       try {
+            as = new AudioStream(in);
+       } catch (IOException e) {
+            e.printStackTrace();
+       }
+
+       AudioPlayer.player.start(as);
+        
+        
+    }
+
+    @Override
+    public void setNotHit() {
+        
     }
 
 }
