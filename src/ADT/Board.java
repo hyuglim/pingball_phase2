@@ -239,7 +239,6 @@ public class Board extends TimerTask {
                         for(Gadget gadget: this.gadgets){
                             if(gadget.getName().equals(g.getOtherPortal())){
                                 otherPortalExists = true;
-                                g.makeNoise();
                                 each.updatePosition(gadget.getX()-0.5, gadget.getY()-0.5);
                             }                           
                         }
@@ -253,12 +252,14 @@ public class Board extends TimerTask {
                         ballsToRemove.add(each);
                   
                     }
+                    
                 }else{
                     g.reflect(each);
     /*                if(!g.doesAbsorb() && !g.doesPort()){
                         updateEmpty(each, timeMinGadget);
                     } */                  
                 }
+                g.makeNoise();
             }
             else{
                 // CASE 1: if the wall is solid, then merely bounce of it
@@ -434,6 +435,7 @@ public class Board extends TimerTask {
      */
     public void handleBallBallCollision(Ball ball1, Ball ball2){
         //mass of the ball?
+        ball1.makeNoise();
         Geometry.VectPair velocities = Geometry.reflectBalls(
                 ball1.getBallCircle().getCenter(), 1, ball1.getVelocity(),
                 ball2.getBallCircle().getCenter(), 1, ball2.getVelocity());

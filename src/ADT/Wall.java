@@ -111,7 +111,6 @@ public class Wall {
      */
     public void update(Ball ball){
         LineSegment wall = getWall();
-        //System.out.println("Hit wall "+this.location);
         double timeToWall = Geometry.timeUntilWallCollision(wall, ball.getBallCircle(), ball.getVelocity());
         Vect oldVel = ball.getVelocity();
         double newXPos = ball.getOriginX() + oldVel.x()*timeToWall;
@@ -186,6 +185,13 @@ public class Wall {
         return this.location;
     }
     
+    /**
+     * Draws a graphical representation of the wall.
+     * Whenever a Wall is visible, it's represented as a solid
+     * red rectangle. When it's visible, it reflects the
+     * name of the connected board.
+     * @param g
+     */
     public void draw(Graphics2D g){
         Color c = new Color(252, 48, 48); //red
         g.setColor(c);
@@ -204,7 +210,7 @@ public class Wall {
         else if (this.location.equals("bottom")){
             if(this.visible){
                 //g.fillRect(0, 420, 440, 20);
-                g.fillRect(0, 424, 440, 16);
+                g.fillRect(0, 423, 440, 17);
             }else{
                 g.setColor(Color.ORANGE);
                 g.setFont(new Font("Verdana", 1, 20));
@@ -246,6 +252,9 @@ public class Wall {
             }
         }
     }
+    /**
+     * Plays the sound file whenever a ball hits the wall
+     */
     public void makeNoise() {
         String fileName ="src/ADT/Wall.wav";
         InputStream in = null;
@@ -253,7 +262,6 @@ public class Wall {
             in = new FileInputStream(fileName);
        } catch (FileNotFoundException e) {
             System.err.println("Can't find wav file");
-            
             e.printStackTrace();
        }
 
@@ -261,6 +269,7 @@ public class Wall {
        try {
             as = new AudioStream(in);
        } catch (IOException e) {
+            System.err.println("Can't play wav file");
             e.printStackTrace();
        }
 
