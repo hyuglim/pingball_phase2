@@ -108,6 +108,7 @@ public class Spawner implements Gadget{
      public void reflect(Ball ball) {
          Vect newVelocity = Geometry.reflectCircle((this.circle).getCenter(), ball.getBallCircle().getCenter(), ball.getVelocity()); 
          ball.updateBallVelocity(newVelocity);
+         ball.changeRadius();
          for(Gadget gadget: this.triggers){
              gadget.action();
          }
@@ -227,7 +228,7 @@ public class Spawner implements Gadget{
 
      @Override
      public void draw(Graphics2D g2) {
-         Color c = new Color(208, 45, 99);//pink
+         Color c = Color.BLUE;//pink
          g2.setColor(c);
          g2.fillOval(x*20+20, y*20+20, getWidth()*20, getHeight()*20);
          

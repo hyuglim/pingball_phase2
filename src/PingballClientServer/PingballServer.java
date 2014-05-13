@@ -639,11 +639,6 @@ public class PingballServer {
 
 				String neighbor = neighbors.get(nameOfBoard).getOne().get(wallNum);
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 635c8e22fe583f47ceff42f5d5f1cab413c0f7bc
 				Socket socketReceiver = neighbors.get(neighbor).getThree();
 
 				outReceiver = new PrintWriter(socketReceiver.getOutputStream(), true);

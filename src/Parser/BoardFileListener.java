@@ -15,6 +15,9 @@ public interface BoardFileListener extends ParseTreeListener {
 	void enterDeclaration(BoardFileParser.DeclarationContext ctx);
 	void exitDeclaration(BoardFileParser.DeclarationContext ctx);
 
+	void enterSpawner(BoardFileParser.SpawnerContext ctx);
+	void exitSpawner(BoardFileParser.SpawnerContext ctx);
+
 	void enterPortal(BoardFileParser.PortalContext ctx);
 	void exitPortal(BoardFileParser.PortalContext ctx);
 

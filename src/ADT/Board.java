@@ -1,5 +1,7 @@
 package ADT;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList; 
 import java.util.Arrays;
@@ -7,7 +9,12 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.Timer;
 import java.util.TimerTask;
+
+
+
+
 
 
 
@@ -16,6 +23,7 @@ import ADT.Gadget;
 import physics.*;
 import physics.Geometry.DoublePair;
 import ADT.Ball;
+import Parser.BoardFileFactory;
 
 
 /**
@@ -862,7 +870,7 @@ public class Board extends TimerTask {
         
         //myBoard.addGadget(rf);
         //myBoard.addGadget(lf);
-   /*     
+        
         StringBuilder boardText = new StringBuilder("");
         
         BufferedReader fr = new BufferedReader(new FileReader("src/Parser/" + "sampleBoard.pb"));
@@ -877,17 +885,9 @@ public class Board extends TimerTask {
         Timer timer = new Timer();
        
         timer.schedule(myBoard, 0, 50);
+
         
-        CircleBumper circle = new CircleBumper("C", 0, 0);
-        Ball newBall = new Ball("A", 0.5, 0.5, 0, 1, 0.25);
-        
-        for(Gadget gadget : myBoard.getGadgets()){
-            if(gadget.doesPort()){
-                System.out.println(gadget.getOtherBoard());
-            }
-        }
-        */
-        
+      /*  
         final Board board = new Board("b", 25, .025, .025);
         Ball ball = new Ball("b", 2.5,1,0,10,.25);
         //board.addGadget(new SquareBumper("sq", 1, 1));
@@ -903,18 +903,16 @@ public class Board extends TimerTask {
         //abs.triggers(abs);
         //board.addGadget(abs);
         board.addGadget(lf);
-/*        Timer timer = new Timer();
+        Timer timer = new Timer();
         
         timer.schedule(board, 0, 50);
         Ball myBall = new Ball("B", 0, 0.25, 1, 1, 0.25);
-        CircleBumper circle = new CircleBumper("C", 0, 0);*/
-        System.out.println(board.getGadgets());
-        System.out.println(board.toString());
-        board.triggerDownKey("ctrl");
-        System.out.println(board.toString());
+        CircleBumper circle = new CircleBumper("C", 0, 0);
+        Spawner mySpawner = new Spawner("spawner", 5, 5);
+        board.addGadget(mySpawner);
+        System.out.println(board.getGadgets());*/
         
-        //System.out.println(circle.getCollisionTime(myBall));
-        
+        //System.out.println(circle.getCollisionTime(myBall));  
     }
 
 

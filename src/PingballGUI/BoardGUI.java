@@ -169,13 +169,26 @@ public class BoardGUI extends JPanel {
    public void start(){
        myTimer.start();
    }
-   
+
    public void restart(){
-       synchronized(board){
-           board = BoardFileFactory.parse(boardText);
-       }
+       myTimer.stop();
+       board = BoardFileFactory.parse(boardText);   
        myTimer.start();
-       
    }
 
+   public Board getBoard(){
+       return board;
+   }
+   
+   public boolean isRunning(){
+       return myTimer.isRunning();
+   }
+   
+   public void updateBoard(Board board){
+       this.board = board;
+   }
+  
+   public void updateBoardString(String boardText){
+       this.boardText = boardText;
+   }
 }
