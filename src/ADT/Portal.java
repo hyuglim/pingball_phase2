@@ -17,7 +17,7 @@ import physics.Vect;
 import sun.audio.AudioPlayer;
 import sun.audio.AudioStream;
 
-public class Portal implements Gadget{
+public class Portal implements Gadget {
     private final int x;
     private final int y;
     private final String name;
@@ -26,25 +26,31 @@ public class Portal implements Gadget{
     private final ArrayList<Gadget> triggers = new ArrayList<Gadget>();
     private final String otherPortal;
     private final String otherBoard;
+
     /**
      * Constructor for a CircleBumper
-     * @param x the x coordinate of this circle bumper in the board.
-     * @param y the y coordinate of this circle bumper in the board
-     * @param name the name of this circle bumper
+     * 
+     * @param x
+     *            the x coordinate of this circle bumper in the board.
+     * @param y
+     *            the y coordinate of this circle bumper in the board
+     * @param name
+     *            the name of this circle bumper
      */
-    public Portal(String name, int x, int y, String otherBoard, String otherPortal){
+    public Portal(String name, int x, int y, String otherBoard,
+            String otherPortal) {
         this.name = name;
         this.x = x;
         this.y = y;
         this.otherBoard = otherBoard;
         this.otherPortal = otherPortal;
-        this.circle = new Circle(x+0.5, y+0.5, 0.5);
+        this.circle = new Circle(x + 0.5, y + 0.5, 0.5);
     }
 
     /**
      * @see Gadget#getX()
      */
-    public int getX(){
+    public int getX() {
         int boardOffset = 1;
         return x + boardOffset;
     }
@@ -52,7 +58,7 @@ public class Portal implements Gadget{
     /**
      * @see Gadget#getY()
      */
-    public int getY(){
+    public int getY() {
         int boardOffset = 1;
         return y + boardOffset;
     }
@@ -60,21 +66,21 @@ public class Portal implements Gadget{
     /**
      * @see Gadget#getChar()
      */
-    public String getChar(){
+    public String getChar() {
         return "Z";
     }
 
     /**
      * @see Gadget#getName()
      */
-    public String getName(){
+    public String getName() {
         return name;
     }
 
     /**
      * @see Gadget#getWidth()
      */
-    public int getWidth(){
+    public int getWidth() {
         int WIDTH_OF_PORTAL = 1;
         return WIDTH_OF_PORTAL;
     }
@@ -82,7 +88,7 @@ public class Portal implements Gadget{
     /**
      * @see Gadget#getHeight()
      */
-    public int getHeight(){
+    public int getHeight() {
         int HEIGHT_OF_PORTAL = 1;
         return HEIGHT_OF_PORTAL;
     }
@@ -97,30 +103,35 @@ public class Portal implements Gadget{
     /**
      * @see Gadget#getCollisionTime(Ball)
      */
-    public double getCollisionTime(Ball ball) {    
+    public double getCollisionTime(Ball ball) {
         return ball.getCircleCollisionTime(this.circle);
     }
 
     /**
      * Updates the velocity and position of the ball after collision
-     * @param ball the ball that collided with this circle bumper
+     * 
+     * @param ball
+     *            the ball that collided with this circle bumper
      */
     public void reflect(Ball ball) {
         makeNoise();
-        if(otherBoard.equals("")){
-            
+        if (otherBoard.equals("")) {
+
         }
-        Vect newVelocity = Geometry.reflectCircle((this.circle).getCenter(), ball.getBallCircle().getCenter(), ball.getVelocity()); 
+        Vect newVelocity = Geometry.reflectCircle((this.circle).getCenter(),
+                ball.getBallCircle().getCenter(), ball.getVelocity());
         ball.updateBallVelocity(newVelocity);
-        for(Gadget gadget: this.triggers){
+        for (Gadget gadget : this.triggers) {
             gadget.action();
         }
-        
+
     }
 
     /**
-     * Action: None 
-     * @param ball the ball to be released
+     * Action: None
+     * 
+     * @param ball
+     *            the ball to be released
      */
     public void release(Ball ball) {
         ball.getsReleased();
@@ -152,7 +163,7 @@ public class Portal implements Gadget{
      * @see Gadget#triggers()
      */
     public void triggers(Gadget gadget) {
-        this.triggers.add(gadget);       
+        this.triggers.add(gadget);
     }
 
     /**
@@ -163,9 +174,10 @@ public class Portal implements Gadget{
 
     /**
      * Returns the Circle representation of this CircleBumper
+     * 
      * @return returns Circle representation.
      */
-    public Circle getCircle(){
+    public Circle getCircle() {
         return this.circle;
     }
 
@@ -186,7 +198,7 @@ public class Portal implements Gadget{
     /**
      * @see Gadget#addKeyUp(key)
      */
-    public void addKeyUp(String key) {        
+    public void addKeyUp(String key) {
     }
 
     /**
@@ -208,7 +220,7 @@ public class Portal implements Gadget{
     public ArrayList<String> getDownKeyTriggers() {
         return new ArrayList<String>();
     }
-    
+
     /**
      * @see Gadget#doesPort()
      */
@@ -233,54 +245,67 @@ public class Portal implements Gadget{
     @Override
     public void draw(Graphics2D g2) {
         BufferedImage img = null;
-        //swirl picture
+        // swirl picture
         try {
             img = ImageIO.read(new File("src/ADT/portal.jpg"));
         } catch (IOException e) {
             System.err.println("No image");
         }
-            g2.drawImage(img, x*20+20, y*20+20, 20, 20, null);
+        g2.drawImage(img, x * 20 + 20, y * 20 + 20, 20, 20, null);
     }
 
+    /**
+     * @see ADT.Gadget#drawAnother(java.awt.Graphics2D)
+     */
+    // dummy method, portal doesn't glow
     @Override
     public void drawAnother(Graphics2D g2) {
-        // TODO Auto-generated method stub
-        
+
     }
 
+    /**
+     * @see ADT.Gadget#isHit()
+     */
+    // dummy method, portal doesn't glow
     @Override
     public boolean isHit() {
         return false;
     }
 
+    /**
+     * @see ADT.Gadget#makeNoise()
+     */
     @Override
     public void makeNoise() {
         String fileName = "src/ADT/Portal.wav";
         InputStream in = null;
         try {
             in = new FileInputStream(fileName);
-  
 
-       } catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             System.err.println("Can't find wav file");
-            
-            e.printStackTrace();
-       }
 
-       AudioStream as = null;
-       try {
+            e.printStackTrace();
+        }
+
+        AudioStream as = null;
+        try {
             as = new AudioStream(in);
-       } catch (IOException e) {
+        } catch (IOException e) {
+            System.err.println("Can't play wav file");
             e.printStackTrace();
-       }
+        }
 
-       AudioPlayer.player.start(as);
-        
-        
+        AudioPlayer.player.start(as);
+
     }
 
+    /**
+     * @see ADT.Gadget#setNotHit()
+     */
+    // dummy method, portal doesn't glow
     @Override
     public void setNotHit() {
-        
+
     }
 }

@@ -1,12 +1,21 @@
 package ADT;
-
-import java.awt.Color; 
+ 
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
 
 import physics.Circle;
 import physics.Geometry;
 import physics.Vect;
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
 
 public class Spawner implements Gadget{
 
@@ -16,6 +25,7 @@ public class Spawner implements Gadget{
     private final Circle circle;
     private final ArrayList<Gadget> triggeredBy = new ArrayList<Gadget>();
     private final ArrayList<Gadget> triggers = new ArrayList<Gadget>();
+    private boolean isHit;
     /**
      * Constructor for a CircleBumper
      * @param x the x coordinate of this circle bumper in the board.
@@ -27,6 +37,7 @@ public class Spawner implements Gadget{
         this.x = x;
         this.y = y;
         this.circle = new Circle(x+0.5, y+0.5, 0.5);
+        this.isHit = false;
         checkRep();
     }
 
@@ -106,6 +117,7 @@ public class Spawner implements Gadget{
       * @param ball the ball that collided with this circle bumper
       */
      public void reflect(Ball ball) {
+         this.isHit = true;
          Vect newVelocity = Geometry.reflectCircle((this.circle).getCenter(), ball.getBallCircle().getCenter(), ball.getVelocity()); 
          ball.updateBallVelocity(newVelocity);
          for(Gadget gadget: this.triggers){
@@ -224,36 +236,71 @@ public class Spawner implements Gadget{
      public String getOtherPortal() {
          return null;
      }
-
+     /**
+      * @see ADT.Gadget#draw(java.awt.Graphics2D)
+      */
      @Override
      public void draw(Graphics2D g2) {
-         Color c = new Color(208, 45, 99);//pink
-         g2.setColor(c);
-         g2.fillOval(x*20+20, y*20+20, getWidth()*20, getHeight()*20);
-         
+         BufferedImage img = null;
+         //swirl picture
+         try {
+             img = ImageIO.read(new File("src/ADT/Spawner.jpg"));
+         } catch (IOException e) {
+             System.err.println("No image");
+         }
+             g2.drawImage(img, x*20+20, y*20+20, 20, 20, null);
      }
-
+     
+     /**
+      * @see ADT.Gadget#drawAnother(java.awt.Graphics2D)
+      */
+   //dummy method, spawner doesn't glow
     @Override
     public void drawAnother(Graphics2D g2) {
-        // TODO Auto-generated method stub
         
     }
-
+    
+    /**
+     * @see ADT.Gadget#isHit()
+     */
+    //dummy method, spawner doesn't glow
     @Override
     public boolean isHit() {
-        // TODO Auto-generated method stub
-        return false;
+        return this.isHit;
     }
-
+   
+    /**
+     * @see ADT.Gadget#makeNoise()
+     */
     @Override
     public void makeNoise() {
-        // TODO Auto-generated method stub
-        
-    }
+        String fileName = "src/ADT/Spawner.wav";
+        InputStream in = null;
+        try {
+            in = new FileInputStream(fileName);
 
+        } catch (FileNotFoundException e) {
+            System.err.println("Can't find wv file");
+            e.printStackTrace();
+        }
+
+        AudioStream as = null;
+        try {
+            as = new AudioStream(in);
+        } catch (IOException e) {
+            System.err.println("Can't play wv file");
+            e.printStackTrace();
+        }
+
+        AudioPlayer.player.start(as);
+
+    }
+    /**
+     * @see ADT.Gadget#setNotHit()
+     */
+    //dummy method, spawner doesn't glow
     @Override
-    public void setNotHit() {
-        // TODO Auto-generated method stub
-        
+    public void setNotHit() {    
+        this.isHit = false;
     }
 }
