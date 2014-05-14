@@ -26,6 +26,8 @@ import Parser.BoardFileFactory;
 public class BoardGUI extends JPanel {   
     private static final long serialVersionUID = 1L; 
     private final Timer myTimer;
+    private final Timer myChatTimer;
+
     private Board board;
     private String boardText;
     private final Color backgroundColor = Color.BLACK;
@@ -43,12 +45,37 @@ public class BoardGUI extends JPanel {
         this.board =  board;
         this.boardText = boardText;
         this.setPreferredSize(new Dimension(440, 440));
+
+        setBackground(backgroundColor);     
+        setFocusable(true);
+        requestFocusInWindow();
+        repaint();
+        myTimer = new Timer(50, paintTimer);
+        myTimer.start();
+        
+        Action chatTimer = new AbstractAction() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				
+			}
+		};
+        myChatTimer = new Timer(50, chatTimer);
+        myChatTimer.start();
+
         this.setBackground(backgroundColor);     
         this.setFocusable(true);
         this.requestFocusInWindow();
         this.repaint();
+<<<<<<< HEAD
         this.myTimer = new Timer(50, paintTimer);
         this.myTimer.start();      
+=======
+
+
+             
+>>>>>>> f9da0aecc43d9bf5c431f3026c5beed5988c6d72
     }
     
     /**
@@ -71,7 +98,7 @@ public class BoardGUI extends JPanel {
             ball.draw(g2);
         }
         for (Wall wall:board.getWalls()){
-                wall.draw(g2); 
+                wall.draw(g2);          
         }
     }
     
