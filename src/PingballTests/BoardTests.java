@@ -171,6 +171,7 @@ public class BoardTests {
         
         assertFalse(ball3.getVelocity().equals(new Vect(0, 0)));
     }
+    
     @Test public void neighborNamesAllTogether(){
         Board board = new Board("Board A", 25, 0.01, 0.01);
         board.connectWall(0, "Mercury");

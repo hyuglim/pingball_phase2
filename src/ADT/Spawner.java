@@ -1,10 +1,10 @@
 package ADT;
  
 /**
- * A Spawner represents a gadget in the pingball board, whose action shrinks a big ball or 
+ * A Spawner represents a gadget in the pingball board, whose action shrinks a big ball or  
  * enlarges a small ball.
  */
-import java.awt.Color; 
+import java.awt.Color;  
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -245,14 +245,11 @@ public class Spawner implements Gadget{
       */
      @Override
      public void draw(Graphics2D g2) {
-<<<<<<< HEAD
          Color c = Color.BLUE;//pink
          g2.setColor(c);
          g2.fillOval(x*20+20, y*20+20, getWidth()*20, getHeight()*20);
          
-=======
 
->>>>>>> a0ca1f764c0db430f02198f6d3e9e5e6766bdd9a
          BufferedImage img = null;
          //swirl picture
          try {
@@ -261,10 +258,7 @@ public class Spawner implements Gadget{
              System.err.println("No image");
          }
              g2.drawImage(img, x*20+20, y*20+20, 20, 20, null);
-<<<<<<< HEAD
-=======
 
->>>>>>> a0ca1f764c0db430f02198f6d3e9e5e6766bdd9a
      }
      
      /**

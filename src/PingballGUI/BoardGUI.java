@@ -1,13 +1,13 @@
 package PingballGUI;
 
 /**
- * BoardGUI: JPanel inside the JFrame and displays board game.
+ * BoardGUI: JPanel inside the JFrame and displays board game. 
  * Takes a board instance and a String representing the initial state of the board
  * and uses Swing timer to 
  * 
  * Ratio: one board cell = 20 pixels!!!
  */
-import java.awt.Color;
+import java.awt.Color; 
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -22,7 +22,6 @@ import ADT.Board;
 import ADT.Gadget;
 import ADT.Wall;
 import Parser.BoardFileFactory;
-
 
 public class BoardGUI extends JPanel {   
     private static final long serialVersionUID = 1L; 
@@ -49,8 +48,7 @@ public class BoardGUI extends JPanel {
         this.requestFocusInWindow();
         this.repaint();
         this.myTimer = new Timer(50, paintTimer);
-        this.myTimer.start();
-             
+        this.myTimer.start();      
     }
     
     /**

@@ -2,7 +2,6 @@ package ADT;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -56,6 +55,24 @@ public class Ball {
     }
 
     /**
+     * Maintains the ball's rep invariant.
+     * @throws RuntimeException if rep invariant is violated.
+     */
+    
+    private void checkRep() throws RuntimeException{
+        double x = position.d1;
+        double y = position.d2;
+        if (this.velocity.length() >= 200){
+            throw new RuntimeException("Ball Is Moving Too Fast!!!");
+        }else if(this.radius<0.25 || this.radius>1){
+            throw new RuntimeException("Ball's radius should be in the range between 0.25 and 1, inclusive!");
+        }else if (x < this.radius || x > 20-this.radius || y < this.radius || y > 20-this.radius) {
+            throw new RuntimeException(
+                    "Ball's position cannot be outside of the board's bounds!!!");
+        }
+    }
+
+    /**
      * make a new ball instance
      * 
      * @param circle
@@ -83,6 +100,7 @@ public class Ball {
     public void updatePosition(double x, double y) {
         this.circle = new Circle(x, y, this.radius);
         this.position = new Geometry.DoublePair(x, y);
+        checkRep();
     }
 
     /**
@@ -93,6 +111,7 @@ public class Ball {
      */
     public void updateVelocity(Vect newVelocity) {
         this.velocity = newVelocity;
+        checkRep();
     }
 
     /**
@@ -296,13 +315,15 @@ public class Ball {
     }
 
     /**
-     * Doubles or halves the radius of the ball, called in spawner
+     * If the ball's radius is 0.25, then doubles the ball, otherwise shrinks
+     * the ball size to the half of its original radius. The new radius must be at least 0.25, if
+     * its less than 0.25, we give it a new radius 0.25
      */
     public void changeRadius() {
         if (this.radius == 0.25) {
-            this.radius = 0.5;
-        } else {
             this.radius = 0.25;
+        } else if (this.radius ==0.25){
+            this.radius = this.radius/2;
         }
     }
 

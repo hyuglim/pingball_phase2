@@ -16,7 +16,6 @@ board name=sampleBoard gravity=0.0 friction1 = 0.0 friction2 = 0.0
   
   # define some triangular bumpers
   circleBumper name=Tri2 x=11 y=9
-  
   spawner name = spawn x=3 y=6
   
   # add some flippers
