@@ -189,9 +189,21 @@ public class Board extends TimerTask {
       
         double newX = oldX + ball.getVelocity().times(time).x();
         double newY = oldY + ball.getVelocity().times(time).y();
+        if (newX > 20-ball.getRadius()){
+            newX = 20-ball.getRadius();
+        }
+        if (newY > 20-ball.getRadius()){
+            newY = 20-ball.getRadius();
+        }
+        if (newX < ball.getRadius() ){
+            newX = ball.getRadius();
+        }
+        if (newY < ball.getRadius() ){
+            newY = ball.getRadius();
+        }
         
         //System.out.println(newX);
-        //System.out.println(newY);
+        //System.out.println(ball.getName()+" "+ball.getBallPosition()+" "+ball.getVelocity());
         
         ball.updatePosition(newX, newY);
         
@@ -435,6 +447,7 @@ public class Board extends TimerTask {
      */
     public void handleBallBallCollision(Ball ball1, Ball ball2){
         //mass of the ball?
+        //System.out.println(ball1.getName()+" collided with "+ball2.getName());
         ball1.makeNoise();
         Geometry.VectPair velocities = Geometry.reflectBalls(
                 ball1.getBallCircle().getCenter(), 1, ball1.getVelocity(),
@@ -443,6 +456,7 @@ public class Board extends TimerTask {
                 ball1.getVelocity(), ball2.getBallCircle(), ball2.getVelocity());
         boardRepRemoveBall(ball1);
         boardRepRemoveBall(ball2);
+        
         updateEmpty(ball1, time);
         updateEmpty(ball2, time);
         ball1.updateVelocity(velocities.v1);
@@ -875,18 +889,18 @@ public class Board extends TimerTask {
         
         StringBuilder boardText = new StringBuilder("");
         
-        BufferedReader fr = new BufferedReader(new FileReader("src/Parser/" + "sampleBoard.pb"));
+        BufferedReader fr = new BufferedReader(new FileReader("src/Parser/" + "boardDana.pb"));
         for (String line = fr.readLine(); line != null; line = fr.readLine()) {
             boardText.append('\n' + line);
         }
         String boardTextString = boardText.toString().substring(1);
         Board myBoard = BoardFileFactory.parse(boardTextString);
-
+        System.out.println(myBoard.toString());
         //Ball myBall = new  Ball("Zulaa", 7, 7, 0, 10);
         //myBoard.addBall(myBall);
-        Timer timer = new Timer();
+        //Timer timer = new Timer();
        
-        timer.schedule(myBoard, 0, 50);
+        //timer.schedule(myBoard, 0, 50);
 
         
       /*  

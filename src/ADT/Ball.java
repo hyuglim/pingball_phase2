@@ -80,9 +80,21 @@ public class Ball {
      * @param y
      *            the y coordinate of the new position
      */
-    public void updatePosition(double x, double y) {
-        this.circle = new Circle(x, y, this.radius);
-        this.position = new Geometry.DoublePair(x, y);
+    public void updatePosition(double newX, double newY) {
+        if (newX > 20-getRadius()){
+            newX = 20-getRadius();
+        }
+        if (newY > 20-getRadius()){
+            newY = 20-getRadius();
+        }
+        if (newX < getRadius() ){
+            newX = getRadius();
+        }
+        if (newY < getRadius() ){
+            newY = getRadius();
+        }
+        this.circle = new Circle(newX, newY, this.radius);
+        this.position = new Geometry.DoublePair(newX, newY);
     }
 
     /**
@@ -289,8 +301,8 @@ public class Ball {
      */
     public void draw(Graphics2D g) {
         g.setColor(Color.YELLOW);
-        g.fillOval((int) (Math.round(getOriginX() * 20 + 20)),
-                (int) (Math.round(getOriginY() * 20 + 20)),
+        g.fillOval((int) (Math.round(getOriginX() * 20 + (20-radius*20))),
+                (int) (Math.round(getOriginY() * 20 + (20-radius*20))),
                 (int) (getRadius() * 40), (int) (getRadius() * 40));
 
     }
@@ -305,6 +317,7 @@ public class Ball {
             this.radius = 0.25;
         }
     }
+    
 
     /**
      * Plays the sound file when ball hits another ball

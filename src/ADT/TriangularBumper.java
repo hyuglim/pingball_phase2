@@ -336,16 +336,18 @@ public class TriangularBumper implements Gadget {
         int y = this.y;
         int[] xCoords = { 1, 2, 3 };
         int[] yCoords = { 1, 1, 1 };
-        if (this.orientation == 0) {
+        
+        
+        if(orientation== 0) {
             xCoords[0] = x * 20 + 20;
             xCoords[1] = x * 20 + 20;
             xCoords[2] = (x + 1) * 20 + 20;
-            yCoords[0] = x * 20 + 20;
+            yCoords[0] = y * 20 + 20;
             yCoords[1] = (y + 1) * 20 + 20;
-            yCoords[2] = y * 20;
+            yCoords[2] = y * 20+20;
 
         }
-        if (this.orientation == 90) {
+        else if (orientation==90) {
             xCoords[0] = x * 20 + 20;
             xCoords[1] = (x + 1) * 20 + 20;
             xCoords[2] = (x + 1) * 20 + 20;
@@ -354,15 +356,17 @@ public class TriangularBumper implements Gadget {
             yCoords[2] = (y + 1) * 20 + 20;
 
         }
-        if (this.orientation == 180) {
+        else if (orientation==180) {
             xCoords[0] = x * 20 + 20;
             xCoords[1] = (x + 1) * 20 + 20;
             xCoords[2] = (x + 1) * 20 + 20;
             yCoords[0] = (y + 1) * 20 + 20;
-            yCoords[1] = (y + 1) * 20 + 20;
-            yCoords[2] = y * 20 + 20;
+            yCoords[1] = y * 20 + 20;
+            yCoords[2] = (y+1) * 20 + 20;
 
-        } else {
+        } 
+        else if (orientation==270)      
+                {
             xCoords[0] = x * 20 + 20;
             xCoords[1] = x * 20 + 20;
             xCoords[2] = (x + 1) * 20 + 20;
@@ -370,6 +374,7 @@ public class TriangularBumper implements Gadget {
             yCoords[1] = (y + 1) * 20 + 20;
             yCoords[2] = (y + 1) * 20 + 20;
 
+        
         }
         g2.fillPolygon(xCoords, yCoords, 3);
 
@@ -413,16 +418,16 @@ public class TriangularBumper implements Gadget {
         int y = this.y;
         int[] xCoords = { 1, 2, 3 };
         int[] yCoords = { 1, 1, 1 };
-        if (this.orientation == 0) {
+        if(orientation== 0) {
             xCoords[0] = x * 20 + 20;
             xCoords[1] = x * 20 + 20;
             xCoords[2] = (x + 1) * 20 + 20;
-            yCoords[0] = x * 20 + 20;
+            yCoords[0] = y * 20 + 20;
             yCoords[1] = (y + 1) * 20 + 20;
-            yCoords[2] = y * 20;
+            yCoords[2] = y * 20+20;
 
         }
-        if (this.orientation == 90) {
+        else if (orientation==90) {
             xCoords[0] = x * 20 + 20;
             xCoords[1] = (x + 1) * 20 + 20;
             xCoords[2] = (x + 1) * 20 + 20;
@@ -431,15 +436,17 @@ public class TriangularBumper implements Gadget {
             yCoords[2] = (y + 1) * 20 + 20;
 
         }
-        if (this.orientation == 180) {
+        else if (orientation==180) {
             xCoords[0] = x * 20 + 20;
             xCoords[1] = (x + 1) * 20 + 20;
             xCoords[2] = (x + 1) * 20 + 20;
             yCoords[0] = (y + 1) * 20 + 20;
-            yCoords[1] = (y + 1) * 20 + 20;
-            yCoords[2] = y * 20 + 20;
+            yCoords[1] = y * 20 + 20;
+            yCoords[2] = (y+1) * 20 + 20;
 
-        } else {
+        } 
+        else if (orientation==270)      
+                {
             xCoords[0] = x * 20 + 20;
             xCoords[1] = x * 20 + 20;
             xCoords[2] = (x + 1) * 20 + 20;
@@ -447,6 +454,7 @@ public class TriangularBumper implements Gadget {
             yCoords[1] = (y + 1) * 20 + 20;
             yCoords[2] = (y + 1) * 20 + 20;
 
+        
         }
         g2.fillPolygon(xCoords, yCoords, 3);
 

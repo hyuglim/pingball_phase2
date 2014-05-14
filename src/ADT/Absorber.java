@@ -372,11 +372,15 @@ public class Absorber implements Gadget {
      */
     @Override
     public void draw(Graphics2D g2) {
-        Color c = new Color(104, 223, 96);// bright green boundary with a line
+        Color c1 = new Color(55, 153, 73);
+        g2.setColor(c1);
+        g2.fillRect(x * 20 + 20, y * 20 + 20, width * 20, height * 20);
+        Color c = new Color(38, 99, 58);// bright green boundary with a line
         g2.setColor(c);
         g2.drawRect(x * 20 + 20, y * 20 + 20, width * 20, height * 20);
-        g2.drawLine(x * 20 + 20, y * 20 + 20 + height * 10, x * 20 + 20 + width
-                * 20, y * 20 + 20 + height * 10);
+        //g2.drawLine(x * 20 + 20, y * 20 + 20 + height * 10, x * 20 + 20 + width
+         //       * 20, y * 20 + 20 + height * 10);
+        
     }
 
     /**
