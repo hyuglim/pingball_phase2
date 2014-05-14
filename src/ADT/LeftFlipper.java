@@ -213,7 +213,11 @@ public class LeftFlipper implements Gadget {
     public void reflect(Ball ball) {
 
         int velocityInRadian = 6;
+<<<<<<< HEAD
         double angularVelocity=0;
+=======
+        double angularVelocity = 0;
+>>>>>>> 479104183df70a4bdbd7fe9016be21baa3021994
         // If its self-triggering rotate it
         if (this.triggers.contains(this)) {
             angularVelocity = Math.PI * velocityInRadian;
@@ -346,7 +350,10 @@ public class LeftFlipper implements Gadget {
      */
     public void action() {
         makeNoise();
+<<<<<<< HEAD
  
+=======
+>>>>>>> 479104183df70a4bdbd7fe9016be21baa3021994
 
         if (this.rotated) {
             this.rotated = false;

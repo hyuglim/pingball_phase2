@@ -11,14 +11,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
-
-
-
-
-
-
-
-
 import ADT.Gadget;
 import physics.*;
 import physics.Geometry.DoublePair;
@@ -34,7 +26,6 @@ import Parser.BoardFileFactory;
  * 
  * Note: Board is merely a framework for containing gadgets and balls. It can be visualized as a list 
  * of lists but in our implementation It is but a list of gadgets defined by the position of their origins.
- *
  */
 
 public class Board extends TimerTask {
@@ -285,33 +276,18 @@ public class Board extends TimerTask {
                     ballOut = true;
                     //XXXX is used for splitting purposes to indicate the beginning of information about a new ball
                     if (w.getLocation().equals("top")){
-                        
-
-                        this.wallHit = "hit "+this.boardname+" 0 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+" " + each.getRadius() + "\n";
-
                         this.wallHit = "hit "+this.boardname+" 0 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+" " + each.getRadius();
 
                     }
                     else if (w.getLocation().equals("bottom")){
-
-                        this.wallHit = "hit "+this.boardname+" 1 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+" " + each.getRadius() +"\n";
-
                         this.wallHit = "hit "+this.boardname+" 1 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+" " + each.getRadius();
 
                     }
                     else if (w.getLocation().equals("right")){
-                        
-                        
-                        this.wallHit = "hit "+this.boardname+" 3 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+" " + each.getRadius() +"\n";
-
                         this.wallHit = "hit "+this.boardname+" 3 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+" " + each.getRadius();
 
                     }
                     else{//left
-                        
-                        
-
-                        this.wallHit = "hit "+this.boardname+" 2 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+" " + each.getRadius() +"\n";
 
                         this.wallHit = "hit "+this.boardname+" 2 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+" " + each.getRadius();
 
@@ -341,10 +317,11 @@ public class Board extends TimerTask {
     private void boardRepRemoveBall(Ball ball){
         int x = (int) Math.floor(ball.getOriginX());
         int y = (int) Math.floor(ball.getOriginY());
-        
-        if (boardRep.get(y + 1).get(x + 1).equals("*")){
-            boardRep.get(y+1).remove(x+1);
-            boardRep.get(y+1).add(x+1, " ");
+        if (y+1< 22 || x+1 < 22 ){
+            if (boardRep.get(y + 1).get(x + 1).equals("*")){
+                boardRep.get(y+1).remove(x+1);
+                boardRep.get(y+1).add(x+1, " ");
+            }
         }
     }
     

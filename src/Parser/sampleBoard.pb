@@ -4,12 +4,18 @@ board name=sampleBoard gravity=0.0 friction1 = 0.0 friction2 = 0.0
 # representation of the screenshot in the project handout.
 
   # define a ball
+<<<<<<< HEAD
 
   ball name=Ball x=15 y=9 xVelocity=0 yVelocity=50 radius=0.25
   ball name = BallB x=3 y=2 xVelocity =50 yVelocity =50 radius = 0.5
 
   ball name=Ball x=1 y=9 xVelocity=0 yVelocity=3 radius=0.25
 
+=======
+  ball name=Ball x=15 y=9 xVelocity=0 yVelocity=50 radius=0.25
+  ball name = BallB x=3 y=2 xVelocity =50 yVelocity =50 radius = 0.5
+  ball name=Ball x=1 y=9 xVelocity=0 yVelocity=3 radius=0.25
+>>>>>>> 479104183df70a4bdbd7fe9016be21baa3021994
   
   # define a series of circle bumpers
   #circleBumper name=Circle5 x=5 y=10 
@@ -19,7 +25,6 @@ board name=sampleBoard gravity=0.0 friction1 = 0.0 friction2 = 0.0
   
   # define some triangular bumpers
   circleBumper name=Tri2 x=11 y=9
-  
   spawner name = spawn x=3 y=6
   
   # add some flippers

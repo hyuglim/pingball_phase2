@@ -1,80 +1,88 @@
 package PingballGUI;
 
-
 /**
- * Takes a board instance, uses Swing timer
+ * BoardGUI: JPanel inside the JFrame and displays board game. 
+ * Takes a board instance and a String representing the initial state of the board
+ * and uses Swing timer to 
  * 
  * Ratio: one board cell = 20 pixels!!!
  */
-import java.awt.BasicStroke; 
-import java.awt.BorderLayout;
-import java.awt.Color;
+import java.awt.Color; 
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 import javax.swing.Timer;
-
-import ADT.Absorber;
 import ADT.Ball;
 import ADT.Board;
-import ADT.CircleBumper;
 import ADT.Gadget;
-import ADT.LeftFlipper;
-import ADT.Portal;
-import ADT.RightFlipper;
-import ADT.SquareBumper;
-import ADT.TriangularBumper;
 import ADT.Wall;
 import Parser.BoardFileFactory;
 
-
-public class BoardGUI extends JPanel {    
+public class BoardGUI extends JPanel {   
+    private static final long serialVersionUID = 1L; 
     private final Timer myTimer;
-    Color backgroundColor = Color.BLACK;
+    private final Timer myChatTimer;
+
     private Board board;
+    private String boardText;
+    private final Color backgroundColor = Color.BLACK;
     //double buffer variables
     Image dbImage;
     Graphics dbGraphics;
-    
-    private String boardText;
-    
-    
-    
+
+    /**
+     * Constructor for the BoardGUI:
+     * @param board the board to be simulated 
+     * @param boardText the String representing
+     * the initial state of the board
+     */
     public BoardGUI(Board board, String boardText) {
         this.board =  board;
         this.boardText = boardText;
         this.setPreferredSize(new Dimension(440, 440));
+
         setBackground(backgroundColor);     
         setFocusable(true);
         requestFocusInWindow();
         repaint();
         myTimer = new Timer(50, paintTimer);
         myTimer.start();
+        
+        Action chatTimer = new AbstractAction() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				
+			}
+		};
+        myChatTimer = new Timer(50, chatTimer);
+        myChatTimer.start();
+
+        this.setBackground(backgroundColor);     
+        this.setFocusable(true);
+        this.requestFocusInWindow();
+        this.repaint();
+<<<<<<< HEAD
+        this.myTimer = new Timer(50, paintTimer);
+        this.myTimer.start();      
+=======
+
+
              
+>>>>>>> f9da0aecc43d9bf5c431f3026c5beed5988c6d72
     }
     
+    /**
+     * 
+     */
     @Override
     public void paintComponent(Graphics g) {
-        
         Graphics2D g2 = (Graphics2D) g;
         fillWindow(g2);
         for (Gadget gadget: board.getGadgets()){
@@ -86,56 +94,26 @@ public class BoardGUI extends JPanel {
                 gadget.draw(g2);
             }
         }
-      
         for (Ball ball:board.getBalls()){
             ball.draw(g2);
         }
         for (Wall wall:board.getWalls()){
-                wall.draw(g2);
-            
+                wall.draw(g2);          
         }
-  
     }
+    
+    /**
+     * Sets the 
+     * @param g 
+     */
     private void fillWindow(final Graphics2D g) {
         g.setColor(backgroundColor);
         g.fillRect(0,  0,  getWidth(), getHeight());
     }
-  /*  
-    public static void main(String[] args) {
-        
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                JFrame window = new JFrame("Pingball");
-                window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                window.setLayout(new BorderLayout());
-                final Board board = new Board("b", 25, .025, .025);
-                Ball ball = new Ball("b", 5,0,0,4,.25);
-                board.addGadget(new SquareBumper("sq", 4, 17));
-                board.addGadget(new CircleBumper("c", 16, 8));
-                board.addBall(ball);
-                board.addGadget(new TriangularBumper("tr", 11, 11, 0));
-                board.addGadget(new Portal("p", 10, 10, "", ""));
-                Gadget abs = new Absorber("a", 0, 19, 20, 1);
-                Gadget lf = new LeftFlipper("lf", 2, 2, 270);
-                Gadget rf = new RightFlipper("rf", 4, 13, 90);
-                lf.triggers(lf);
-                rf.triggers(rf);
-                abs.triggers(abs);
-                //board.addGadget(abs);
-                board.addGadget(lf);
-                board.addGadget(rf);
-                BoardGUI canvas = new BoardGUI(board);
-                
-                window.add(canvas, BorderLayout.CENTER);
-                window.pack();
-                window.setVisible(true);
-         
-            }
-        });
-        
     
-    }   */
-    
+    /**
+     * 
+     */
     Action paintTimer = new AbstractAction(){
        public void actionPerformed(ActionEvent e){
            synchronized(board){
@@ -146,7 +124,8 @@ public class BoardGUI extends JPanel {
    };
    
    /**
-    * Method for double buffering, so the image doesn't flicker
+    * Method for double buffering, so when the ball moves and the
+    * subsequent image is displayed on the screen, the image doesn't flicker
     */
    
    public void update(Graphics g){      
@@ -154,7 +133,6 @@ public class BoardGUI extends JPanel {
            dbImage = createImage(this.getSize().width, this.getSize().height);
            dbGraphics = dbImage.getGraphics();
        }
-       
        dbGraphics.setColor(this.getBackground());
        dbGraphics.fillRect(0, 0, this.getSize().width, this.getSize().height);
        dbGraphics.setColor(getForeground());
@@ -162,33 +140,67 @@ public class BoardGUI extends JPanel {
        g.drawImage(dbImage, 0, 0, this);   
    }
 
+   /**
+    * Stops the running board game by stopping the timer.
+    */
    public void stop(){
        myTimer.stop();
    }
    
+   /**
+    * Starts or resumes the board game by starting the
+    * timer.
+    */
    public void start(){
        myTimer.start();
    }
 
+   /**
+    * Restarts the board game by stopping the timer and 
+    * updating this boardGUI's board to its initial state and then 
+    * starts the timer.
+    */
    public void restart(){
        myTimer.stop();
        board = BoardFileFactory.parse(boardText);   
        myTimer.start();
    }
 
+   /**
+    * Returns the board of this boardGui
+    * @return the board
+    */
    public Board getBoard(){
        return board;
    }
    
+   /**
+    * Returns a boolean indicating whether the board game on this boardGUI
+    * is running or not by checking if the timer is running. If the timer is running
+    * then the board game is running.
+    * @return true if the timer is running, else false.
+    */
    public boolean isRunning(){
        return myTimer.isRunning();
    }
    
-   public void updateBoard(Board board){
-       this.board = board;
+   /**
+    * Updates the board of this boradGUI by the given newBoard
+    * @param newBoard the new board to update this boardGUI's board
+    */
+   public void updateBoard(Board newBoard){
+       this.board = newBoard;
    }
   
-   public void updateBoardString(String boardText){
-       this.boardText = boardText;
+   /**
+    * Updates the boardText of this boardGUI. When a different board file is
+    * loaded, this method is called so that from then on, when a
+    * board game is restarted, the new loaded board file is always updated to its
+    * own initial state.
+    * @param newBoardText the new Board text String denoting the new initial state
+    * of the board.
+    */
+   public void updateBoardString(String newBoardText){
+       this.boardText = newBoardText;
    }
 }

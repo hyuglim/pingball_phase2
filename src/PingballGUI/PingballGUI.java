@@ -41,7 +41,7 @@ import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
 
 import ADT.Board;
-import Parser.*;
+import Parser.BoardFileFactory;
 import PingballClientServer.PingballClient;
 
 public class PingballGUI extends JFrame implements ActionListener{
@@ -168,37 +168,23 @@ public class PingballGUI extends JFrame implements ActionListener{
 
         connectToServer.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent event){
-                if(boardGui!=null){
-                    boardGui.stop();
-                }
-                int serverId = 0;
+                
                 String serverName = JOptionPane.showInputDialog("Enter Server name: ");
-                if(serverName!=null){
-                    JOptionPane.showMessageDialog(null, "Connecting to Server: " + serverName.replaceAll(" ", ""));
-                    String serverIdString = JOptionPane.showInputDialog("Enter Server port: ");
-                    if(serverIdString!=null){
-                        try{
-                            serverId = Integer.parseInt(serverIdString);
-                            if(serverId<0 || serverId>65535){
-                                JOptionPane.showMessageDialog(null, "Invalid Port Number: " + serverIdString + " Port number should be an integer in the "
-                                        + "range 0 to 65535 inclusive, Connect again!", "Warning!", JOptionPane.WARNING_MESSAGE);
-                            }
-                            try {
-                                if(board!=null){
-                                    myClient = new PingballClient(new Socket(serverName, serverId), board);
-                                }    
-                            } catch (UnknownHostException e) {
-                                JOptionPane.showMessageDialog(null, "Connecting to invalid Server: " + serverName 
-                                        + " with port: " + serverId + " connect again!");
-                            } catch (IOException e) {
-                                JOptionPane.showMessageDialog(null, "Connection refused! Connect again!");
-                            }
-                        }catch(Exception e){
-                            JOptionPane.showMessageDialog(null, "Invalid Port Number: " + serverIdString + " Port number should be an integer in the "
-                                    + "range 0 to 65535 inclusive, Connect again!", "Warning!", JOptionPane.WARNING_MESSAGE);
-                        }
+                String serverId = JOptionPane.showInputDialog("Enter Server port: ");
+                
+                try {
+                    if(board!=null){
+                        myClient = new PingballClient(new Socket(serverName, Integer.parseInt(serverId)), board);
                     }
+   
+                } catch (UnknownHostException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
                 }
+                
             }
         });
         
@@ -210,9 +196,7 @@ public class PingballGUI extends JFrame implements ActionListener{
         disconnectFromServer.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent event){
                 try {
-                    if(myClient!=null){
-                        myClient.close();
-                    }
+                    myClient.close();
                 } catch (IOException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -266,22 +250,12 @@ public class PingballGUI extends JFrame implements ActionListener{
         });
         
         /**
-         * Pop up a chat window
-         */
-        
-        
-        
-        /**
          * Registers an action listener for the loadFile JMenuItem, so that
          * when this item is selected from the menu, opens a file chooser
          * and lets the user to choose a board file.
          */
         loadFile.addActionListener(new ActionListener(){
-            
             public void actionPerformed(ActionEvent event){
-                if(boardGui!=null){
-                    boardGui.stop();
-                }
                 JFileChooser fc = new JFileChooser();
                 fc.showOpenDialog(null);
                 File file = fc.getSelectedFile();
@@ -289,7 +263,6 @@ public class PingballGUI extends JFrame implements ActionListener{
                 StringBuilder boardText = new StringBuilder("");
                 BufferedReader br;
                 try {
-
                     br = new BufferedReader(new FileReader(filePath));
                     
                     for(String line = br.readLine(); line != null; line = br.readLine()){
@@ -304,24 +277,20 @@ public class PingballGUI extends JFrame implements ActionListener{
                 }
 
                 String boardTextString = boardText.toString().substring(1);
-                Board newBoard = BoardFileFactory.parse(boardTextString);  
+                board = BoardFileFactory.parse(boardTextString);  
                 
-                if(boardGui==null){                
-                    boardGui = new BoardGUI(newBoard, boardTextString);     
-                    board = boardGui.getBoard();
+                if(boardGui==null){
+                    boardGui = new BoardGUI(board, boardTextString);             
                     add(pauseButton);
                     add(resumeButton);
                     add(restartButton);
                     add(exitButton);
                     getContentPane().add(boardGui);
-                    boardGui.start();
                 }else{
-                    boardGui.updateBoard(newBoard);
-                    boardGui.updateBoardString(boardTextString);
+                    boardGui = new BoardGUI(board, boardTextString);
                 }
                 
                 revalidate();
-                
             }
         });
         
@@ -340,26 +309,20 @@ public class PingballGUI extends JFrame implements ActionListener{
     private class MyDispatcher implements KeyEventDispatcher{
         @Override
         public boolean dispatchKeyEvent(KeyEvent e) {
-            if(boardGui!=null){
-                if(!boardGui.isRunning()){
-                    if (e.getID() == KeyEvent.KEY_PRESSED) {
-                        String key = KeyEvent.getKeyText(e.getKeyCode());
-                        String keyString = key.replaceAll(" ", "").toLowerCase();
-                            boardGui.getBoard().triggerDownKey(keyString);
-                        System.out.println("Key Pressed: " + keyString);
-                    } else if (e.getID() == KeyEvent.KEY_RELEASED) {
-                        String key = KeyEvent.getKeyText(e.getKeyCode());
-                        String keyString = key.replaceAll(" ", "").toLowerCase();
-                            boardGui.getBoard().triggerUpKey(keyString);           
-                        System.out.println("Key Released: " + keyString);
-                    } else if (e.getID() == KeyEvent.KEY_TYPED) {
-                        System.out.println("Key Typed: " + KeyEvent.getKeyText(e.getKeyCode()));
-                    }
-                   
-                }
+            if (e.getID() == KeyEvent.KEY_PRESSED) {
+                String key = KeyEvent.getKeyText(e.getKeyCode());
+                String keyString = key.replaceAll(" ", "").toLowerCase();
+                board.triggerDownKey(keyString);
+                System.out.println("Key Pressed: " + keyString);
+            } else if (e.getID() == KeyEvent.KEY_RELEASED) {
+                String key = KeyEvent.getKeyText(e.getKeyCode());
+                String keyString = key.replaceAll(" ", "").toLowerCase();
+                board.triggerUpKey(keyString);
+                System.out.println("Key Released: " + keyString);
+            } else if (e.getID() == KeyEvent.KEY_TYPED) {
+                System.out.println("Key Typed: " + KeyEvent.getKeyText(e.getKeyCode()));
             }
             return false;
-            
         }
    }
 

@@ -84,8 +84,9 @@ public class PingballServer {
 	// Each board name also has a list of booleans indicating if the top, bottom, left, or right wall is 
 	// invisible or not. Finally, each board name has a socket that corresponds to that particular client thread.
 	// Tuple has a list of strings and a list of booleans
-	private ConcurrentHashMap<String, Triple<List<String>,List<Boolean>,Socket>> neighbors 
-	= new ConcurrentHashMap<String, Triple<List<String>,List<Boolean>,Socket>>();
+	private ConcurrentHashMap<String, Quadruple<List<String>,List<Boolean>,Socket,List<Boolean>>> neighbors 
+	= new ConcurrentHashMap<String, Quadruple<List<String>,List<Boolean>,Socket, List<Boolean>>>();
+	
 
 
 	/**
@@ -121,28 +122,16 @@ public class PingballServer {
 			}
 		}		
 	}
+	
+	private void notifyChat(String chatName, String msg) throws IOException{
+			System.out.println("notifyChat: " + msg);
+		
+			Socket socket = neighbors.get(chatName).getThree();
+			PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+			out.println(msg);					
+		
+	}
 
-	/**
-	 * Method used for telling clients that their wall has been unjoined
-	 * @param name
-	 * @throws IOException
-	 */
-	//	private void notifyBoardUnjoin(String name) throws IOException {
-	//		Socket socket = neighbors.get(name).getThree();
-	//		List<String> adj = neighbors.get(name).getOne();
-	//		List<Boolean> invis = neighbors.get(name).getTwo();
-	//		PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-	//
-	//		for (int i = 0; i < adj.size(); i++) {
-	//			if (invis.get(i)) {
-	//				String neigh = adj.get(i);
-	//				System.out.println("unmark " + i + " " + neigh);
-	//
-	//				out.println("unmark " + i + " " + neigh);
-	//
-	//			}
-	//		}		
-	//	}
 
 
 	/**
@@ -317,17 +306,46 @@ public class PingballServer {
 	 * @throws IOException 
 	 * @throws IllegalArgumentException 
 	 */
-	private void joinBoards(String command) throws IllegalArgumentException, IOException {
+	public void joinBoards(String command) throws IllegalArgumentException, IOException {
 		// sample input: h NAME_left NAME_right
 		//               v NAME_top NAME_bottom
 		String []words = command.split(" ");
+		System.out.println(command);
 
 		if (words[0].equals("h")) {
 			makeHorizNeighbors(words);
 		} else if (words[0].equals("v")) {
 			makeVerticNeighbors(words);
 		}
-
+	}
+	
+	/**
+	 * 
+	 * @param name: board that wants to chat
+	 * @param nameWantsChat: if that board wants to chat
+	 * @return if both name and neighbor want to chat
+	 */
+	public boolean checkChatAgreement(String name, boolean nameWantsChat, String neighbor) {
+		int nameIndex = neighbors.get(neighbor).getOne().indexOf(name);
+		boolean neighborWantsChat = neighbors.get(neighbor).getFour().get(nameIndex) ;
+		return nameWantsChat && neighborWantsChat;
+	}
+	
+	public boolean checkBothFinished (String name, String neighbor) {
+		int nameIndex = neighbors.get(neighbor).getOne().indexOf(name);
+		int neighborIndex = neighbors.get(name).getOne().indexOf(neighbor);
+		System.out.println("neighbor -> name " + neighbors.get(neighbor).getFour().get(nameIndex));
+		System.out.println("name -> neighbor " + neighbors.get(name).getFour().get(neighborIndex));
+		
+		return neighbors.get(neighbor).getFour().get(nameIndex) != null
+		    && neighbors.get(name).getFour().get(neighborIndex) != null;		
+	}
+	
+	/**
+	 * update if the board wants to talk to neighbor of given index
+	 */
+	public void updateChatWant(String name, boolean nameWantsChat, int neighborIndex) {
+		neighbors.get(name).getFour().set(neighborIndex, nameWantsChat);
 	}
 
 	/**
@@ -403,8 +421,9 @@ public class PingballServer {
 							//top, bottom, left, right
 							List<String> adjacents = Arrays.asList(null, null, null, null);
 							List<Boolean> invisibles = Arrays.asList(false, false, false, false);
-							Triple<List<String>, List<Boolean>, Socket> triple 
-							= new Triple<List<String>, List<Boolean>,Socket>(adjacents, invisibles, socket);
+							List<Boolean> chatNeighbors = Arrays.asList(null, null, null, null);
+							Quadruple<List<String>, List<Boolean>, Socket, List<Boolean>> triple 
+							= new Quadruple<List<String>, List<Boolean>,Socket, List<Boolean>>(adjacents, invisibles, socket, chatNeighbors);
 
 							neighbors.put(name, triple);
 						}
@@ -428,9 +447,7 @@ public class PingballServer {
 			System.out.println("revert walls: inside try " + name);
 		} catch(Exception e) {
 			//when the server thread specific to a client disconnects, revert the neighboring boards to solid walls
-			//			revertToSolidWalls(name);
-			//
-			//			System.out.println("revert walls: inside catch1 " + name);
+
 			e.printStackTrace(); 
 		}   finally {
 			out.close();
@@ -456,6 +473,7 @@ public class PingballServer {
 
 		List<String> adjacents = neighbors.get(name).getOne();		
 		List<Boolean> invisibles = neighbors.get(name).getTwo();
+		List<Boolean> chatNeighbors = neighbors.get(name).getFour();
 
 		System.out.println("who called this method: " + name);
 
@@ -493,9 +511,10 @@ public class PingballServer {
 		// reset the board 
 		adjacents = Arrays.asList(null, null, null, null);
 		invisibles = Arrays.asList(false, false, false, false);
-		Triple<List<String>, List<Boolean>, Socket> triple 
-		= new Triple<List<String>, List<Boolean>,Socket>(adjacents, invisibles, null);
-		neighbors.put(name, triple);
+		chatNeighbors = Arrays.asList(null, null, null, null);
+		Quadruple<List<String>, List<Boolean>, Socket, List<Boolean>> quad 
+		= new Quadruple<List<String>, List<Boolean>,Socket, List<Boolean>>(adjacents, invisibles, null, chatNeighbors);
+		neighbors.put(name, quad);
 
 
 
@@ -523,6 +542,70 @@ public class PingballServer {
 		if(tokens[0].equals("name")) {
 			//System.out.println("name: " + input);
 			return input;
+		}
+		
+		if (tokens[0].equals("chatWant")) {
+			System.out.println("input: " + input);
+			int wallNum = Integer.parseInt(tokens[1]);
+			String chatName = tokens[2];
+			String chatNeighbor = tokens[3];
+			updateChatWant(chatName, true, wallNum);
+			
+			boolean ended = checkBothFinished(chatName, chatNeighbor);
+			if (!ended) 
+				return null;			
+			
+			boolean chatAgreed = checkChatAgreement(chatName, true, chatNeighbor);
+			System.out.println("chatAgreed: " + chatAgreed + " chatName: " + chatName + " chatNeigh: " + chatNeighbor);
+			
+			if (chatAgreed && ended){
+				String msgToChatName = "chatCreated " + wallNum + " " + chatNeighbor;
+				String msgToChatNeighbor = "chatCreated " + neighbors.get(chatNeighbor).getOne().indexOf(chatName)
+						               + " " + chatName;
+				
+				try {
+//					Socket socket = neighbors.get(chatName).getThree();
+//					PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+//					out.println(msgToChatNeighbor);		
+					notifyChat(chatName, msgToChatName);
+					notifyChat(chatNeighbor, msgToChatNeighbor);
+					
+					
+				} catch (IOException e) {
+					System.out.println("inside chatWant");
+					e.printStackTrace();
+				}
+			}
+			return null;
+		}
+		
+		if (tokens[0].equals("chatNo")) {
+			System.out.println("input " + input);
+			boolean send = !Boolean.parseBoolean(tokens[1]);
+			int wallNum = Integer.parseInt(tokens[2]);
+			String chatName = tokens[3];
+			String chatNeighbor = tokens[4];
+			
+			boolean ended = checkBothFinished(chatName, chatNeighbor);
+			updateChatWant(chatName, false, wallNum);		
+						
+			
+			//String msgToChatName = "chatReject " + chatNeighbor + " " + wallNum;
+			String msgToChatNeighbor = "chatReject " + chatName + " " 
+					               + neighbors.get(chatNeighbor).getOne().indexOf(chatName);
+			
+			if (send && !ended) {
+				try {
+					//notifyChat(chatName, msgToChatName);
+					notifyChat(chatNeighbor, msgToChatNeighbor);
+					
+				} catch (IOException e) {
+					System.out.println("inside chatNo");
+					e.printStackTrace();
+				}
+			}
+			
+			return null;
 		}
 
 		if (tokens[0].equals("create")){
