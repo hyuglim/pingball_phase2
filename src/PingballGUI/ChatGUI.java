@@ -7,15 +7,14 @@ import java.awt.event.ActionListener;
 import java.util.HashMap;
 
 import javax.swing.GroupLayout;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
-import javax.swing.WindowConstants;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.SwingWorker;
+import javax.swing.table.DefaultTableModel;
+
+import PingballClientServer.Communicator;
 
 
 /**
@@ -24,25 +23,28 @@ import javax.swing.SwingWorker;
  * JTable is modified by a event dispatching thread, so the data is safe.
  * 
  */
-public class ChatGUI extends JFrame {
+public class ChatGUI extends JFrame implements Runnable{
 
 	private static final long serialVersionUID = 1L; // required by Serializable
 
 	// components to use in the GUI
-	private final JButton newPuzzleButton;
-	private final JTextField newPuzzleNumber;
-	private final JLabel puzzleNumber;
-	private final JLabel guessInstruction;
-	private final JTextField guess;
-	private final JTable guessTable;
+
+	private final JLabel chatInstruction;
+	private final JTextField chatSend;
+	private final JTable converseTable;
 	private final DefaultTableModel tmodel;
 
-	private int puzzleInt;
-	private String puzzleGuess;
-
+	private String chatSendContent;
 	
-	private HashMap <String, Integer> guessToRow = new HashMap<String, Integer>();
-	private int rowGuess = 0;
+	private final int wallNum;
+	private final Communicator backgroundC;
+
+
+	private HashMap <String, Integer> chatReceiveToRow = new HashMap<String, Integer>();
+	private int rowChat = 0;
+	
+	private final String me;
+	private final String chatNeighbor;
 
 	/**
 	 * No input given
@@ -52,38 +54,31 @@ public class ChatGUI extends JFrame {
 	 *  
 	 * instantiate a thread for the model to keep running in the background
 	 */
-	public ChatGUI() {
+	public ChatGUI(int wallNum, Communicator c, String me, String chatNeighbor) {
 		// components must be named with "setName" as specified in the problem set
 		// remember to use these objects in your GUI!
+		this.me = me;
+		this.chatNeighbor = chatNeighbor;
 
-		newPuzzleButton = new JButton("newPuzzle");
-		newPuzzleButton.setName("newPuzzleButton");
-		newPuzzleButton.addActionListener(new ButtonClickListener());
+		this.wallNum = wallNum;
+		this.backgroundC = c;
 
-		newPuzzleNumber = new JTextField(10);
-		newPuzzleNumber.setName("newPuzzleNumber");
-		newPuzzleNumber.addActionListener(new TypeNumListener());
+		chatInstruction = new JLabel(me + " talking to " + chatNeighbor);
+		chatInstruction.setName("guessInstruction");
 
-		//calculate randomly and initialize
-		int random = (int) (Math.random() * 10000) + 1;
-		puzzleNumber = new JLabel("puzzle #" + random);
-		puzzleNumber.setName("puzzleNumber");
-		puzzleInt = random;
-
-
-		guessInstruction = new JLabel("Type a guess here: ");
-		guessInstruction.setName("guessInstruction");
-
-		guess = new JTextField();
-		guess.setName("guess");
+		chatSend = new JTextField();
+		chatSend.setName("guess");
 		TypeGuessListener t = new TypeGuessListener();
-		guess.addActionListener(t);		
+		chatSend.addActionListener(t);		
 
-		final String[] colNames = {"guess", "numInCommon", "numCorrectPos"}; 
+		final String[] colNames = {"Your Neighbor", "You"}; 
 		tmodel = new DefaultTableModel(colNames, 0);
 		tmodel.setColumnIdentifiers(colNames);
-		guessTable = new JTable(tmodel);
-		guessTable.setName("guessTable");
+		converseTable = new JTable(tmodel);
+		converseTable.setName("guessTable");
+		
+		Object[] row = {"Your Neighbor", "You"};
+		tmodel.addRow(row);
 
 
 
@@ -94,29 +89,22 @@ public class ChatGUI extends JFrame {
 		layout.setAutoCreateContainerGaps(true);
 
 		layout.setHorizontalGroup(layout.createParallelGroup()
-				.addGroup(layout.createSequentialGroup()
-						.addComponent(puzzleNumber)
-						.addComponent(newPuzzleButton)
-						.addComponent(newPuzzleNumber)
-						)
+				.addGroup(layout.createSequentialGroup()					
 						.addGroup(layout.createSequentialGroup()
-								.addComponent(guessInstruction)
-								.addComponent(guess)
-								)
-								.addComponent(guessTable)
-				);
+								.addComponent(chatInstruction)
+								.addComponent(chatSend)
+								))
+								.addComponent(converseTable)
+						);
 
 		layout.setVerticalGroup(layout.createSequentialGroup()
 				.addGroup(layout.createParallelGroup(BASELINE)
-						.addComponent(puzzleNumber)
-						.addComponent(newPuzzleButton)
-						.addComponent(newPuzzleNumber))
 						.addGroup(layout.createParallelGroup(BASELINE)
-								.addComponent(guessInstruction)
-								.addComponent(guess)
-								)
-								.addComponent(guessTable)
-				);
+								.addComponent(chatInstruction)
+								.addComponent(chatSend)
+								))
+								.addComponent(converseTable)
+						);
 
 
 	}
@@ -124,85 +112,19 @@ public class ChatGUI extends JFrame {
 	/**
 	 * pack and show GUI on the screen
 	 */
-	public static void createAndShowGUI() {
-//		JottoGUI jotto = new JottoGUI();
-//		jotto.setTitle("Jotto Game");
-//		jotto.setSize(500, 300);
-//		jotto.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-//		jotto.setVisible(true);
-		ChatGUI chat = new ChatGUI();
-		chat.setTitle("ChatGUI");
-		chat.setSize(500,500);
-		chat.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		chat.setVisible(true);
+	public void showGUI() {
+
+
+		this.setTitle("ChatGUI");
+		this.setSize(500,500);
+		//chat.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		this.setVisible(true);
 	}
 
 
-	/**
-	 * Start the GUI Jotto client.
-	 * @param args unused
-	 */
-	public static void main(final String[] args) {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				createAndShowGUI();
-			}
-		});
-	}
 
-	/**
-	 * 
-	 * @param String puzzleNum
-	 * @return a parsed Integer 
-	 * 		or a randomly generated quizz number if invalid input given
-	 */
-	private int parsePuzzleNum(String puzzleNum) {
-		int randomNum = (int) (Math.random() * 10000) + 1;
-		int parsedInput;
-		try {
-			parsedInput = Integer.parseInt(puzzleNum);
-			if (parsedInput > 0)
-				return parsedInput;	
-			else
-				return randomNum;
-		} catch (Exception e) {
-			return randomNum;
-		}
 
-	}
 
-	/**
-	 * Listens for mouse click on the newPuzzle button
-	 * and retrieve the user input inside the textfield
-	 */
-	private class ButtonClickListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			puzzleInt = parsePuzzleNum(newPuzzleNumber.getText());	
-
-			puzzleNumber.setText("puzzle #"+puzzleInt); // reset the field
-			newPuzzleNumber.setText(""); 			
-			tmodel.setRowCount(0); // reset the table
-			rowGuess = 0;
-		}		
-	}
-
-	/**
-	 * Listens for keyboard Enter from the guess textfield
-	 * and retrieve the user input inside the textfield
-	 */
-	private class TypeNumListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			puzzleInt = parsePuzzleNum(newPuzzleNumber.getText());	
-
-			puzzleNumber.setText("puzzle #"+puzzleInt);
-			newPuzzleNumber.setText(""); 
-			tmodel.setRowCount(0);
-			rowGuess = 0;
-			
-		}	
-	}
 
 	/**
 	 * Listens for user input for guesses
@@ -217,56 +139,64 @@ public class ChatGUI extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 
-			puzzleGuess = guess.getText();
-			guess.setText(""); // reset the field
+			chatSendContent = chatSend.getText();
+			chatSend.setText(""); // reset the field
+
+			chatReceiveToRow.put(chatSendContent, rowChat);
+			//System.out.println(chatReceiveToRow.containsKey(chatSendContent));
 			
-			System.out.println("guessToRow");
-			guessToRow.put(puzzleGuess, rowGuess);
-			System.out.println(guessToRow.containsKey(puzzleGuess));
-			
-			System.out.println("rowGuess " + rowGuess);
-			new PutInAnswer(puzzleGuess, rowGuess, puzzleInt).execute();
-			
-			rowGuess++;
+			backgroundC.chatSend(chatSendContent, wallNum);
 			
 			
-			
-			Object[] row = {puzzleGuess, null, null};
+			rowChat++;
+
+			Object[] row = {null, chatSendContent};
 			tmodel.addRow(row);
 
 		}	
 
-
 	}
 
-	private class PutInAnswer extends SwingWorker<String, Object> {
-		
-
-		public PutInAnswer(String guess, int row, int puzzleNum) {
-		}
-		/**
-		 * constantly check for responses coming from the server
-		 * process them appropriately and store them into the JTable
-		 */
-		@Override
-		public String doInBackground() {
-			return "";
+	@Override
+	public void run() {
+		while (true) {
+			String chatReceived = backgroundC.chatReceive(wallNum);
+			System.out.println("chatReceived: " + chatReceived);
+			Object[] row = {chatReceived, null};
+			tmodel.addRow(row);
+			rowChat++;
 		}
 		
-		@Override
-		protected void done() {
-			try {
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		
-		
-		
-	}	
+	}
 	
 	
+	
+
+//	private class PutInAnswer extends SwingWorker<String, Object> {
+//
+//		/**
+//		 * constantly check for responses coming from the server
+//		 * process them appropriately and store them into the JTable
+//		 */
+//		@Override
+//		public String doInBackground() {
+//			//String chatReceive = c.take();
+////			String msg = 
+////			backgroundC.chatReceive(msg, wallNum)
+//		}
+//
+//		@Override
+//		protected void done() {
+//			try {
+//
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//		}
+//	}	
+
+	
+
 }
 
 

@@ -6,18 +6,26 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import ADT.Board;
 import ADT.Gadget;
+import PingballGUI.ChatGUI;
 
 public class Communicator implements Runnable{
 	private Socket clientSocket = null;
 	private Board board = null;
 	
+	private final ChatGUI[] chatGUIs = new ChatGUI[4];
+	
 	private final String[] chatNeighbors = new String[4];
+	private final BlockingQueue<String>[] chatSends = new BlockingQueue[4];
+	private final BlockingQueue<String>[] chatReceives = new BlockingQueue[4];
 
 	/**
 	 * Each communicator thread has a socket and a board
@@ -84,12 +92,33 @@ public class Communicator implements Runnable{
                         if(! portalHit.equals("")){//if ball hits a wall
                             synchronized(out){
                                 // sample output: hit NAMEofBoard wallNum  NAMEofBall x y xVel yVel
-                                System.out.println(portalHit);
+                                //System.out.println(portalHit);
                                 
                                 out.println(portalHit);
                                 board.updatePortalHit();
                             }   
                         }
+                        
+                        // take chats off the queue and send to the server
+                        for (int i = 0; i < chatSends.length; i++) {
+                        	try {
+                        		
+                        		if (chatSends[i] != null && chatSends[i].size() > 0) { // because we don't want this thread to block because of take() method
+                        			System.out.println("chatSends[i] size " + i + " " + chatSends[i].size());
+                        			String delim = "123456789";
+                        			String msgToSend = "chatSend" + delim + board.boardname + delim + 
+                        		                       chatNeighbors[i] + delim + i + delim + chatSends[i].take();
+                        			//TODO: change the delimiter from space to something else
+                        			// assume for now that the messages sent are one word long
+                        			out.println(msgToSend);
+                        		}						   	
+								
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+                        }
+                        
+                        
 					}
 					
 				}
@@ -102,23 +131,31 @@ public class Communicator implements Runnable{
 
 			        // when client disconnects, clear all balls
 			        if (output.equals("kill")) {
-			            System.out.println("I am killed");
+			            //System.out.println("I am killed");
 			            board.die();
 			            board.clearAllBalls();
 			            return;
 			        }
 
 			        if (output.contains("create")){
-			            out.println(output);
+			        	synchronized(out) {
+			        		out.println(output);
+			        	}
+			            
 			        }
 			        
 			        if (output.contains("chatWant") || output.contains("chatNo")) {
-			        	out.println(output);
-			        	System.out.println(output);
+			        	synchronized(out) {
+			        		out.println(output);
+			        	}
+			        	
+			        	//System.out.println(output);
 			        }
 			    }   		
 			}
-		} finally {
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
 			out.close();
 			in.close();
 		}
@@ -133,6 +170,27 @@ public class Communicator implements Runnable{
 
 		String[] tokens = input.split(" ");
 	
+		// receiving messages from the chat
+		String delim = "123456789";
+		String[] strangeTokens = input.split(delim);
+		if(strangeTokens[0].equals("chatReceive")) {
+			//System.out.println("inside chatReceive");
+			String chatNeighbor = strangeTokens[1];
+			int wallNum = Integer.parseInt(strangeTokens[2]);
+			String msgReceived = strangeTokens[3];
+			
+			System.out.println("wallnum checked: " + wallNum);
+			
+			try {
+				chatReceives[wallNum].put(msgReceived);
+				
+			} catch (InterruptedException e) {
+				//System.out.println("inside chatReceive");
+				e.printStackTrace();
+			}
+			
+			return null;
+		}
 		
 		//CONFIRMING IF BALL HIT AN INVISIBLE WALL
 		if(tokens[0].equals("delete")) {
@@ -180,7 +238,7 @@ public class Communicator implements Runnable{
         }
 
 		if(tokens[0].equals("create")) {
-		    System.out.println(tokens);
+		    //System.out.println(tokens);
 			// sample input: invisible NAMEofBALL x y xVel yVel
 			String nameOfBall = tokens[1];
 			float x = Float.parseFloat(tokens[2]);
@@ -200,7 +258,7 @@ public class Communicator implements Runnable{
 		}
 		
 		if (tokens[0].equals("chatReject")) {
-			System.out.println("inside chatReject");
+			//System.out.println("inside chatReject");
 			String chatNeighbor = tokens[1];
 			String msg = chatNeighbor + " does not want to talk to you.";
 			Object[] options = {"Cancel"};
@@ -219,8 +277,35 @@ public class Communicator implements Runnable{
 		
 		if (tokens[0].equals("chatCreated")) {
 			System.out.println("inside chatCreated");
-			// TODO: do GUI stuff
+			final int wallNum = Integer.parseInt(tokens[1]);
+			final String chatNeighbor = tokens[2];
+			final Communicator c = this;
 			
+			// TODO: do GUI stuff
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					ChatGUI cg = new ChatGUI(wallNum, c, board.boardname, chatNeighbor);
+					chatGUIs[wallNum] = cg;
+					chatNeighbors[wallNum] = chatNeighbor;
+					chatSends[wallNum] = new LinkedBlockingQueue<String>();
+					chatReceives[wallNum] = new LinkedBlockingQueue<String>();
+					
+					new Thread(cg).start(); 				
+					cg.showGUI();
+				}				
+			});
+			System.out.println("wallnum Created: " + wallNum);
+			System.out.println("is chatReceieves[wallnum] null: " + chatReceives[wallNum] == null);
+			System.out.println("is chatSends[wallnum] null: " + chatSends[wallNum] == null);
+			
+//			SwingUtilities.invokeLater(new Runnable() {
+//				public void run() {
+//					cg.update
+//				}
+//			});
+			
+			
+			//System.out.println("endingnnnn");
 			return null;
 		}
 		
@@ -242,29 +327,53 @@ public class Communicator implements Runnable{
 		}
 		
 		if(tokens[0].equals("unmark")) {
-			System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+			//System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
 			int wallNum = Integer.parseInt(tokens[1]);
 			String neighbor = tokens[2];
 			board.removeNeighborsName(wallNum, neighbor);
 			return null;
 		}
 
-		System.out.println(input+"Boooooooooooooooooooo");
+		//System.out.println(input+"Boooooooooooooooooooo");
 
 		// Should never get here--make sure to return in each of the valid cases above.
 		throw new UnsupportedOperationException();
 	}
 	
+	/**
+	 * Send the client a chat invitation.
+	 * @param chatNeighbor
+	 * @param wallNum
+	 * @return 
+	 */
 	private boolean askForChat(String chatNeighbor, int wallNum) {
 		int chatRequested = JOptionPane.showConfirmDialog(new JFrame(), 
 				             "Do you want to talk to " + chatNeighbor + " ?" +
 				             		"\n If so, we'll let you know if both of you want to talk to each other", 
 				             		"Chat Invitation", JOptionPane.YES_NO_OPTION);
-		System.out.println("chatRequested" + chatRequested);
-		System.out.println("Yes_no_option: " + JOptionPane.YES_NO_OPTION);
-		System.out.println("Yes_no cancel option: " + JOptionPane.YES_NO_CANCEL_OPTION);
-		System.out.println("ok cancel option: " + JOptionPane.OK_CANCEL_OPTION);
+//		//System.out.println("chatRequested" + chatRequested);
+//		//System.out.println("Yes_no_option: " + JOptionPane.YES_NO_OPTION);
+//		//System.out.println("Yes_no cancel option: " + JOptionPane.YES_NO_CANCEL_OPTION);
+//		//System.out.println("ok cancel option: " + JOptionPane.OK_CANCEL_OPTION);
 		return chatRequested == JOptionPane.YES_NO_OPTION;
+	}
+	
+	public String chatReceive(int wallNum) {
+		String response = null;
+		try {
+			response = chatReceives[wallNum].take();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		return response;
+	}
+	
+	public void chatSend(String msg, int wallNum) {
+		try {
+			chatSends[wallNum].put(msg);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 	
 }

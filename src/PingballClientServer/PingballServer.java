@@ -414,6 +414,8 @@ public class PingballServer {
 					//System.out.println(line);
 
 					String[] tokens = line.split(" ");
+					
+					//When the client first connects, it passes in the name of the boar
 					if (tokens[0].equals("name")) {
 						name = tokens[1];
 						System.out.println(name);
@@ -432,12 +434,11 @@ public class PingballServer {
 
 					String output = handleRequest(line); 
 					if (output != null) {
-						//out.println(output);
+						
 					}
 				}
-				//System.out.println("line: " + line);
-				//When the client first connects, it passes in the name of the board   
-			}
+				  
+			}//end for
 			System.out.println("got out of for loop");
 			out.println("kill");
 
@@ -542,6 +543,22 @@ public class PingballServer {
 		if(tokens[0].equals("name")) {
 			//System.out.println("name: " + input);
 			return input;
+		}
+		
+		// assume for now that the messages sent are one word long
+		// change the delimiter to something else later
+		String[] strangeTokens = input.split("123456789");
+		if (strangeTokens[0].equals("chatSend")) {
+			System.out.println("inside chatSend: " + input);
+			String chatName = strangeTokens[1];
+			String chatNeighbor = strangeTokens[2];
+			int wallNum = neighbors.get(chatNeighbor).getOne().indexOf(chatName);
+			String msg = strangeTokens[4];
+			
+			String delim = "123456789";
+			String msgToReceive = "chatReceive" + delim + chatNeighbor + delim + wallNum + delim + msg;
+			notifyChat(chatNeighbor, msgToReceive);
+			return null;
 		}
 		
 		if (tokens[0].equals("chatWant")) {
