@@ -1,7 +1,7 @@
 package PingballGUI;
 
 /**
- * The Pingball playing GUI user interface that displays the running game as a  
+ * The Pingball playing GUI user interface that displays the running game as a   
  * graphical user interface that pops up in a new window. 
  * 
  * The commands for the operations: loading a board from a file, connecting to 
@@ -19,7 +19,7 @@ package PingballGUI;
  * gives the users directions on how to play the game and a JMenuBar on the user interface
  * that lets the user change the background color of the user interface.
  */
-import java.awt.Color; 
+import java.awt.Color;  
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -376,6 +376,5 @@ public class PingballClientGUI extends JFrame implements ActionListener{
                 main.setSize(600, 600);
             }
         });
-
     }
 }

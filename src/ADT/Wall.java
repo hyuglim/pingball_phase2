@@ -209,8 +209,8 @@ public class Wall {
         }
         else if (this.location.equals("bottom")){
             if(this.visible){
-                //g.fillRect(0, 420, 440, 20);
-                g.fillRect(0, 423, 440, 17);
+                g.fillRect(0, 420, 440, 20);
+                //g.fillRect(0, 423, 440, 17);
             }else{
                 g.setColor(Color.ORANGE);
                 g.setFont(new Font("Verdana", 1, 20));
@@ -221,8 +221,8 @@ public class Wall {
         }
         else if (this.location.equals("left")){
             if(this.visible){
-                g.fillRect(0, 20, 20, 404);
-                //g.fillRect(0, 20, 20, 400);
+                //g.fillRect(0, 20, 20, 404);
+                g.fillRect(0, 20, 20, 400);
             }else{
                 g.setColor(Color.ORANGE);
                 g.setFont(new Font("Verdana", 1, 20));
@@ -237,8 +237,8 @@ public class Wall {
         }
         else{
             if(this.visible){
-                //g.fillRect(420, 20, 20, 400); 
-                g.fillRect(423, 20, 17, 404);
+                g.fillRect(420, 20, 20, 400); 
+                //g.fillRect(423, 20, 17, 404);
             }else{
                 g.setColor(Color.ORANGE);
                 g.setFont(new Font("Verdana", 1, 20));
