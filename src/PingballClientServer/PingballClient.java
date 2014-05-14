@@ -16,6 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import ADT.Ball;
 import ADT.Board;
+import ADT.Wall;
 import Parser.BoardFileFactory;
 
 
@@ -38,6 +39,7 @@ public class PingballClient{
 	// -1: no wall hit, 0: top wall hit,
 	// 1: bottom wall hit, 2: right wall hit
 	private int whichWallHit = -1;
+	private Board myBoard;
 
 
 	/**
@@ -47,14 +49,16 @@ public class PingballClient{
 	 */
 	
 	public PingballClient(Socket socket){
+	    this.socket = socket;
 	}
 	
 	public PingballClient(Socket socket, Board board) {
+	    this.myBoard = board;
 	    this.socket = socket;
 		this.player = new GamePlayer(board);
 		this.messenger = new Communicator(socket, board);
 		
-		new Thread(player).start();
+		//new Thread(player).start();
 		new Thread(messenger).start();
 	}
 
@@ -187,5 +191,8 @@ public class PingballClient{
 	
 	public void close() throws IOException{
 	    socket.close();
+	    for(Wall wall: this.myBoard.getWalls()){
+	        wall.removeConnection();
+	    }
 	}
 }

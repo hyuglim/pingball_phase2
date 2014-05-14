@@ -1,12 +1,24 @@
 package ADT;
-
-import java.awt.Color;
+ 
+/**
+ * A Spawner represents a gadget in the pingball board, whose action shrinks a big ball or 
+ * enlarges a small ball.
+ */
+import java.awt.Color; 
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
-
+import javax.imageio.ImageIO;
 import physics.Circle;
 import physics.Geometry;
 import physics.Vect;
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
 
 public class Spawner implements Gadget{
 
@@ -16,17 +28,19 @@ public class Spawner implements Gadget{
     private final Circle circle;
     private final ArrayList<Gadget> triggeredBy = new ArrayList<Gadget>();
     private final ArrayList<Gadget> triggers = new ArrayList<Gadget>();
+    private boolean isHit;
     /**
-     * Constructor for a CircleBumper
-     * @param x the x coordinate of this circle bumper in the board.
-     * @param y the y coordinate of this circle bumper in the board
-     * @param name the name of this circle bumper
+     * Constructor for a Spawner
+     * @param x the x coordinate of this spawner in the board.
+     * @param y the y coordinate of this spawner in the board
+     * @param name the name of this spawner
      */
     public Spawner(String name, int x, int y){
         this.name = name;
         this.x = x;
         this.y = y;
         this.circle = new Circle(x+0.5, y+0.5, 0.5);
+        this.isHit = false;
         checkRep();
     }
 
@@ -37,9 +51,10 @@ public class Spawner implements Gadget{
     
     private void checkRep() throws RuntimeException{
         if (this.x<0 || this.x>19 || this.y<0 || this.y>19){
-            throw new RuntimeException("CircleBumper's position cannot be outside of the board's bounds!!!");
+            throw new RuntimeException("Spawner's position cannot be outside of the board's bounds!!!");
         }
     }
+    
     /**
      * @see Gadget#getX()
      */
@@ -60,7 +75,7 @@ public class Spawner implements Gadget{
       * @see Gadget#getChar()
       */
      public String getChar(){
-         return "O";
+         return "S";
      }
      
      /**
@@ -105,8 +120,10 @@ public class Spawner implements Gadget{
       * @param ball the ball that collided with this circle bumper
       */
      public void reflect(Ball ball) {
+         this.isHit = true;
          Vect newVelocity = Geometry.reflectCircle((this.circle).getCenter(), ball.getBallCircle().getCenter(), ball.getVelocity()); 
          ball.updateBallVelocity(newVelocity);
+         ball.changeRadius();
          for(Gadget gadget: this.triggers){
              gadget.action();
          }
@@ -116,8 +133,7 @@ public class Spawner implements Gadget{
       * Action: None 
       * @param ball the ball to be released
       */
-     public void release(Ball ball) {
-         
+     public void release(Ball ball) {   
      }
 
      /**
@@ -224,13 +240,76 @@ public class Spawner implements Gadget{
      public String getOtherPortal() {
          return null;
      }
-
+     /**
+      * @see ADT.Gadget#draw(java.awt.Graphics2D)
+      */
      @Override
      public void draw(Graphics2D g2) {
-         Color c = new Color(208, 45, 99);//pink
+
+         Color c = Color.BLUE;//pink
          g2.setColor(c);
          g2.fillOval(x*20+20, y*20+20, getWidth()*20, getHeight()*20);
-         
-     }
 
+         BufferedImage img = null;
+         //swirl picture
+         try {
+             img = ImageIO.read(new File("src/ADT/Spawner.jpg"));
+         } catch (IOException e) {
+             System.err.println("No image");
+         }
+             g2.drawImage(img, x*20+20, y*20+20, 20, 20, null);
+
+     }
+     
+     /**
+      * @see ADT.Gadget#drawAnother(java.awt.Graphics2D)
+      */
+   //dummy method, spawner doesn't glow
+    @Override
+    public void drawAnother(Graphics2D g2) {
+        
+    }
+    
+    /**
+     * @see ADT.Gadget#isHit()
+     */
+    //dummy method, spawner doesn't glow
+    @Override
+    public boolean isHit() {
+        return false;
+    }
+   
+    /**
+     * @see ADT.Gadget#makeNoise()
+     */
+    @Override
+    public void makeNoise() {
+        String fileName = "src/ADT/Spawner.wav";
+        InputStream in = null;
+        try {
+            in = new FileInputStream(fileName);
+
+        } catch (FileNotFoundException e) {
+            System.err.println("Can't find wav file");
+            e.printStackTrace();
+        }
+
+        AudioStream as = null;
+        try {
+            as = new AudioStream(in);
+        } catch (IOException e) {
+            System.err.println("Can't play wav file");
+            e.printStackTrace();
+        }
+
+        AudioPlayer.player.start(as);
+
+    }
+    /**
+     * @see ADT.Gadget#setNotHit()
+     */
+    //dummy method, spawner doesn't glow
+    @Override
+    public void setNotHit() {    
+    }
 }

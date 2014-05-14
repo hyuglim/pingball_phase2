@@ -1,7 +1,6 @@
 package ADT;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList; 
@@ -12,15 +11,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
-
-
-import org.antlr.v4.codegen.model.chunk.ThisRulePropertyRef_ctx;
-
 import ADT.Gadget;
 import physics.*;
 import physics.Geometry.DoublePair;
 import ADT.Ball;
 import Parser.BoardFileFactory;
+
 
 /**
  * Concurrency/Thread Safety Strategy: The only aspect of board accessible by the server is its calls.
@@ -30,7 +26,6 @@ import Parser.BoardFileFactory;
  * 
  * Note: Board is merely a framework for containing gadgets and balls. It can be visualized as a list 
  * of lists but in our implementation It is but a list of gadgets defined by the position of their origins.
- *
  */
 
 public class Board extends TimerTask {
@@ -248,17 +243,20 @@ public class Board extends TimerTask {
                         ballsToRemove.add(each);
                   
                     }
+                    
                 }else{
                     g.reflect(each);
     /*                if(!g.doesAbsorb() && !g.doesPort()){
                         updateEmpty(each, timeMinGadget);
                     } */                  
                 }
+                g.makeNoise();
             }
             else{
                 // CASE 1: if the wall is solid, then merely bounce of it
                 if (w.getVisibility()){
                     w.update(each);
+                    w.makeNoise();
                 }
                 // CASE 2: If the wall is connected to another board, remove the ball for current
                 //board and send encode the outgoing wall in a string (to be tackled by server)
@@ -322,10 +320,11 @@ public class Board extends TimerTask {
     private void boardRepRemoveBall(Ball ball){
         int x = (int) Math.floor(ball.getOriginX());
         int y = (int) Math.floor(ball.getOriginY());
-        
-        if (boardRep.get(y + 1).get(x + 1).equals("*")){
-            boardRep.get(y+1).remove(x+1);
-            boardRep.get(y+1).add(x+1, " ");
+        if (y+1<= boardRep.size() || x+1 <= boardRep.size() ){
+            if (boardRep.get(y + 1).get(x + 1).equals("*")){
+                boardRep.get(y+1).remove(x+1);
+                boardRep.get(y+1).add(x+1, " ");
+            }
         }
     }
     
@@ -387,8 +386,7 @@ public class Board extends TimerTask {
      */
     private List<List<String>> UpdateBoardRep(){
         // Update the walls (in case of joining walls etc)
-        boardRepUpdateWalls();
-        
+        boardRepUpdateWalls();        
         //ensures that each ball is represented on the board 
         //(unless if it is in a square that already contains another gadget
         for(Ball ball:balls){
@@ -397,8 +395,7 @@ public class Board extends TimerTask {
                 boardRepAddBall(ball);
         }
         // Update the boardRep to represent the flippers in their right states
-        updateFlipperStringPosition();
-        
+        updateFlipperStringPosition();        
         return boardRep;
     }
     
@@ -413,8 +410,7 @@ public class Board extends TimerTask {
         if (die == true) {
         	this.cancel();
         }
-        System.out.println(this.toString());
-        
+        System.out.println(this.toString());     
     }
     
     public void die(){
@@ -431,6 +427,7 @@ public class Board extends TimerTask {
      */
     public void handleBallBallCollision(Ball ball1, Ball ball2){
         //mass of the ball?
+        ball1.makeNoise();
         Geometry.VectPair velocities = Geometry.reflectBalls(
                 ball1.getBallCircle().getCenter(), 1, ball1.getVelocity(),
                 ball2.getBallCircle().getCenter(), 1, ball2.getVelocity());
@@ -441,11 +438,7 @@ public class Board extends TimerTask {
         updateEmpty(ball1, time);
         updateEmpty(ball2, time);
         ball1.updateVelocity(velocities.v1);
-
-        ball2.updateVelocity(velocities.v2);
-
-        
-        
+        ball2.updateVelocity(velocities.v2);  
     }
     
     
@@ -871,7 +864,7 @@ public class Board extends TimerTask {
         
         //myBoard.addGadget(rf);
         //myBoard.addGadget(lf);
-   /*     
+        
         StringBuilder boardText = new StringBuilder("");
         
         BufferedReader fr = new BufferedReader(new FileReader("src/Parser/" + "sampleBoard.pb"));
@@ -886,17 +879,9 @@ public class Board extends TimerTask {
         Timer timer = new Timer();
        
         timer.schedule(myBoard, 0, 50);
+
         
-        CircleBumper circle = new CircleBumper("C", 0, 0);
-        Ball newBall = new Ball("A", 0.5, 0.5, 0, 1, 0.25);
-        
-        for(Gadget gadget : myBoard.getGadgets()){
-            if(gadget.doesPort()){
-                System.out.println(gadget.getOtherBoard());
-            }
-        }
-        */
-        
+      /*  
         final Board board = new Board("b", 25, .025, .025);
         Ball ball = new Ball("b", 2.5,1,0,10,.25);
         //board.addGadget(new SquareBumper("sq", 1, 1));
@@ -912,18 +897,16 @@ public class Board extends TimerTask {
         //abs.triggers(abs);
         //board.addGadget(abs);
         board.addGadget(lf);
-/*        Timer timer = new Timer();
+        Timer timer = new Timer();
         
         timer.schedule(board, 0, 50);
         Ball myBall = new Ball("B", 0, 0.25, 1, 1, 0.25);
-        CircleBumper circle = new CircleBumper("C", 0, 0);*/
-        System.out.println(board.getGadgets());
-        System.out.println(board.toString());
-        board.triggerDownKey("ctrl");
-        System.out.println(board.toString());
+        CircleBumper circle = new CircleBumper("C", 0, 0);
+        Spawner mySpawner = new Spawner("spawner", 5, 5);
+        board.addGadget(mySpawner);
+        System.out.println(board.getGadgets());*/
         
-        //System.out.println(circle.getCollisionTime(myBall));
-        
+        //System.out.println(circle.getCollisionTime(myBall));  
     }
 
 

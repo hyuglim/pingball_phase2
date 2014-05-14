@@ -4,21 +4,27 @@ board name=sampleBoard gravity=0.0 friction1 = 0.0 friction2 = 0.0
 # representation of the screenshot in the project handout.
 
   # define a ball
-  ball name=Ball x=0.5 y=5.5 xVelocity=5 yVelocity=5 radius=0.25
+  ball name=Ball x=15 y=9 xVelocity=0 yVelocity=50 radius=0.25
+  ball name = BallB x=3 y=2 xVelocity =50 yVelocity =50 radius = 0.5
+  ball name=Ball x=1 y=9 xVelocity=0 yVelocity=3 radius=0.25
   
   # define a series of circle bumpers
   #circleBumper name=Circle5 x=5 y=10 
   
   # define a series of square bumpers
-  squareBumper name=Square1 x=1 y=2
+  squareBumper name=Square1 x=1 y=12
   
   # define some triangular bumpers
-  triangleBumper name=Tri2 x=11 y=9 orientation=180
+  circleBumper name=Tri2 x=11 y=9
+  
+  spawner name = spawn x=3 y=6
   
   # add some flippers
   leftFlipper name=FlipL2 x=5 y=10 orientation=90
   rightFlipper name=FlipR2 x=7 y=8 orientation=90
-
+  
+  portal name=p x=11 y=15 otherPortal=k
+  portal name=k x= 15 y = 17 otherPortal=p
   #define an absorber to catch the ball at the bottom
   #absorber name=Abs x=0 y=19 width=20 height=1 
   

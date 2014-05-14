@@ -7,12 +7,17 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.List;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 import ADT.Board;
 import ADT.Gadget;
 
 public class Communicator implements Runnable{
 	private Socket clientSocket = null;
 	private Board board = null;
+	
+	private final String[] chatNeighbors = new String[4];
 
 	/**
 	 * Each communicator thread has a socket and a board
@@ -105,7 +110,11 @@ public class Communicator implements Runnable{
 
 			        if (output.contains("create")){
 			            out.println(output);
-			            System.out.println(output);
+			        }
+			        
+			        if (output.contains("chatWant") || output.contains("chatNo")) {
+			        	out.println(output);
+			        	System.out.println(output);
 			        }
 			    }   		
 			}
@@ -190,13 +199,46 @@ public class Communicator implements Runnable{
 			return null;
 		}
 		
+		if (tokens[0].equals("chatReject")) {
+			System.out.println("inside chatReject");
+			String chatNeighbor = tokens[1];
+			String msg = chatNeighbor + " does not want to talk to you.";
+			Object[] options = {"Cancel"};
+			
+			JOptionPane.showOptionDialog(new JFrame(),
+				    msg,
+				    "Chat Invitation Response",
+				    JOptionPane.CANCEL_OPTION,
+				    JOptionPane.QUESTION_MESSAGE,
+				    null,     //do not use a custom Icon
+				    options,  //the titles of buttons
+				    options[0]); //default button title
+			
+			return null;
+		}
+		
+		if (tokens[0].equals("chatCreated")) {
+			System.out.println("inside chatCreated");
+			// TODO: do GUI stuff
+			
+			return null;
+		}
+		
 		if(tokens[0].equals("mark")) {
 		
 			int wallNum = Integer.parseInt(tokens[1]);
 			String neighbor = tokens[2];
 			board.giveNeighborsName(wallNum, neighbor);
 			board.connectWall(wallNum, neighbor);
-			return null;
+			
+			String answer = null;
+			boolean chatWant = askForChat(neighbor, wallNum);
+			if (chatWant)
+				answer = "chatWant " + wallNum + " " + this.board.boardname + " " + neighbor;
+			else
+				answer = "chatNo " + chatWant + " " + wallNum + " " + this.board.boardname + " " + neighbor;
+			
+			return answer;
 		}
 		
 		if(tokens[0].equals("unmark")) {
@@ -212,4 +254,17 @@ public class Communicator implements Runnable{
 		// Should never get here--make sure to return in each of the valid cases above.
 		throw new UnsupportedOperationException();
 	}
+	
+	private boolean askForChat(String chatNeighbor, int wallNum) {
+		int chatRequested = JOptionPane.showConfirmDialog(new JFrame(), 
+				             "Do you want to talk to " + chatNeighbor + " ?" +
+				             		"\n If so, we'll let you know if both of you want to talk to each other", 
+				             		"Chat Invitation", JOptionPane.YES_NO_OPTION);
+		System.out.println("chatRequested" + chatRequested);
+		System.out.println("Yes_no_option: " + JOptionPane.YES_NO_OPTION);
+		System.out.println("Yes_no cancel option: " + JOptionPane.YES_NO_CANCEL_OPTION);
+		System.out.println("ok cancel option: " + JOptionPane.OK_CANCEL_OPTION);
+		return chatRequested == JOptionPane.YES_NO_OPTION;
+	}
+	
 }

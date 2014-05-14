@@ -18,6 +18,9 @@ public class BoardFileBaseListener implements BoardFileListener {
 	@Override public void enterDeclaration(BoardFileParser.DeclarationContext ctx) { }
 	@Override public void exitDeclaration(BoardFileParser.DeclarationContext ctx) { }
 
+	@Override public void enterSpawner(BoardFileParser.SpawnerContext ctx) { }
+	@Override public void exitSpawner(BoardFileParser.SpawnerContext ctx) { }
+
 	@Override public void enterPortal(BoardFileParser.PortalContext ctx) { }
 	@Override public void exitPortal(BoardFileParser.PortalContext ctx) { }
 

@@ -130,6 +130,11 @@ public class ChatGUI extends JFrame {
 //		jotto.setSize(500, 300);
 //		jotto.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 //		jotto.setVisible(true);
+		ChatGUI chat = new ChatGUI();
+		chat.setTitle("ChatGUI");
+		chat.setSize(500,500);
+		chat.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		chat.setVisible(true);
 	}
 
 

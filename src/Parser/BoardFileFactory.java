@@ -24,6 +24,7 @@ import ADT.Gadget;
 import ADT.LeftFlipper;
 import ADT.Portal;
 import ADT.RightFlipper;
+import ADT.Spawner;
 import ADT.SquareBumper;
 import ADT.TriangularBumper;
 
@@ -154,6 +155,17 @@ public class BoardFileFactory {
       CircleBumper circleBumper = new CircleBumper(name, xCoord, yCoord);
       desiredBoard.addGadget(circleBumper);
       gadgets.add(circleBumper);
+  }
+  
+
+  @Override
+  public void exitSpawner(BoardFileParser.SpawnerContext ctx) {
+      String name = attributes.remove().toString();
+      int xCoord = Integer.parseInt(attributes.remove().toString());
+      int yCoord = Integer.parseInt(attributes.remove().toString());
+      Spawner spawner = new Spawner(name, xCoord, yCoord);
+      desiredBoard.addGadget(spawner);
+      gadgets.add(spawner);
   }
   
   @Override
@@ -334,6 +346,9 @@ static class PrintEverythingListener extends BoardFileBaseListener {
   
   public void enterFire(BoardFileParser.FireContext ctx) { System.err.println("entering fire " + ctx.getText()); }
   public void exitFire(BoardFileParser.FireContext ctx) { System.err.println("exiting fire " + ctx.getText()); }
+  
+  public void enterSpawner(BoardFileParser.SpawnerContext ctx) { System.err.println("entering spawner " + ctx.getText()); }
+  public void exitSpawner(BoardFileParser.SpawnerContext ctx) { System.err.println("exiting spawner " + ctx.getText()); }
   
   public void enterKey(BoardFileParser.KeytriggerContext ctx) { System.err.println("entering key " + ctx.getText()); }
   public void exitKey(BoardFileParser.KeytriggerContext ctx) { System.err.println("exiting key " + ctx.getText()); }

@@ -7,8 +7,8 @@ import ADT.Ball;
 
 /**
  *
- * The standard gadget could either be a Wall, SquareBumper, CircleBumper, TriangularBumper, 
- * RightFlipper, LeftFlipper or Absorber. Each gadget may have a trigger and an action. 
+ * The standard gadget could either be a SquareBumper, CircleBumper, TriangularBumper, 
+ * RightFlipper, LeftFlipper, Portal, Spawner or Absorber. Each gadget may have a trigger and an action. 
  * A trigger is an event that happens at the gadget, such as a ball colliding with it. An action 
  * is a response that a gadget can make to a trigger happening somewhere on the board.
  * A gadget also has a coefficient of reflection, which is a multiplier applied to the 
@@ -173,8 +173,31 @@ public interface Gadget {
 
     /**
      * Draws a graphical representation of the object in BoardJPanel
-     * @param g2
+     * @param g2 instance of Graphics2D, drawing tool
      */
     public void draw(Graphics2D g2);
-           
+    
+    /**
+     * Draws a graphical representation of the object in BoardJPanel
+     * when the gadget is hit and instantaneously glows
+     * @param g2 instance of Graphics2D, drawing tool
+     */
+    public void drawAnother(Graphics2D g2);
+    
+    /**
+     * Checks whether the gadget was just hit
+     * @return true if the gadget was hit
+     */
+    public boolean isHit();
+    
+    /**
+     * Plays the sound file associated with the gadget when it is hit by the ball
+     */
+    public void makeNoise();
+    
+    /**
+     * Sets  gadget's field isHit to be false so the gadget stops glowing
+     */
+    public void setNotHit();      
+
 }

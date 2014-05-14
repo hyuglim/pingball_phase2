@@ -41,6 +41,7 @@ TRIANGULAR_BUMPER : 'triangleBumper' ;
 LEFT_FLIPPER : 'leftFlipper' ;
 RIGHT_FLIPPER : 'rightFlipper' ;
 ABSORBER : 'absorber' ;
+SPAWNER : 'spawner';
 FIRE : 'fire';
 KEYUP : 'keyup';
 KEYDOWN : 'keydown';
@@ -54,13 +55,14 @@ NAME : [A-Za-z_][A-Za-z_0-9]* ;
 WHITESPACE : [ \t\r\n]+ -> skip ;
 COMMENT : '#' ~('\n'|'\r')* -> skip ;
 
+
 /*
  * These are the parser rules. They define the structures used by the parser.
  * *** ANTLR requires grammar nonterminals to be lowercase, like html, normal, and italic.
  */
 file : declaration EOF;
 declaration : board line*;
-line : ball | square | circle | triangle | leftFlipper | rightFlipper | absorber | portal | fire | keytrigger;
+line : ball | square | circle | triangle | leftFlipper | rightFlipper | absorber | portal | fire | keytrigger | spawner;
 board : BOARD (attribute EQUAL value) (GRAVITY EQUAL value)? (FRICTION1 EQUAL value)? (FRICTION2 EQUAL value)?;
 ball : BALL (attribute EQUAL value)+;
 square : SQUARE_BUMPER (attribute EQUAL value)+;
@@ -68,6 +70,7 @@ circle : CIRCLE_BUMPER (attribute EQUAL value)+;
 triangle : TRIANGULAR_BUMPER (attribute EQUAL value)+;
 leftFlipper : LEFT_FLIPPER (attribute EQUAL value)+;
 rightFlipper : RIGHT_FLIPPER (attribute EQUAL value)+;
+spawner : SPAWNER (attribute EQUAL value)+;
 absorber : ABSORBER (attribute EQUAL value)+;
 portal : PORTAL (attribute EQUAL value)+;
 fire : FIRE TRIGGER EQUAL NAME ACTION EQUAL NAME;  
