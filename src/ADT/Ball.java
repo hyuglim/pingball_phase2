@@ -113,7 +113,11 @@ public class Ball {
         }
         this.circle = new Circle(newX, newY, this.radius);
         this.position = new Geometry.DoublePair(newX, newY);
+<<<<<<< HEAD
+    }
+=======
         checkRep();
+>>>>>>> e89a7153e89ec835aba3b6071907cc64bc14175d
 
 }
     /**

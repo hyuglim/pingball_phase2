@@ -245,8 +245,11 @@ public class Spawner implements Gadget{
       */
      @Override
      public void draw(Graphics2D g2) {
+<<<<<<< HEAD
+=======
 
          
+>>>>>>> e89a7153e89ec835aba3b6071907cc64bc14175d
          BufferedImage img = null;
          //swirl picture
          try {

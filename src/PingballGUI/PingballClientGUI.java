@@ -270,12 +270,14 @@ public class PingballClientGUI extends JFrame implements ActionListener{
          * when this item is selected from the menu, opens a file chooser
          * and lets the user to choose a board file. If the chosen file is invalid, then
          * opens up a message saying that the board file is invalid. 
-         */       
+         */  
+        
         loadFile.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent event){
                 if(boardGui!=null){
                     boardGui.stop();
                 }
+                
                 JFileChooser fc = new JFileChooser();
                 fc.showOpenDialog(null);
                 File file = fc.getSelectedFile();
@@ -316,33 +318,13 @@ public class PingballClientGUI extends JFrame implements ActionListener{
                                 "Warning!", JOptionPane.WARNING_MESSAGE);
                     }                    
                 }
+                
+                if(boardGui!=null){
+                    boardGui.start();
+                }
             }
         });
-        
-
-        /**
-         * Key listener:
-         * Listens for the key events: typed, pressed or released and triggers gadgets in 
-         * this PingballClientGUI's board that are triggered by the key.
-         */
-        KeyListener listener = new KeyAdapter() {
-                public void keyPressed(KeyEvent e) {
-                    String key = KeyEvent.getKeyText(e.getKeyCode());
-                    String keyString = key.replaceAll(" ", "").toLowerCase();
-                    boardGui.getBoard().triggerDownKey(keyString);
-                    System.out.println("Key Pressed: " + keyString);
-                }
-
-                public void keyReleased(KeyEvent e) {
-                    String key = KeyEvent.getKeyText(e.getKeyCode());
-                    String keyString = key.replaceAll(" ", "").toLowerCase();
-                    boardGui.getBoard().triggerUpKey(keyString);           
-                    System.out.println("Key Released: " + keyString);
-                }
-        };
-
-        KeyListener magical = new MagicKeyListener(listener);
-        addKeyListener(magical);
+       
     }
 
     /**
