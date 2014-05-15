@@ -167,7 +167,7 @@ public class Communicator implements Runnable{
 	 * @return a String telling the Client what to do
 	 */
 	private String handleRequest(String input) {
-
+		System.out.println("input: " + input);
 		String[] tokens = input.split(" ");
 	
 		// receiving messages from the chat

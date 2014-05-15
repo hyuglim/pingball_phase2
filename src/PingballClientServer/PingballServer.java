@@ -110,10 +110,11 @@ public class PingballServer {
 		Socket socket = neighbors.get(name).getThree();
 		List<String> adj = neighbors.get(name).getOne();
 		List<Boolean> invis = neighbors.get(name).getTwo();
+		List<Boolean> chats = neighbors.get(name).getFour();
 		PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
 		for (int i = 0; i < adj.size(); i++) {
-			if (invis.get(i)) {
+			if (invis.get(i) && chats.get(i)==null) {
 				String neigh = adj.get(i);
 				//System.out.println("mark " + i + " " + neigh);
 
@@ -569,8 +570,10 @@ public class PingballServer {
 			updateChatWant(chatName, true, wallNum);
 			
 			boolean ended = checkBothFinished(chatName, chatNeighbor);
-			if (!ended) 
-				return null;			
+			if (!ended) {
+				System.out.println("chatName: " + chatName + " chatNeibor: " + chatNeighbor);
+				return null;
+			}
 			
 			boolean chatAgreed = checkChatAgreement(chatName, true, chatNeighbor);
 			System.out.println("chatAgreed: " + chatAgreed + " chatName: " + chatName + " chatNeigh: " + chatNeighbor);
