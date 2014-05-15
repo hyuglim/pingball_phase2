@@ -245,18 +245,6 @@ public class Spawner implements Gadget{
       */
      @Override
      public void draw(Graphics2D g2) {
-<<<<<<< HEAD
-         Color c = Color.BLUE;//pink
-         g2.setColor(c);
-         g2.fillOval(x*20+20, y*20+20, getWidth()*20, getHeight()*20);
-         
-=======
-
-         Color c = Color.BLUE;//pink
-         g2.setColor(c);
-         g2.fillOval(x*20+20, y*20+20, getWidth()*20, getHeight()*20);
->>>>>>> f9da0aecc43d9bf5c431f3026c5beed5988c6d72
-
          BufferedImage img = null;
          //swirl picture
          try {

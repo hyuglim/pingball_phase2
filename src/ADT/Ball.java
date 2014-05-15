@@ -97,7 +97,7 @@ public class Ball {
      * @param y
      *            the y coordinate of the new position
      */
-<<<<<<< HEAD
+
     public void updatePosition(double newX, double newY) {
         if (newX > 20-getRadius()){
             newX = 20-getRadius();
@@ -113,12 +113,6 @@ public class Ball {
         }
         this.circle = new Circle(newX, newY, this.radius);
         this.position = new Geometry.DoublePair(newX, newY);
-=======
-    public void updatePosition(double x, double y) {
-        this.circle = new Circle(x, y, this.radius);
-        this.position = new Geometry.DoublePair(x, y);
-        checkRep();
->>>>>>> 479104183df70a4bdbd7fe9016be21baa3021994
     }
 
     /**
