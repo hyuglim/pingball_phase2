@@ -1,17 +1,14 @@
-<<<<<<< HEAD
-board name=ourBoard1 gravity=0 friction1=0.0 friction2=0.0
-=======
-board name=ourBoard1 gravity=0.0 friction1=0.0 friction2=0.0
->>>>>>> 19b72b87e75b2b73783a1db95faf60cd84ec8e43
 
+board name=ourBoard1 gravity=0 friction1=0.0 friction2=0.0
 # define a ball
+
 #ball name=BallA x=3 y=2.5 xVelocity=10.0 yVelocity=12 radius=0.25
 ball name=BallB x=18 y=15 xVelocity=0.0 yVelocity=-10 radius = 1
 
 # define some bumpers
-#squareBumper name=Square1 x=12 y=11
-#squareBumper name=Square2 x=2 y=13
-#squareBumper name=Square3 x=4 y=7
+squareBumper name=Square1 x=12 y=11
+squareBumper name=Square2 x=2 y=13
+squareBumper name=Square3 x=4 y=7
 
 #circleBumper name=Circle x=4 y=3
 
@@ -27,17 +24,10 @@ ball name=BallB x=18 y=15 xVelocity=0.0 yVelocity=-10 radius = 1
 #absorber name=Abs x=10 y=8 width=10 height=2 
 
 # define events between gizmos
-<<<<<<< HEAD
 fire trigger=Square1 action=FlipL
 fire trigger=Square2 action=FlipL
 fire trigger=Square3 action=FlipL
 #fire trigger=Circle action=Abs
 #fire trigger=FlipL action=Abs 
 #fire trigger=Abs action=Abs
-=======
-#fire trigger=Square1 action=FlipL
-#fire trigger=Square2 action=FlipL
-#fire trigger=Square3 action=FlipL
-#fire trigger=Circle action=Abs
-#fire trigger=FlipL action=Abs 
->>>>>>> 19b72b87e75b2b73783a1db95faf60cd84ec8e43
+

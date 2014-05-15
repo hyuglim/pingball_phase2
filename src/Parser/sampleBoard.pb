@@ -3,29 +3,23 @@ board name=sampleBoard gravity=0.0 friction1 = 0.0 friction2 = 0.0
 # This board is meant for stand-alone play. It is a loose 
 # representation of the screenshot in the project handout.
 
-<<<<<<< HEAD
   # define a ball
 
   #ball name=Ball x=15 y=9 xVelocity=0 yVelocity=20 radius=0.25
-=======
   ball name=Ball x=15 y=9 xVelocity=20 yVelocity=0 radius=0.25
->>>>>>> 19b72b87e75b2b73783a1db95faf60cd84ec8e43
+
   #ball name = BallB x=3 y=2 xVelocity =50 yVelocity =50 radius = 0.5
 
   #ball name=Ball x=1 y=9 xVelocity=0 yVelocity=3 radius=0.25
   
   # define a series of circle bumpers
 
-<<<<<<< HEAD
  #ball name=Ball x=15 y=9 xVelocity=0 yVelocity=20 radius=0.25
   
   
  # define a series of circle bumpers
 
-=======
   ball name=BallA x=15 y=15 xVelocity=20 yVelocity=0 radius=0.25
- 
->>>>>>> 19b72b87e75b2b73783a1db95faf60cd84ec8e43
   #circleBumper name=Circle5 x=5 y=10 
   
   # define a series of square bumpers

@@ -131,7 +131,7 @@ public class PingballServer {
 	 * @param msg
 	 * @throws IOException
 	 */
-	/*
+	
 	private void notifyChat(String chatName, String msg) throws IOException{
 			System.out.println("notifyChat: " + msg);
 		
@@ -140,7 +140,7 @@ public class PingballServer {
 			out.println(msg);					
 		
 	}
-	*/
+	
 
 	/**
 	 * join boards horizontally. 
@@ -321,7 +321,7 @@ public class PingballServer {
 		}
 	}
 	
-<<<<<<< HEAD
+
     /**
 =======
 	/**
@@ -335,7 +335,7 @@ public class PingballServer {
 		int nameIndex = neighbors.get(neighbor).getOne().indexOf(name);
 		boolean neighborWantsChat = neighbors.get(neighbor).getFour().get(nameIndex) ;
 		return nameWantsChat && neighborWantsChat; 
-	} */
+	} 
 	
 	/**
 	 * 
@@ -344,7 +344,7 @@ public class PingballServer {
 	 * @return if both name and neighbor have expressed yes or no on 
 	 *         whether to join the chat
 	 */
-	/*
+	
 	public boolean checkBothFinished (String name, String neighbor) {
 		int nameIndex = neighbors.get(neighbor).getOne().indexOf(name);
 		int neighborIndex = neighbors.get(name).getOne().indexOf(neighbor);
@@ -355,11 +355,10 @@ public class PingballServer {
 		    && neighbors.get(name).getFour().get(neighborIndex) != null;		
 	}
 	
-<<<<<<< HEAD
 	 /*
 =======
 <<<<<<< HEAD
-	*/
+	
 	/**
 	 * update if the board wants to talk to neighbor of given index
 
@@ -373,25 +372,12 @@ public class PingballServer {
 	 * @param nameWantsChat
 	 * @param neighborIndex
 	 */
-<<<<<<< HEAD
 
-=======
-<<<<<<< HEAD
-	/*
-=======
->>>>>>> ca290c6edffea74d65e41bff41412a1c926651fc
->>>>>>> deea1fd35bd92ede2b770435d2c8f6584dc0a9c5
 	public void updateChatWant(String name, boolean nameWantsChat, int neighborIndex) {
 		neighbors.get(name).getFour().set(neighborIndex, nameWantsChat);
 	}
 
-<<<<<<< HEAD
-	
-=======
-<<<<<<< HEAD
-	*/
-=======
->>>>>>> ca290c6edffea74d65e41bff41412a1c926651fc
+
 	/**
 	 * Run the server, listening for client connections and handling them.
 	 * Never returns unless an exception is thrown.
@@ -399,14 +385,14 @@ public class PingballServer {
 	 * @throws IOException if the main server socket is broken
 	 *                     (IOExceptions from individual clients do *not* terminate serve())
 	 */
->>>>>>> deea1fd35bd92ede2b770435d2c8f6584dc0a9c5
+
 	public void serve() throws IOException {
 		new Thread() {
 			/**
 			 * listen for server join commands
 			 */
 			public void run() {
-<<<<<<< HEAD
+
 			    Scanner sc = new Scanner(System.in);
                 System.out.println("Enter a join command:");
                 while(sc.hasNextLine()) {
@@ -418,29 +404,7 @@ public class PingballServer {
                     } 
                 }
                 sc.close();
-				
-=======
 
-<<<<<<< HEAD
-			    
-=======
-	
->>>>>>> ca290c6edffea74d65e41bff41412a1c926651fc
-				Scanner sc = new Scanner(System.in);
-				System.out.println("Enter a join command:");
-				while(sc.hasNextLine()) {
-
-					String joinCommand = sc.nextLine();
-					try {
-						joinBoards(joinCommand);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}					
-
-				}
-				sc.close();
-
->>>>>>> deea1fd35bd92ede2b770435d2c8f6584dc0a9c5
 			}
 		}.start();
 
@@ -579,18 +543,9 @@ public class PingballServer {
 				System.out.println("index of neighbor: " + index);
 				nOfns.set(index, null);
 				bOfns.set(index, false);		
-<<<<<<< HEAD
-				cOfns.set(index, null);
-=======
 
-<<<<<<< HEAD
-
-=======
->>>>>>> ca290c6edffea74d65e41bff41412a1c926651fc
 				cOfns.set(index, null);
 
-
->>>>>>> deea1fd35bd92ede2b770435d2c8f6584dc0a9c5
 			}
 		}	
 		
@@ -790,10 +745,6 @@ public class PingballServer {
 		// sample input: hit NAMEofBoard wallNum  NAMEofBall x y xVel yVel
 		// wallNum is either 0,1,2,3 -> top, bottom, left, right
 		if (tokens[0].equals("hit")) {
-<<<<<<< HEAD
-=======
-
->>>>>>> ca290c6edffea74d65e41bff41412a1c926651fc
 		    System.out.println("INPUT AGAIN: "+input);
 
 		    System.out.println("Input message: " + input);
@@ -847,14 +798,8 @@ public class PingballServer {
 				    x-=19;
 				}
 				
-<<<<<<< HEAD
-
-				
-			
-=======
 				System.out.println(wallNum);
 
->>>>>>> ca290c6edffea74d65e41bff41412a1c926651fc
 				//String msgToSender = "delete " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel;
 				String msgToReceiver = "create " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel + " " + radius;
 				System.out.println(msgToReceiver);

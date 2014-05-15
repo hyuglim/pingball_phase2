@@ -289,23 +289,18 @@ public class Communicator implements Runnable{
 			float xVel = Float.parseFloat(tokens[4]);
 			float yVel = Float.parseFloat(tokens[5]);
 			float radius = Float.parseFloat(tokens[6]);
-			
-<<<<<<< HEAD
+
 			// ADD A NEW BALL AT X,Y LOC IN THE CLIENT 		
-=======
 		
 			System.out.println("ABABABBAABBBABBBBABABBABBABBABABABABAB");
-			// ADD A NEW BALL AT X,Y LOC IN THE CLIENT 			
->>>>>>> deea1fd35bd92ede2b770435d2c8f6584dc0a9c5
+
 			board.insertBall(nameOfBall, x, y, xVel, yVel, radius);
 
-<<<<<<< HEAD
+
 			//System.out.println(input);
 
-			
-=======
 			System.out.println(input);
->>>>>>> ca290c6edffea74d65e41bff41412a1c926651fc
+
 
 			return null;
 		}   

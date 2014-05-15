@@ -263,6 +263,7 @@ public class Board extends TimerTask {
                     // CASE 2: If the wall is connected to another board, remove the ball for current
                     //board and send encode the outgoing wall in a string (to be tackled by server)
                     else{
+                        System.out.println("Hit Meee!!!");
                         ballOut = true;
                         //XXXX is used for splitting purposes to indicate the beginning of information about a new ball
                         if (w.getLocation().equals("top")){
@@ -274,6 +275,7 @@ public class Board extends TimerTask {
                         } else{//left
                             this.wallHit.add("hit "+this.boardname+" 2 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+" " + each.getRadius());
                         }
+                        System.out.println(wallHit.get(0));
                         ballsToRemove.add(each);
                     }
 
