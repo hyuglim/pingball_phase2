@@ -349,12 +349,16 @@ public class PingballClientGUI extends JFrame implements ActionListener{
             if (e.getID() == KeyEvent.KEY_PRESSED) {
                 String key = KeyEvent.getKeyText(e.getKeyCode());
                 String keyString = key.replaceAll(" ", "").toLowerCase();
-                boardGui.getBoard().triggerDownKey(keyString);
+                if(boardGui!=null){
+                    boardGui.getBoard().triggerDownKey(keyString);
+                }
                 System.out.println("Key Pressed: " + keyString);
             } else if (e.getID() == KeyEvent.KEY_RELEASED) {
                 String key = KeyEvent.getKeyText(e.getKeyCode());
                 String keyString = key.replaceAll(" ", "").toLowerCase();
-                boardGui.getBoard().triggerUpKey(keyString);
+                if(boardGui!=null){
+                    boardGui.getBoard().triggerUpKey(keyString);
+                }
                 System.out.println("Key Released: " + keyString);
             } else if (e.getID() == KeyEvent.KEY_TYPED) {
                 System.out.println("Key Typed: " + KeyEvent.getKeyText(e.getKeyCode()));
