@@ -3,8 +3,8 @@ board name=sampleBoard2 gravity=20.0
 # representation of the screenshot in the project handout.
 
   # define a ball
-  ball name=Ball x=0.5 y=0.5 xVelocity=2.5 yVelocity=2.5
-  ball name=Ball2 x=6.0 y=5.0 xVelocity=3.5 yVelocity=-1.4
+  ball name=Ball x=0.5 y=0.5 xVelocity=2.5 yVelocity=2.5 radius =.25
+  ball name=Ball2 x=6.0 y=5.0 xVelocity=3.5 yVelocity=-1.4 radius =.25
   
   # define a series of circle bumpers
   circleBumper name=Circle5 x=5 y=4 

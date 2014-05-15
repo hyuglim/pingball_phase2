@@ -1,15 +1,13 @@
 package ADT;
 
-import java.awt.Color;
+import java.awt.Color; 
 import java.awt.Graphics2D;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-
 import ADT.Ball;
-import physics.Angle;
 import physics.Circle;
 import physics.Geometry;
 import physics.LineSegment;
@@ -40,11 +38,8 @@ public class LeftFlipper implements Gadget {
     private final double reflection = 0.95;
     private Circle end1;
     private Circle end2;
-
     private double angularVelocity = 0;
-
     private LineSegment line;
-
     private ArrayList<String> upTriggers = new ArrayList<String>();
     private ArrayList<String> downTriggers = new ArrayList<String>();
 
@@ -56,15 +51,11 @@ public class LeftFlipper implements Gadget {
     /**
      * Constructor for the flipper
      * 
-     * @param rightflipper
-     *            boolean true if this flipper is a right-flipper, false if this
-     *            flipper is a left-flipper.
-     * @param x
-     *            the x coordinate of this flipper in the board.
-     * @param y
-     *            the y coordinate of this flipper in the board
-     * @param name
-     *            the name of this flipper
+     * @param rightflipper boolean true if this flipper is a right-flipper, false if this flipper
+     *           is a left-flipper.
+     * @param x the x coordinate of this flipper in the board.
+     * @param y the y coordinate of this flipper in the board
+     * @param name the name of this flipper
      */
 
     public LeftFlipper(String name, int x, int y, int orientation) {
@@ -83,25 +74,19 @@ public class LeftFlipper implements Gadget {
         } else if (orientation == 90) {
             this.center = new Vect(x + 2, y);
             this.segment = new LineSegment(x, y, x + 2, y);
-
             line = new LineSegment(x, y, x + 2, y);
-
             this.end1 = new Circle(line.p1().x(), line.p1().y(), 0);
             this.end2 = new Circle(line.p2().x(), line.p2().y(), 0);
         } else if (orientation == 180) {
             this.center = new Vect(x + 2, y + 2);
             this.segment = new LineSegment(x + 2, y, x + 2, y + 2);
-
             line = new LineSegment(x + 2, y, x + 2, y + 2);
-
             this.end1 = new Circle(line.p1().x(), line.p1().y(), 0);
             this.end2 = new Circle(line.p2().x(), line.p2().y(), 0);
         } else {
             this.center = new Vect(x, y + 2);
             this.segment = new LineSegment(x, y + 2, x + 2, y + 2);
-
             line = new LineSegment(x, y + 2, x + 2, y + 2);
-
             this.end1 = new Circle(line.p1().x(), line.p1().y(), 0);
             this.end2 = new Circle(line.p2().x(), line.p2().y(), 0);
         }
@@ -130,7 +115,6 @@ public class LeftFlipper implements Gadget {
 
     /**
      * Returns the orientation of the gadget. Used for debugging antlr.
-     * 
      * @return the the orientation
      */
     public int getOrientation() {
@@ -195,7 +179,6 @@ public class LeftFlipper implements Gadget {
             } else if (this.orientation == 180) {
                 return "  --";
             }
-
             return "| | ";
         }
     }
@@ -213,17 +196,15 @@ public class LeftFlipper implements Gadget {
     public void reflect(Ball ball) {
 
         int velocityInRadian = 6;
-
-        double angularVelocity=0;
+        double angularVelocity = 0;
 
         // If its self-triggering rotate it
         if (this.triggers.contains(this)) {
             angularVelocity = Math.PI * velocityInRadian;
             if (this.rotated) {
-                angularVelocity = -angularVelocity;
+                angularVelocity = - angularVelocity;
             }
         }
-
         double minTime = this.getCollisionTime(ball);
 
         // Finds the part of this flipper that the ball hit and
@@ -240,8 +221,7 @@ public class LeftFlipper implements Gadget {
             }
         }
         
-        ball.updateBallVelocity(newVelocity.times(this.reflection));
-        
+        ball.updateBallVelocity(newVelocity.times(this.reflection));        
         // triggers all the gadgets that this leftflipper triggers
         for (Gadget gadget : this.triggers) {
             gadget.action();
@@ -258,42 +238,13 @@ public class LeftFlipper implements Gadget {
     /**
      * @see Gadget#getCollisionTime()
      */
-
     public double getCollisionTime(Ball ball) {
-        /*
-         * public static LineSegment rotateAround(LineSegment line, Vect cor,
-         * Angle a) { return geometry.rotateAround(line, cor, a); }
-         * 
-         * public static double timeUntilRotatingWallCollision(LineSegment line,
-         * Vect center, double angularVelocity, Circle ball, Vect velocity) {
-         * return geometry.timeUntilRotatingWallCollision(line, center,
-         * angularVelocity, ball, velocity); }
-         */
-        /*
-        double minTimeToCollision = Geometry.timeUntilRotatingWallCollision(
-                segment, center, 0, ball.getBallCircle(),
-                ball.getVelocity());
-        // double minTimeToCollision = Geometry.timeUntilWallCollision(line,
-        // ball.getBallCircle(), ball.getVelocity());
-        double timeToEnd1 = Geometry.timeUntilRotatingCircleCollision(end1,
-                end1.getCenter(), 0, ball.getBallCircle(),
-                ball.getVelocity());
+        double minTimeToCollision = Geometry.timeUntilWallCollision(segment, ball.getBallCircle(), ball.getVelocity());
+        double timeToEnd1 = Geometry.timeUntilCircleCollision(end1, ball.getBallCircle(), ball.getVelocity());
         minTimeToCollision = Math.min(minTimeToCollision, timeToEnd1);
-        double timeToEnd2 = Geometry.timeUntilRotatingCircleCollision(end2,
-                end2.getCenter(), 0, ball.getBallCircle(),
-                ball.getVelocity());
+        double timeToEnd2 = Geometry.timeUntilCircleCollision(end2, ball.getBallCircle(), ball.getVelocity());
         minTimeToCollision = Math.min(minTimeToCollision, timeToEnd2);
-        System.out.println(minTimeToCollision);
         return minTimeToCollision;
-        */
-        
-            double minTimeToCollision = Geometry.timeUntilWallCollision(segment, ball.getBallCircle(), ball.getVelocity());
-            double timeToEnd1 = Geometry.timeUntilCircleCollision(end1, ball.getBallCircle(), ball.getVelocity());
-            minTimeToCollision = Math.min(minTimeToCollision, timeToEnd1);
-            double timeToEnd2 = Geometry.timeUntilCircleCollision(end2, ball.getBallCircle(), ball.getVelocity());
-            minTimeToCollision = Math.min(minTimeToCollision, timeToEnd2);
-            return minTimeToCollision;
-        
     }
 
     /**
@@ -314,9 +265,7 @@ public class LeftFlipper implements Gadget {
 
     /**
      * Action: None
-     * 
-     * @param ball
-     *            to be released
+     * @param ball to be released
      */
     public void release(Ball ball) {
     }
@@ -360,7 +309,6 @@ public class LeftFlipper implements Gadget {
      */
     public void action() {
         makeNoise();
-
         if (this.rotated) {
             this.rotated = false;
             if (orientation == 0) {
