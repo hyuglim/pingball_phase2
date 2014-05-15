@@ -43,7 +43,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
-
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -54,7 +53,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.SwingUtilities;
-
 import ADT.Board;
 import Parser.*;
 import PingballClientServer.PingballClient;
@@ -311,10 +309,8 @@ public class PingballClientGUI extends JFrame implements ActionListener{
                         + "       then connect to the server\n"
                         + "To disconnect from Server: Choose the disconnectFromServer option from the Menu\n"
                         + "To exit: Choose the exit option from the Menu");
-                requestFocusInWindow();
-            
-            }
-            
+                requestFocusInWindow();            
+            }    
         });
         
         /**
@@ -372,8 +368,7 @@ public class PingballClientGUI extends JFrame implements ActionListener{
                     boardGui.start();
                 }
                 requestFocusInWindow();
-            }
-            
+            }           
         });  
 
         KeyListener listener = new KeyAdapter() {
@@ -424,8 +419,6 @@ public class PingballClientGUI extends JFrame implements ActionListener{
                 PingballClientGUI main = new PingballClientGUI();
                 main.setTitle("PingballGUI Client");
                 main.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                
-                
                 main.setVisible(true);
                 main.setSize(600, 600);
             }

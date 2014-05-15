@@ -1,5 +1,10 @@
 package PingballClientServer;
 
+/**
+ * Subclass Quadruple. Used to represent four elements in the client/server.
+ * 
+ */
+
 public class Quadruple<One,Two, Three, Four> {
 
 	private final One one;
@@ -7,6 +12,13 @@ public class Quadruple<One,Two, Three, Four> {
 	private final Three three;
 	private final Four four;
 
+	/**
+	 * Constructor for the creating a Quadruple.
+	 * @param one the first element 
+	 * @param two the second element
+	 * @param three the third element
+	 * @param four the fourth element
+	 */
 	public Quadruple(One one, Two two, Three three, Four four) {
 		this.one = one;
 		this.two = two;
@@ -14,11 +26,30 @@ public class Quadruple<One,Two, Three, Four> {
 		this.four = four;
 	}
 
+	/**
+	 * Returns the first element
+	 * @return the first element
+	 */
 	public One getOne() { return one; }
+	
+	/**
+	 * @return the second element
+	 */
 	public Two getTwo() { return two; }
+	
+	/**
+	 * @return the third element
+	 */
 	public Three getThree() {return three;}
+	
+	/**
+	 * @return the fourth element
+	 */
 	public Four getFour() {return four;}
 
+	 /**
+	  * @see java.lang.Object#hashCode()
+	  */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -30,6 +61,11 @@ public class Quadruple<One,Two, Three, Four> {
 		return result;
 	}
 
+	 /**
+     * @param obj other Object to compare this to.
+     * @return boolean whether this equals obj or not.
+     * necessary because hashmap uses equals() to compare keys in get() and put().
+     */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

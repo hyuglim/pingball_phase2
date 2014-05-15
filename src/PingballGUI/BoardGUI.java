@@ -3,7 +3,8 @@ package PingballGUI;
 /**
  * BoardGUI: JPanel inside the JFrame and displays the board game. 
  * Takes a board instance and a String representing the initial state of the board
- * and uses Swing timer to 
+ * and uses Swing timer to simulate the board game animation and updates the 
+ * image using double-buffering to avoid flickering of the moving objects in the baord.
  * 
  * Ratio: one board cell = 20 pixels!!!
  */
@@ -113,6 +114,7 @@ public class BoardGUI extends JPanel {
      * the GUI is updated in the separate thread in the separate Swing thread
      */
     Action paintTimer = new AbstractAction() {
+        private static final long serialVersionUID = 1L;
         public void actionPerformed(ActionEvent e) {
             Thread t = new Thread(new Runnable() {
                 @Override

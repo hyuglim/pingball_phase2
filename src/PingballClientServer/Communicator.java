@@ -150,17 +150,13 @@ public class Communicator implements Runnable{
 								e.printStackTrace();
 							}
                         }
-                        
-                        
-					}
-					
+					}			
 				}
 			}.start();
 			//while server inputstream isn't closed
 			for (String line = in.readLine(); line != null; line = in.readLine()) { 
 			    String output = handleRequest(line); 
 			    if (output != null) {
-
 			        // when client disconnects, clear all balls
 			        if (output.equals("kill")) {
 			            //System.out.println("I am killed");
@@ -172,19 +168,16 @@ public class Communicator implements Runnable{
 			        	synchronized(out) {
 			        		out.println(output);
 			        	}
-			            
 			        }			        
 			        if (output.contains("chatWant") || output.contains("chatNo")) {
 			        	synchronized(out) {
 			        		out.println(output);
-			        	}
-			        	
+			        	}	
 			        	//System.out.println(output);
 			        }
 			    }   		
 			}
-		}catch (Exception e) {
-			
+		}catch (Exception e) {	
 		}finally {
 			out.close();
 			in.close();
@@ -217,26 +210,20 @@ public class Communicator implements Runnable{
 			} catch (InterruptedException e) {
 				//System.out.println("inside chatReceive");
 				e.printStackTrace();
-			}
-			
+			}	
 			return null;
 		}
 		
 		//CONFIRMING IF BALL HIT AN INVISIBLE WALL
 		if(tokens[0].equals("delete")) {
-		    
-		 
 			// sample input: invisible NAMEofBALL x y xVel yVel
 			String nameOfBall = tokens[1];
-
 			// get rid of the ball with that name     
 			board.deleteBall(nameOfBall);
 			return null;
 		}
-		
 		//CONFIRMING IF BALL HIT a portal
         if(tokens[0].equals("port")) {
-
             // sample input: invisible NAMEofBALL x y xVel yVel
             String originalBoardName = tokens[1];
             String portalName = tokens[2];
@@ -252,7 +239,6 @@ public class Communicator implements Runnable{
                 board.insertBall(nameOfBall, portal.getX()-0.5, portal.getY()-0.5, xVel, yVel, radius);
                 return null;
             }
-
            //put the ball a little outside the portal
             if (x<19){
                 x = x+1;
@@ -265,18 +251,14 @@ public class Communicator implements Runnable{
             }
             String messageToSend = "create " + originalBoardName + " " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel + " " + radius;            
             return messageToSend;
-          
-        }
-        
+        }      
 		if(tokens[0].equals("delete")) {
             // sample input: invisible NAMEofBALL x y xVel yVel
             String nameOfBall = tokens[1];
-
             // get rid of the ball with that name     
             board.deleteBall(nameOfBall);
             return null;
         }
-
 		if(tokens[0].equals("create")) {
 		    //System.out.println(tokens);
 			// sample input: invisible NAMEofBALL x y xVel yVel
@@ -291,12 +273,10 @@ public class Communicator implements Runnable{
 			board.insertBall(nameOfBall, x, y, xVel, yVel, radius);
 			return null;
 		}   
-
 		if(tokens[0].equals("visible")) {
 			// DON'T DO ANYTHING. BUSINESS AS USUAL
 			return null;
 		}
-		
 		if (tokens[0].equals("chatReject")) {
 			//System.out.println("inside chatReject");
 			String chatNeighbor = tokens[1];
@@ -314,7 +294,6 @@ public class Communicator implements Runnable{
 			
 			return null;
 		}
-		
 		if (tokens[0].equals("chatCreated")) {
 			//System.out.println("inside chatCreated");
 			final int wallNum = Integer.parseInt(tokens[1]);
@@ -327,61 +306,55 @@ public class Communicator implements Runnable{
 					chatGUIs[wallNum] = cg;
 					chatNeighbors[wallNum] = chatNeighbor;
 					chatSends[wallNum] = new LinkedBlockingQueue<String>();
-					chatReceives[wallNum] = new LinkedBlockingQueue<String>();
-					
+					chatReceives[wallNum] = new LinkedBlockingQueue<String>();					
 					new Thread(cg).start(); 				
 					cg.showGUI();
 				}				
-			});
-			
+			});			
 			return null;
-		}
-		
-		if(tokens[0].equals("mark")) {
-		
+		}		
+		if(tokens[0].equals("mark")) {		
 			int wallNum = Integer.parseInt(tokens[1]);
-			String neighbor = tokens[2];
-			
-			
+			String neighbor = tokens[2];		
 			board.giveNeighborsName(wallNum, neighbor);
-			board.connectWall(wallNum, neighbor);
-			
+			board.connectWall(wallNum, neighbor);			
 			String answer = null;
 			boolean chatWant = askForChat(neighbor, wallNum);
 			if (chatWant)
 				answer = "chatWant " + wallNum + " " + this.board.boardname + " " + neighbor;
 			else
-				answer = "chatNo " + chatWant + " " + wallNum + " " + this.board.boardname + " " + neighbor;
-			
+				answer = "chatNo " + chatWant + " " + wallNum + " " + this.board.boardname + " " + neighbor;			
 			return answer;
 		}
-		
-		if(tokens[0].equals("unmark")) {
-			
+		if(tokens[0].equals("unmark")) {			
 			int wallNum = Integer.parseInt(tokens[1]);
 			String neighbor = tokens[2];
 			board.removeNeighborsName(wallNum, neighbor);
 			return null;
 		}
-
 		throw new UnsupportedOperationException();
 	}
 	
 	/**
 	 * Send the client a chat invitation.
-	 * @param chatNeighbor
-	 * @param wallNum
-	 * @return 
+	 * @param chatNeighbor the String representing the neighbor
+	 * @param wallNum the integer representing the wall
+	 * @return the yes no option pane answer
 	 */
+	
 	private boolean askForChat(String chatNeighbor, int wallNum) {
 		int chatRequested = JOptionPane.showConfirmDialog(new JFrame(), 
 				             "Do you want to talk to " + chatNeighbor + " ?" +
 				             		"\n If so, we'll let you know if both of you want to talk to each other", 
 				             		"Chat Invitation", JOptionPane.YES_NO_OPTION);
-
 		return chatRequested == JOptionPane.YES_NO_OPTION;
 	}
 	
+	/**
+	 * Receives a chat from the clients
+	 * @param wallNum the integer representing the wall number
+	 * @return the response message received from the chat.
+	 */
 	public String chatReceive(int wallNum) {
 		String response = null;
 		try {
@@ -392,6 +365,11 @@ public class Communicator implements Runnable{
 		return response;
 	}
 	
+	/**
+	 * Sends the messages from the clients
+	 * @param msg the message to send
+	 * @param wallNum the integer representing the wall.
+	 */
 	public void chatSend(String msg, int wallNum) {
 		try {
 			chatSends[wallNum].put(msg);
@@ -399,5 +377,4 @@ public class Communicator implements Runnable{
 			e.printStackTrace();
 		}
 	}
-	
 }

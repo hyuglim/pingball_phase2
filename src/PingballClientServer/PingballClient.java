@@ -4,17 +4,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Queue;
-import java.util.concurrent.ConcurrentHashMap;
-
-import ADT.Ball;
 import ADT.Board;
 import ADT.Wall;
 import Parser.BoardFileFactory;
@@ -28,33 +22,35 @@ import Parser.BoardFileFactory;
 
 
 public class PingballClient{
-
 	private boolean isSinglePlayerMode = true;
 	// key = ball, value = "invisible"|"visible". store whether the ball hit an invisible wall.
-	private ConcurrentHashMap<Ball, String> hitInvisibles = new ConcurrentHashMap<>();
 	private GamePlayer player;
 	private Communicator messenger;
-
 	private static Socket socket;
 	// -1: no wall hit, 0: top wall hit,
 	// 1: bottom wall hit, 2: right wall hit
-	private int whichWallHit = -1;
 	private Board myBoard;
 
 
 	/**
-	 * multiplayer constructor
-	 * @param socket
-	 * @param board
+	 * Constructor for a multiplayer PingballClient with only a board
+	 * when a user connects with the server without a board file.
+	 * @param socket the socket of the PingballClient to initialize.
 	 */
 	
 	public PingballClient(Socket socket){
-	    this.socket = socket;
+	    PingballClient.socket = socket;
 	}
 	
+	/**
+	 * Constructor for a PingballClient in a multiplayer game 
+	 * that takes in input: socket and board. 
+	 * @param socket the socket to initialize the PingballClient
+	 * @param board the board of the PingballClient
+	 */
 	public PingballClient(Socket socket, Board board) {
 	    this.myBoard = board;
-	    this.socket = socket;
+	    PingballClient.socket = socket;
 		//this.player = new GamePlayer(board);
 		this.messenger = new Communicator(socket, board);
 		
@@ -64,7 +60,7 @@ public class PingballClient{
 
 	/**
 	 * singleplayer constructor
-	 * @param board
+	 * @param board the board to initialize the singleplayer game.
 	 */
 	public PingballClient(Board board) {
 		this.player = new GamePlayer(board);		
@@ -72,15 +68,15 @@ public class PingballClient{
 	}	
 	   
 	/**
-	 * 
-	 * @return single player
+	 * Return a boolean indicating whether the game is in a single player mode. 
+	 * @return true if the game is in a single player mode, else false. 
 	 */
 	public boolean isSinglePlayerMode() {
 		return isSinglePlayerMode;
 	}
 
 	/**
-	 * 
+	 * Set the game to single player mode.
 	 * @param isSinglePlayerMode
 	 */
 	public void setSinglePlayerMode(boolean isSinglePlayerMode) {
@@ -143,13 +139,11 @@ public class PingballClient{
 		            boardText.append('\n'+line);
 		        }
 		        String boardTextString = boardText.toString().substring(1);
-		        board = BoardFileFactory.parse(boardTextString);
-				PingballClient player = new PingballClient(board);
-				
+		        board = BoardFileFactory.parse(boardTextString);		
+		        br.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			} 
-
 		} else { //multiplayer mode
 			try {
 				System.out.println("multiplayer");
@@ -161,14 +155,11 @@ public class PingballClient{
                 String boardTextString = boardText.toString().substring(1);
                 board = BoardFileFactory.parse(boardTextString);
 				socket = new Socket(host, port);
-				PingballClient player = new PingballClient(socket, board);
-				
-				
+				br.close();
 			} catch (Exception e) {
 				e.printStackTrace();			
 			}
-		}				
-		
+		}						
         while(true){
             try{
                 Thread.sleep(50);
@@ -178,10 +169,19 @@ public class PingballClient{
         }
 	}
 	
+	/**
+	 * Sets the player to a new player with given board
+	 * @param board the board to start game player.
+	 */
 	public void setBoard(Board board){
 	    this.player = new GamePlayer(board);
 	}
 	
+	/**
+	 * Closes the socket of this client and removes this board's 
+	 * all walls' connection.
+	 * @throws IOException if the socket cannot be closed
+	 */
 	public void close() throws IOException{
 	    socket.close();
 	    for(Wall wall: this.myBoard.getWalls()){
