@@ -21,6 +21,8 @@ package PingballGUI;
  */
 import java.awt.Color;  
 import java.awt.FlowLayout;
+import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -33,6 +35,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
+
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -43,6 +46,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.SwingUtilities;
+
 import ADT.Board;
 import Parser.*;
 import PingballClientServer.PingballClient;
@@ -324,8 +328,41 @@ public class PingballClientGUI extends JFrame implements ActionListener{
                 }
             }
         });
-       
+        
+        KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+        manager.addKeyEventDispatcher(new MyDispatcher());
+        
+
     }
+    
+
+    /**
+     * Class for key listener:
+     * Listens for the key events: typed, pressed or released and checks
+     * if the key triggers gadgets in the board and triggers those gadgets.
+     * @author zulsarbatmunkh
+     *
+     */
+    private class MyDispatcher implements KeyEventDispatcher{
+        @Override
+        public boolean dispatchKeyEvent(KeyEvent e) {
+            if (e.getID() == KeyEvent.KEY_PRESSED) {
+                String key = KeyEvent.getKeyText(e.getKeyCode());
+                String keyString = key.replaceAll(" ", "").toLowerCase();
+                boardGui.getBoard().triggerDownKey(keyString);
+                System.out.println("Key Pressed: " + keyString);
+            } else if (e.getID() == KeyEvent.KEY_RELEASED) {
+                String key = KeyEvent.getKeyText(e.getKeyCode());
+                String keyString = key.replaceAll(" ", "").toLowerCase();
+                boardGui.getBoard().triggerUpKey(keyString);
+                System.out.println("Key Released: " + keyString);
+            } else if (e.getID() == KeyEvent.KEY_TYPED) {
+                System.out.println("Key Typed: " + KeyEvent.getKeyText(e.getKeyCode()));
+            }
+            return false;
+        }
+   }
+
 
     /**
      * Lets the user to change the background color of the user interface.

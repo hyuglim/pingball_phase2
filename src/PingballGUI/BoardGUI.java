@@ -50,7 +50,7 @@ public class BoardGUI extends JPanel {
         setFocusable(true);
         requestFocusInWindow();
         repaint();
-<<<<<<< HEAD
+
 /*        Action chatTimer = new AbstractAction() {
 =======
         
@@ -72,21 +72,9 @@ public class BoardGUI extends JPanel {
 <<<<<<< HEAD
         this.repaint();*/
 
-        this.myTimer = new Timer(50, paintTimer);
-        this.myTimer.start();      
-        
-                                                            
-=======
-        this.repaint();
 
         this.myTimer = new Timer(50, paintTimer);
         this.myTimer.start();      
-
-
-
-             
-
->>>>>>> e89a7153e89ec835aba3b6071907cc64bc14175d
     }
     
     /**
