@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -17,6 +18,36 @@ import ADT.Board;
 import ADT.Gadget;
 import PingballGUI.ChatGUI;
 
+
+/**
+ * Overview and Concurrency Arguments for Chat Feature
+ * 
+ * Communicator is a thread owned by each client that communicates with the server.
+ * Communicator is responsible for receiving messages from the server and giving messages to the server,
+ * depending what happens inside the pingball game.
+ * The argument for the actual pingball game proper can be found at the top of PingballServer.java
+ * 
+ * 
+ * ###############################Chat Functionality ############################################# 
+ * If both boards agree to come into the chat, then the Communicator thread receives a message from 
+ * the server to create a ChatGUI. Each Communicator thread has four ChatGUIs at maximum for talking
+ * to four of its joined neighbors. When a ChatGUI is started, two queues are initiated for putting 
+ * chats to send to the neighbor and receiving chats from the neighbor. ChatGUI is initiated by SwingUtilities
+ * invokeLater method. ChatGUI has a separate thread running that checks if there is something to 
+ * take from the chatSends and Receives queues. 
+ * 
+ * 
+ * ########################Concurrency argument#####################
+ * Each Communicator thread can have at maximum eight queues for chat functionality. A send queue and a receive queue
+ * for each of the four neighbors. Those queues are the only shared data between the Communicator thread 
+ * and ChatGUI, and those queues are BlockingQueues, a threadsafe data type provided by Java. 
+ * Each of those queues store an immutable data String. Thus, the shared data is safe from multithreading.
+ *  
+ * 
+ * 
+ * @author jonathan
+ *
+ */
 public class Communicator implements Runnable{
 	private Socket clientSocket = null;
 	private Board board = null;
@@ -78,27 +109,34 @@ public class Communicator implements Runnable{
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						String hitwall = board.whichWallGotHit();
+						ArrayList<String> hitwall = board.whichWallGotHit();
 						
-						if(! hitwall.equals("")){//if ball hits a wall
+						if(hitwall.size()!=0){//if ball hits a wall
 							synchronized(out){
 								// sample output: hit NAMEofBoard wallNum  NAMEofBall x y xVel yVel
-								out.println(hitwall);
+								
+							    for(String hitMessage: hitwall){
+                                    System.out.println(hitwall.size());
+                                    System.out.println(hitMessage);
+                                    out.println(hitMessage);
+                                }
 								board.updateWallHit();
 							}	
 						}
 						
-						String portalHit = board.whichPortalGotHit();
-                        if(! portalHit.equals("")){//if ball hits a wall
+						ArrayList<String> portalHit = board.whichPortalGotHit();
+                        if(!portalHit.isEmpty()){//if ball hits a wall
                             synchronized(out){
                                 // sample output: hit NAMEofBoard wallNum  NAMEofBall x y xVel yVel
                                 //System.out.println(portalHit);
-                                
-                                out.println(portalHit);
+                                for(String hitMessage: portalHit){
+                                    System.out.println(portalHit.size());
+                                    System.out.println(hitMessage);
+                                    out.println(hitMessage);
+                                }
                                 board.updatePortalHit();
                             }   
-                        }
-                        
+                        }                       
                         // take chats off the queue and send to the server
                         for (int i = 0; i < chatSends.length; i++) {
                         	try {
@@ -123,7 +161,6 @@ public class Communicator implements Runnable{
 					
 				}
 			}.start();
-
 			//while server inputstream isn't closed
 			for (String line = in.readLine(); line != null; line = in.readLine()) { 
 			    String output = handleRequest(line); 
@@ -136,14 +173,12 @@ public class Communicator implements Runnable{
 			            board.clearAllBalls();
 			            return;
 			        }
-
 			        if (output.contains("create")){
 			        	synchronized(out) {
 			        		out.println(output);
 			        	}
 			            
-			        }
-			        
+			        }			        
 			        if (output.contains("chatWant") || output.contains("chatNo")) {
 			        	synchronized(out) {
 			        		out.println(output);
@@ -153,7 +188,7 @@ public class Communicator implements Runnable{
 			        }
 			    }   		
 			}
-		} catch (Exception e) {
+		}catch (Exception e) {
 			e.printStackTrace();
 		}finally {
 			out.close();
@@ -249,6 +284,9 @@ public class Communicator implements Runnable{
 			
 			// ADD A NEW BALL AT X,Y LOC IN THE CLIENT 			
 			board.insertBall(nameOfBall, x, y, xVel, yVel, radius);
+
+			System.out.println(input);
+
 			return null;
 		}   
 
@@ -297,12 +335,6 @@ public class Communicator implements Runnable{
 			System.out.println("wallnum Created: " + wallNum);
 			System.out.println("is chatReceieves[wallnum] null: " + chatReceives[wallNum] == null);
 			System.out.println("is chatSends[wallnum] null: " + chatSends[wallNum] == null);
-			
-//			SwingUtilities.invokeLater(new Runnable() {
-//				public void run() {
-//					cg.update
-//				}
-//			});
 			
 			
 			//System.out.println("endingnnnn");

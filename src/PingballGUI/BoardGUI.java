@@ -85,9 +85,13 @@ public class BoardGUI extends JPanel {
                 }
             }
         }
-        for (Ball ball : board.getBalls()) {
-            ball.draw(g2);
+        
+        synchronized(board.getBalls()){
+            for (Ball ball : board.getBalls()) {
+                ball.draw(g2);
+            }
         }
+        
         for (Wall wall : board.getWalls()) {
             wall.draw(g2);
         }

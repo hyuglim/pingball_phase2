@@ -58,7 +58,7 @@ public class PortalTest {
         b1.addBall(ball);
         b1.update();
         System.out.println(b1.getBalls().size());
-        assertTrue(b1.whichPortalGotHit().length()!=0);
+        assertTrue(b1.whichPortalGotHit().size()!=0);
         
     }
     /**

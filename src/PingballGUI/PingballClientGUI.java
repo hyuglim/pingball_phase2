@@ -256,6 +256,13 @@ public class PingballClientGUI extends JFrame implements ActionListener{
         restartButton.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent event){
                 boardGui.restart();
+                try {
+                    if(myClient!=null){
+                        myClient.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } 
                 requestFocusInWindow();
             }
         });

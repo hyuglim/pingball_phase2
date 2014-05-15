@@ -4,39 +4,43 @@ board name=sampleBoard gravity=0.0 friction1 = 0.0 friction2 = 0.0
 # representation of the screenshot in the project handout.
 
 <<<<<<< HEAD
-
- ball name=Ball x=15 y=9 xVelocity=0 yVelocity=20 radius=0.25
-=======
   # define a ball
 
-  ball name=Ball x=15 y=9 xVelocity=0 yVelocity=20 radius=0.25
+  #ball name=Ball x=15 y=9 xVelocity=0 yVelocity=20 radius=0.25
+=======
+  ball name=Ball x=15 y=9 xVelocity=20 yVelocity=0 radius=0.25
+>>>>>>> 19b72b87e75b2b73783a1db95faf60cd84ec8e43
   #ball name = BallB x=3 y=2 xVelocity =50 yVelocity =50 radius = 0.5
 
   #ball name=Ball x=1 y=9 xVelocity=0 yVelocity=3 radius=0.25
   
   # define a series of circle bumpers
 
- ball name=Ball x=15 y=9 xVelocity=0 yVelocity=20 radius=0.25
+<<<<<<< HEAD
+ #ball name=Ball x=15 y=9 xVelocity=0 yVelocity=20 radius=0.25
   
   
  # define a series of circle bumpers
->>>>>>> 365656bfbe1b5477e91ae55426cd0a48ade999d0
 
+=======
+  ball name=BallA x=15 y=15 xVelocity=20 yVelocity=0 radius=0.25
+ 
+>>>>>>> 19b72b87e75b2b73783a1db95faf60cd84ec8e43
   #circleBumper name=Circle5 x=5 y=10 
   
   # define a series of square bumpers
   squareBumper name=Square1 x=1 y=12
   
   # define some triangular bumpers
-  circleBumper name=Tri2 x=11 y=9
-  spawner name = spawn x=3 y=6
+  #circleBumper name=Tri2 x=11 y=9
+  #spawner name = spawn x=3 y=6
   
   # add some flippers
-  leftFlipper name=FlipL2 x=5 y=10 orientation=90
-  rightFlipper name=FlipR2 x=7 y=8 orientation=90
+  #leftFlipper name=FlipL2 x=5 y=10 orientation=90
+  #rightFlipper name=FlipR2 x=7 y=8 orientation=90
   
-  portal name=p x=11 y=15 otherPortal=k
-  portal name=k x= 15 y = 17 otherPortal=p
+ # portal name=p x=11 y=15 otherPortal=k
+ # portal name=k x= 15 y = 17 otherPortal=p
   #define an absorber to catch the ball at the bottom
   #absorber name=Abs x=0 y=19 width=20 height=1 
   
@@ -45,8 +49,8 @@ board name=sampleBoard gravity=0.0 friction1 = 0.0 friction2 = 0.0
   #portal name=Gamma x=9 y=16 otherBoard = ourBoard1 otherPortal=Heyhey
   # make the absorber self-triggering
   
-  fire trigger=Abs action=Abs
-  fire trigger=FlipL2 action=FlipL2
+ # fire trigger=Abs action=Abs
+ # fire trigger=FlipL2 action=FlipL2
   
-  keydown key=shift action=FlipL2
-  keyup key=ctrl action=FlipR2
+ # keydown key=shift action=FlipL2
+ # keyup key=ctrl action=FlipR2

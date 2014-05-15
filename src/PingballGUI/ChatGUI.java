@@ -14,6 +14,8 @@ import PingballClientServer.Communicator;
 
 
 /**
+ * A window that pops up when two boards agree to a chat
+ * Concurrency argument for this GUI is made on top of Communicator class
  * 
  * @author jonathan
  *
@@ -41,9 +43,16 @@ public class ChatGUI extends JFrame implements Runnable{
 	private final String chatNeighbor;
 
 	
+	/**
+	 * GUI window has an introductory statement of who you are talking to,
+	 * a chat box to type into, and a conversation table
+	 * @param wallNum
+	 * @param c
+	 * @param me
+	 * @param chatNeighbor
+	 */
 	public ChatGUI(int wallNum, Communicator c, String me, String chatNeighbor) {
-		// components must be named with "setName" as specified in the problem set
-		// remember to use these objects in your GUI!
+
 		this.me = me;
 		this.chatNeighbor = chatNeighbor;
 
@@ -55,7 +64,7 @@ public class ChatGUI extends JFrame implements Runnable{
 
 		chatSend = new JTextField();
 		chatSend.setName("guess");
-		TypeGuessListener t = new TypeGuessListener();
+		TypeChatListener t = new TypeChatListener();
 		chatSend.addActionListener(t);		
 
 		final String[] colNames = {"Your Neighbor", "You"}; 
@@ -114,10 +123,10 @@ public class ChatGUI extends JFrame implements Runnable{
 
 
 	/**
-	 * Listens for user input for guesses
+	 * Listens for user input for chat box
 	 *
 	 */
-	private class TypeGuessListener implements ActionListener {
+	private class TypeChatListener implements ActionListener {
 
 		/**
 		 * Listen for user input and put the input into the request 
@@ -144,6 +153,9 @@ public class ChatGUI extends JFrame implements Runnable{
 
 	}
 
+	/**
+	 * take chat responses off the queue and store on the table
+	 */
 	@Override
 	public void run() {
 		while (true) {
@@ -156,32 +168,6 @@ public class ChatGUI extends JFrame implements Runnable{
 		
 	}
 	
-	
-	
-
-//	private class PutInAnswer extends SwingWorker<String, Object> {
-//
-//		/**
-//		 * constantly check for responses coming from the server
-//		 * process them appropriately and store them into the JTable
-//		 */
-//		@Override
-//		public String doInBackground() {
-//			//String chatReceive = c.take();
-////			String msg = 
-////			backgroundC.chatReceive(msg, wallNum)
-//		}
-//
-//		@Override
-//		protected void done() {
-//			try {
-//
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
-//		}
-//	}	
-
 	
 
 }
