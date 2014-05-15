@@ -1,7 +1,7 @@
 package PingballGUI;
 
 /**
- * BoardGUI: JPanel inside the JFrame and displays board game. 
+ * BoardGUI: JPanel inside the JFrame and displays the board game. 
  * Takes a board instance and a String representing the initial state of the board
  * and uses Swing timer to 
  * 
@@ -13,12 +13,10 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JFrame;
@@ -35,7 +33,6 @@ public class BoardGUI extends JPanel {
     private static final long serialVersionUID = 1L;
     private final Timer myTimer;
     // private final Timer myChatTimer;
-
     private Board board;
     private String boardText;
     private final Color backgroundColor = Color.BLACK;
@@ -86,9 +83,13 @@ public class BoardGUI extends JPanel {
                 }
             }
         }
-        for (Ball ball : board.getBalls()) {
-            ball.draw(g2);
+        
+        synchronized(board.getBalls()){
+            for (Ball ball : board.getBalls()) {
+                ball.draw(g2);
+            }
         }
+        
         for (Wall wall : board.getWalls()) {
             wall.draw(g2);
         }
@@ -112,23 +113,19 @@ public class BoardGUI extends JPanel {
     Action paintTimer = new AbstractAction() {
         public void actionPerformed(ActionEvent e) {
             Thread t = new Thread(new Runnable() {
-
                 @Override
                 public void run() {
                     board.update();
                     SwingUtilities.invokeLater(new Runnable() {
-
                         @Override
                         public void run() {
                             repaint();
-
                         }
                     });
 
                 }
             });
             t.start();
-
         }
     };
 
@@ -196,8 +193,7 @@ public class BoardGUI extends JPanel {
     /**
      * Updates the board of this boradGUI by the given newBoard
      * 
-     * @param newBoard
-     *            the new board to update this boardGUI's board
+     * @param newBoard the new board to update this boardGUI's board
      */
     public void updateBoard(Board newBoard) {
         this.board = newBoard;
@@ -216,7 +212,7 @@ public class BoardGUI extends JPanel {
     public void updateBoardString(String newBoardText) {
         this.boardText = newBoardText;
     }
-
+/*
     public static void main(String[] args) {
         
         SwingUtilities.invokeLater(new Runnable() {
@@ -247,6 +243,5 @@ public class BoardGUI extends JPanel {
 
             }
         });
-    }
-
+    }*/
 }

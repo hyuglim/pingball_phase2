@@ -55,10 +55,10 @@ public class PingballClient{
 	public PingballClient(Socket socket, Board board) {
 	    this.myBoard = board;
 	    this.socket = socket;
-		this.player = new GamePlayer(board);
+		//this.player = new GamePlayer(board);
 		this.messenger = new Communicator(socket, board);
 		
-		//new Thread(player).start();
+		new Thread(player).start();
 		new Thread(messenger).start();
 	}
 
@@ -102,15 +102,12 @@ public class PingballClient{
 			//command line parsing
 			while ( ! arguments.isEmpty()) {
 				String flag = arguments.remove();
-				System.out.println("flag: "+ flag);
 				try {
 					if (flag.equals("--host")) {
 						host = arguments.remove();
-						System.out.println("host: " + host);
 					}
 					if (flag.equals("--port")) {
 						port = Integer.parseInt(arguments.remove());
-						System.out.println("port: " + flag);
 					}
 					if (arguments.size()==0) { //the last argument must be file
 						//String filePath = arguments.remove();
@@ -133,10 +130,6 @@ public class PingballClient{
 			System.err.println("usage: PingballClient [--host HOST] [--port PORT] FILE");
 			return;
 		}
-
-		System.out.println("port: " + port);
-		System.out.println("host: " + host);
-		System.out.println("file: " + file);
 
 		//starting threads and shit
 		Board board =null;

@@ -33,8 +33,8 @@ public class Board extends TimerTask {
     private List<Wall> walls;
     private List<Gadget> gadgets;
     private final ArrayList<Gadget> myFlippers = new ArrayList<Gadget>();
-    private String wallHit;
-    private String portalHit;
+    private ArrayList<String> wallHit = new ArrayList<String>();
+    private ArrayList<String> portalHit = new ArrayList<String>();
     private String[] neighbours = new String[4];
     private boolean die = false;
     /**
@@ -58,8 +58,6 @@ public class Board extends TimerTask {
         // wall has a field visible (if visible, it is a solid wall)
         this.walls = Collections.synchronizedList(Arrays.asList(new Wall("top",true, null, boardname), new Wall("bottom",true, null, boardname), new Wall("left",true, null, boardname),new Wall("right",true, null, boardname)));
         this.boardname = name;
-        this.wallHit = "";
-        this.portalHit = "";
 
         /**
          * Makes an empty board with named walls
@@ -238,9 +236,9 @@ public class Board extends TimerTask {
                             if(otherPortalExists == false){
                                 updateEmpty(each, 0.05);
                             }
+                            
                         }else{
-
-                            this.portalHit = "port "+this.boardname+" " +g.getOtherBoard()+" "+g.getOtherPortal()+" "+each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+ " " + each.getRadius();
+                            this.portalHit.add("port "+this.boardname+" " +g.getOtherBoard()+" "+g.getOtherPortal()+" "+each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+ " " + each.getRadius());
                             ballOut = true;
                             ballsToRemove.add(each);                 
                         }                 
@@ -264,13 +262,13 @@ public class Board extends TimerTask {
                         ballOut = true;
                         //XXXX is used for splitting purposes to indicate the beginning of information about a new ball
                         if (w.getLocation().equals("top")){
-                            this.wallHit = "hit "+this.boardname+" 0 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+" " + each.getRadius();
+                            this.wallHit.add("hit "+this.boardname+" 0 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+" " + each.getRadius());
                         } else if (w.getLocation().equals("bottom")){
-                            this.wallHit = "hit "+this.boardname+" 1 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+" " + each.getRadius();
+                            this.wallHit.add("hit "+this.boardname+" 1 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+" " + each.getRadius());
                         } else if (w.getLocation().equals("right")){
-                            this.wallHit = "hit "+this.boardname+" 3 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+" " + each.getRadius();
+                            this.wallHit.add("hit "+this.boardname+" 3 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+" " + each.getRadius());
                         } else{//left
-                            this.wallHit = "hit "+this.boardname+" 2 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+" " + each.getRadius();
+                            this.wallHit.add("hit "+this.boardname+" 2 " +each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+" " + each.getRadius());
                         }
                         ballsToRemove.add(each);
                     }
@@ -279,10 +277,12 @@ public class Board extends TimerTask {
             }
             UpdateBoardRep();
             //Removing the balls that are leaving the board from the board's list of balls
-            if (ballOut){
-                for (Ball b:ballsToRemove){
-                    removeBall(b);
-                }
+           
+        }
+        
+        if (ballOut){
+            for (Ball b:ballsToRemove){
+                removeBall(b);
             }
         }
     }
@@ -635,7 +635,7 @@ public class Board extends TimerTask {
      * @return String representation of the message to be sent to the Server when 
      * a ball hits a wall
      */
-    public String whichWallGotHit(){
+    public ArrayList<String> whichWallGotHit(){
         return this.wallHit;
 
     }
@@ -645,7 +645,7 @@ public class Board extends TimerTask {
      * @return String representation of the message to be sent to the Server when 
      * a ball hits a portal
      */
-    public String whichPortalGotHit(){
+    public ArrayList<String> whichPortalGotHit(){
         return this.portalHit;
     }
 
@@ -748,7 +748,7 @@ public class Board extends TimerTask {
      * to show that none of the balls are hitting a wall.
      */
     public void updateWallHit(){
-        this.wallHit = "";
+        this.wallHit = new ArrayList<String>();
     }
 
     /**
@@ -816,7 +816,7 @@ public class Board extends TimerTask {
      * to show that none of the balls are hitting a portal.
      */
     public void updatePortalHit(){
-        this.portalHit = "";
+        this.portalHit = new ArrayList<String>();
     }
 
     /**

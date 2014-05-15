@@ -1,6 +1,6 @@
-package PingballGUI;
+/*package PingballGUI;
 
-import static javax.swing.GroupLayout.Alignment.BASELINE; 
+import static javax.swing.GroupLayout.Alignment.BASELINE;  
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
@@ -12,6 +12,12 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import PingballClientServer.Communicator;
 
+*//**
+ * Jotto GUI has a SwingWorker running in the background thread
+ * each listener gets a separate jottomodel, so they're modifying their own data.
+ * JTable is modified by a event dispatching thread, so the data is safe.
+ * 
+ *//*
 
 public class ChatGUI extends JFrame implements Runnable{
 
@@ -35,14 +41,14 @@ public class ChatGUI extends JFrame implements Runnable{
 	private final String me;
 	private final String chatNeighbor;
 
-	/**
+	*//**
 	 * No input given
 	 * Create all the GUI components here
 	 * newPuzzle button, textfield for the user to enter new number, 
 	 * textfield for user input, and table showing how the user is doing in the game
 	 *  
 	 * instantiate a thread for the model to keep running in the background
-	 */
+	 *//*
 	public ChatGUI(int wallNum, Communicator c, String me, String chatNeighbor) {
 		// components must be named with "setName" as specified in the problem set
 		// remember to use these objects in your GUI!
@@ -98,9 +104,9 @@ public class ChatGUI extends JFrame implements Runnable{
 
 	}
 
-	/**
+	*//**
 	 * pack and show GUI on the screen
-	 */
+	 *//*
 	public void showGUI() {
 
 
@@ -115,16 +121,16 @@ public class ChatGUI extends JFrame implements Runnable{
 
 
 
-	/**
+	*//**
 	 * Listens for user input for guesses
 	 *
-	 */
+	 *//*
 	private class TypeGuessListener implements ActionListener {
 
-		/**
+		*//**
 		 * Listen for user input and put the input into the request 
 		 * queue to be sent to the server
-		 */
+		 *//*
 		@Override
 		public void actionPerformed(ActionEvent e) {
 
@@ -185,9 +191,3 @@ public class ChatGUI extends JFrame implements Runnable{
 //	}	
 
 	
-
-}
-
-
-
-
