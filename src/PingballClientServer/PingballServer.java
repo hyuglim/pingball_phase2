@@ -116,7 +116,7 @@ public class PingballServer {
 		for (int i = 0; i < adj.size(); i++) {
 			if (invis.get(i) && chats.get(i)==null) {
 				String neigh = adj.get(i);
-				//System.out.println("mark " + i + " " + neigh);
+				System.out.println("mark " + i + " " + neigh);
 
 				out.println("mark " + i + " " + neigh);
 
@@ -124,6 +124,13 @@ public class PingballServer {
 		}		
 	}
 	
+	/**
+	 * get the socket corresponding to chatName and send the message 
+	 * to that board
+	 * @param chatName
+	 * @param msg
+	 * @throws IOException
+	 */
 	private void notifyChat(String chatName, String msg) throws IOException{
 			System.out.println("notifyChat: " + msg);
 		
@@ -332,6 +339,13 @@ public class PingballServer {
 		return nameWantsChat && neighborWantsChat;
 	}
 	
+	/**
+	 * 
+	 * @param name
+	 * @param neighbor
+	 * @return if both name and neighbor have expressed yes or no on 
+	 *         whether to join the chat
+	 */
 	public boolean checkBothFinished (String name, String neighbor) {
 		int nameIndex = neighbors.get(neighbor).getOne().indexOf(name);
 		int neighborIndex = neighbors.get(name).getOne().indexOf(neighbor);
@@ -344,6 +358,9 @@ public class PingballServer {
 	
 	/**
 	 * update if the board wants to talk to neighbor of given index
+	 * @param name
+	 * @param nameWantsChat
+	 * @param neighborIndex
 	 */
 	public void updateChatWant(String name, boolean nameWantsChat, int neighborIndex) {
 		neighbors.get(name).getFour().set(neighborIndex, nameWantsChat);
@@ -358,20 +375,24 @@ public class PingballServer {
 	 */
 	public void serve() throws IOException {
 		new Thread() {
+			/**
+			 * listen for server join commands
+			 */
 			public void run() {
-				try {
-					Scanner sc = new Scanner(System.in);
-					System.out.println("Enter a join command:");
-					while(sc.hasNextLine()) {
+				
+				Scanner sc = new Scanner(System.in);
+				System.out.println("Enter a join command:");
+				while(sc.hasNextLine()) {
 
-						String joinCommand = sc.nextLine();
+					String joinCommand = sc.nextLine();
+					try {
 						joinBoards(joinCommand);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}					
 
-					}
-					sc.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				} 
+				}
+				sc.close();
 			}
 		}.start();
 
@@ -381,6 +402,9 @@ public class PingballServer {
 				// block until a client connects
 				socket = serverSocket.accept();
 				new Thread(){
+					/**
+					 * talk to the client thread
+					 */
 					public void run(){
 						try {
 							handleConnection(socket);
@@ -466,6 +490,7 @@ public class PingballServer {
 
 	/**
 	 * When a client disconnects, find all boards joined to it, and revert to solid walls
+	 * also clear all the neighbors who are in chat
 	 * @param name
 	 */
 	private void revertToSolidWalls(String name) {
@@ -486,6 +511,8 @@ public class PingballServer {
 			if (neighbor != null) {
 				List<String> nOfns = neighbors.get(neighbor).getOne();
 				List<Boolean> bOfns = neighbors.get(neighbor).getTwo();
+				List<Boolean> cOfns = neighbors.get(neighbor).getFour();
+				
 				int index = nOfns.indexOf(name);
 				System.out.println("neighbor's name: " + neighbor);
 				Socket socket = neighbors.get(neighbor).getThree();
@@ -503,12 +530,11 @@ public class PingballServer {
 				System.out.println("index of neighbor: " + index);
 				nOfns.set(index, null);
 				bOfns.set(index, false);		
+				cOfns.set(index, null);
 
 
 			}
 		}	
-
-
 
 		// reset the board 
 		adjacents = Arrays.asList(null, null, null, null);
@@ -518,19 +544,17 @@ public class PingballServer {
 		= new Quadruple<List<String>, List<Boolean>,Socket, List<Boolean>>(adjacents, invisibles, null, chatNeighbors);
 		neighbors.put(name, quad);
 
-
-
-
 		printNeighbors();
 		System.out.println("**********");
 		System.out.println();
 	}
+	
 
 	/**
 	 * do something with the client messages
 	 * such as choosing the neighbor clients to pass the ball to.
 	 * @param input
-	 * @return
+	 * @return an output to send to the server
 	 * @throws IOException 
 	 */
 	private String handleRequest(String input) throws IOException {
