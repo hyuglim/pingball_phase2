@@ -213,7 +213,7 @@ public class Board extends TimerTask {
                     g = getMinTimeGadget(each);
                     timeMinGadget = timeMinGadget(each, g);
 
-                }           
+                }                     
                 Wall w = getMinWall(each);
                 double timeMinWall = getMinTimeWall(each, w);
                 if(timeMinGadget >0.05 && timeMinWall > 0.05){
@@ -235,8 +235,7 @@ public class Board extends TimerTask {
                             }
                             if(otherPortalExists == false){
                                 updateEmpty(each, 0.05);
-                            }
-                            
+                            }                           
                         }else{
                             this.portalHit.add("port "+this.boardname+" " +g.getOtherBoard()+" "+g.getOtherPortal()+" "+each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+ " " + each.getRadius());
                             ballOut = true;
@@ -511,7 +510,13 @@ public class Board extends TimerTask {
 
     public void connectWall(int walllocation, String boardname){
         //truncate long names
-
+        
+        for(Wall wall: this.walls){
+            System.out.println(wall.getVisibility());
+            System.out.println(wall.getConnectedTo());
+        }
+        
+        System.out.println("Yoohooo");
         if (walllocation == 0){
             walls.get(0).addConnection(boardname);
         }
@@ -522,6 +527,7 @@ public class Board extends TimerTask {
             walls.get(3).addConnection(boardname);
         }
         else{
+            System.out.println("hello");
             walls.get(2).addConnection(boardname);
         }
     }
@@ -710,6 +716,7 @@ public class Board extends TimerTask {
      */
     public void insertBall(String nameOfBall, double x, double y, double xVel, double yVel, double radius){
         Ball ball = new Ball(nameOfBall, x, y, xVel, yVel, radius);
+        ball.updatePosition(x, y);
         this.addBall(ball);
 
     }

@@ -347,34 +347,23 @@ public class PingballServer {
 		    && neighbors.get(name).getFour().get(neighborIndex) != null;		
 	}
 	
-	*//**
-	 * update if the board wants to talk to neighbor of given index
-<<<<<<< HEAD
-	 *//*
-=======
+	 /*
 	 * @param name
 	 * @param nameWantsChat
 	 * @param neighborIndex
 	 */
->>>>>>> 16f464810430d00cf04cd8fec61c72730ec79cf5
+
 	public void updateChatWant(String name, boolean nameWantsChat, int neighborIndex) {
 		neighbors.get(name).getFour().set(neighborIndex, nameWantsChat);
 	}
 
-	*//**
-	 * Run the server, listening for client connections and handling them.
-	 * Never returns unless an exception is thrown.
-	 * 
-	 * @throws IOException if the main server socket is broken
-	 *                     (IOExceptions from individual clients do *not* terminate serve())
-	 */
+	
 	public void serve() throws IOException {
 		new Thread() {
 			/**
 			 * listen for server join commands
 			 */
 			public void run() {
-<<<<<<< HEAD
 			    Scanner sc = new Scanner(System.in);
                 System.out.println("Enter a join command:");
                 while(sc.hasNextLine()) {
@@ -386,22 +375,7 @@ public class PingballServer {
                     } 
                 }
                 sc.close();
-=======
 				
-				Scanner sc = new Scanner(System.in);
-				System.out.println("Enter a join command:");
-				while(sc.hasNextLine()) {
-
-					String joinCommand = sc.nextLine();
-					try {
-						joinBoards(joinCommand);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}					
-
-				}
-				sc.close();
->>>>>>> 16f464810430d00cf04cd8fec61c72730ec79cf5
 			}
 		}.start();
 
@@ -453,6 +427,8 @@ public class PingballServer {
 					if (tokens[0].equals("name")) {
 						name = tokens[1];
 						System.out.println(name);
+						System.out.println("bla blaa bla");
+						printNeighbors();
 						if (!neighbors.contains(name)) {
 							//top, bottom, left, right
 							List<String> adjacents = Arrays.asList(null, null, null, null);
@@ -473,14 +449,15 @@ public class PingballServer {
 				}
 				  
 			}//end for
-			System.out.println("got out of for loop");
-			out.println("kill");
-
-			//when a client disconnects, revert to solid walls
-			revertToSolidWalls(name);
-			System.out.println("revert walls: inside try " + name);
 			
-			neighbors.remove(name);
+			System.out.println("got out of for loop");
+			
+
+			//when a client disconnects, revert to solid wall
+			System.out.println("revert walls: inside try " + name);		
+			out.println("kill");
+			revertToSolidWalls(name);
+			
 		} catch(Exception e) {
 			//when the server thread specific to a client disconnects, revert the neighboring boards to solid walls
 		    
@@ -509,9 +486,6 @@ public class PingballServer {
 		printNeighbors();
 
 		List<String> adjacents = neighbors.get(name).getOne();		
-		List<Boolean> invisibles = neighbors.get(name).getTwo();
-		List<Boolean> chatNeighbors = neighbors.get(name).getFour();
-
 		System.out.println("who called this method: " + name);
 
 		//go through the neighbors and reset
@@ -540,24 +514,13 @@ public class PingballServer {
 				System.out.println("index of neighbor: " + index);
 				nOfns.set(index, null);
 				bOfns.set(index, false);		
-<<<<<<< HEAD
-=======
 				cOfns.set(index, null);
-
-
->>>>>>> 16f464810430d00cf04cd8fec61c72730ec79cf5
 			}
 		}	
-
-		// reset the board 
-		adjacents = Arrays.asList(null, null, null, null);
-		invisibles = Arrays.asList(false, false, false, false);
-		chatNeighbors = Arrays.asList(null, null, null, null);
-		Quadruple<List<String>, List<Boolean>, Socket, List<Boolean>> quad 
-		= new Quadruple<List<String>, List<Boolean>,Socket, List<Boolean>>(adjacents, invisibles, null, chatNeighbors);
-		neighbors.put(name, quad);
-
+		
+		neighbors.remove(name);
 		printNeighbors();
+		System.out.println(neighbors);
 		System.out.println("**********");
 		System.out.println();
 	}
@@ -872,5 +835,6 @@ public class PingballServer {
 		s.serve();
 	}
 	//in serve, listen for a connection 
+
 
 }

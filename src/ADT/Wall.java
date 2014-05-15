@@ -146,7 +146,7 @@ public class Wall {
      * disconnects the connection
      */
     public void removeConnection(){
-        this.connectedTo = ".";
+        this.connectedTo = null;
         this.visible = true;
     }
     
@@ -156,7 +156,10 @@ public class Wall {
      * @param name the name of the board to connect to
      */
     public void addConnection(String name){
+        System.out.println(name);
+        System.out.println("before "+this.connectedTo);
         this.connectedTo = name;
+        System.out.println("after "+this.connectedTo);
         this.visible = false;
     }
     

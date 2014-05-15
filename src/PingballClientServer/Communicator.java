@@ -85,8 +85,6 @@ public class Communicator implements Runnable{
 								// sample output: hit NAMEofBoard wallNum  NAMEofBall x y xVel yVel
 								
 							    for(String hitMessage: hitwall){
-                                    System.out.println(hitwall.size());
-                                    System.out.println(hitMessage);
                                     out.println(hitMessage);
                                 }
 								board.updateWallHit();
@@ -251,7 +249,7 @@ public class Communicator implements Runnable{
 			float yVel = Float.parseFloat(tokens[5]);
 			float radius = Float.parseFloat(tokens[6]);
 			
-			// ADD A NEW BALL AT X,Y LOC IN THE CLIENT 			
+			// ADD A NEW BALL AT X,Y LOC IN THE CLIENT 		
 			board.insertBall(nameOfBall, x, y, xVel, yVel, radius);
 			
 			return null;
@@ -318,7 +316,11 @@ public class Communicator implements Runnable{
 		
 			int wallNum = Integer.parseInt(tokens[1]);
 			String neighbor = tokens[2];
+			
+			
 			board.giveNeighborsName(wallNum, neighbor);
+			System.out.println(wallNum);
+			System.out.println(neighbor);
 			board.connectWall(wallNum, neighbor);
 			
 			String answer = null;
