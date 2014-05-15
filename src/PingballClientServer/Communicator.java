@@ -94,7 +94,7 @@ public class Communicator implements Runnable{
 						}
 						
 						ArrayList<String> portalHit = board.whichPortalGotHit();
-                        if(!portalHit.isEmpty()){//if ball hits a wall
+                        if(!portalHit.isEmpty()){//if ball hits a portal
                             synchronized(out){
                                 // sample output: hit NAMEofBoard wallNum  NAMEofBall x y xVel yVel
                                 //System.out.println(portalHit);
@@ -226,7 +226,17 @@ public class Communicator implements Runnable{
                 board.insertBall(nameOfBall, portal.getX()-0.5, portal.getY()-0.5, xVel, yVel, radius);
                 return null;
             }
-                       
+
+           //put the ball a little outside the portal
+            if (x<19){
+                x = x+1;
+            }
+            else if(y<19){
+                y = y+1;
+            }
+            else{
+                x = x-1;
+            }
             String messageToSend = "create " + originalBoardName + " " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel + " " + radius;            
             return messageToSend;
           
@@ -251,13 +261,15 @@ public class Communicator implements Runnable{
 			float yVel = Float.parseFloat(tokens[5]);
 			float radius = Float.parseFloat(tokens[6]);
 			
+		
+			System.out.println("ABABABBAABBBABBBBABABBABBABBABABABABAB");
 			// ADD A NEW BALL AT X,Y LOC IN THE CLIENT 			
 			board.insertBall(nameOfBall, x, y, xVel, yVel, radius);
-<<<<<<< HEAD
-			System.out.println(input);
-=======
+
+			//System.out.println(input);
+
 			
->>>>>>> 19b72b87e75b2b73783a1db95faf60cd84ec8e43
+
 			return null;
 		}   
 

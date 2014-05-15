@@ -238,9 +238,14 @@ public class Board extends TimerTask {
                             }
                             
                         }else{
+                            if(hasThisNeighbor(g.getOtherBoard())){
                             this.portalHit.add("port "+this.boardname+" " +g.getOtherBoard()+" "+g.getOtherPortal()+" "+each.name+" "+each.getOriginX()+" "+each.getOriginY()+" "+each.getVelocity().x()+" "+each.getVelocity().y()+ " " + each.getRadius());
                             ballOut = true;
-                            ballsToRemove.add(each);                 
+                            ballsToRemove.add(each);}
+                            else{
+                               updateEmpty(each, .05);
+                            }
+                            
                         }                 
                     }else{
                         g.reflect(each);
@@ -827,6 +832,16 @@ public class Board extends TimerTask {
      */
     public List<Wall> getWalls() {
         return this.walls;
+    }
+    public boolean hasThisNeighbor(String otherBoard){
+        boolean answer = false;
+        for(Wall w:walls){
+            if (w.getConnectedTo()!=null && w.getConnectedTo().equals(otherBoard)){
+                answer = true;
+                break;
+            }
+        }
+        return answer;
     }
 
 
