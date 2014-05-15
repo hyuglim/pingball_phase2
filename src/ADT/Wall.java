@@ -44,7 +44,7 @@ public class Wall {
     
     /**
      * returns the appropriate line segment to be used in a board for reflections
-     * @return
+     * @return correcponding Line Segment instance
      */
     public LineSegment getWall(){
         if (location.equals("top")){
@@ -65,7 +65,7 @@ public class Wall {
     
     /**
      * a list representation to be used in printing the boardrep more easily since walls can be changed
-     * @return
+     * @return List of Strings used by boardRep
      */
     
     public List<String> toList(){
@@ -107,7 +107,7 @@ public class Wall {
     
     /**
      * takes care of ball to wall collisions
-     * @param ball
+     * @param ball to be collided with a wall
      */
     public void update(Ball ball){
         LineSegment wall = getWall();
@@ -156,10 +156,7 @@ public class Wall {
      * @param name the name of the board to connect to
      */
     public void addConnection(String name){
-        System.out.println(name);
-        System.out.println("before "+this.connectedTo);
         this.connectedTo = name;
-        System.out.println("after "+this.connectedTo);
         this.visible = false;
     }
     
@@ -193,7 +190,7 @@ public class Wall {
      * Whenever a Wall is visible, it's represented as a solid
      * red rectangle. When it's visible, it reflects the
      * name of the connected board.
-     * @param g
+     * @param g drawing tool
      */
     public void draw(Graphics2D g){
         Color c = new Color(252, 48, 48); //red
@@ -213,7 +210,6 @@ public class Wall {
         else if (this.location.equals("bottom")){
             if(this.visible){
                 g.fillRect(0, 420, 440, 20);
-                //g.fillRect(0, 423, 440, 17);
             }else{
                 g.setColor(Color.ORANGE);
                 g.setFont(new Font("Verdana", 1, 20));
@@ -224,7 +220,6 @@ public class Wall {
         }
         else if (this.location.equals("left")){
             if(this.visible){
-                //g.fillRect(0, 20, 20, 404);
                 g.fillRect(0, 20, 20, 400);
             }else{
                 g.setColor(Color.ORANGE);
@@ -241,7 +236,6 @@ public class Wall {
         else{
             if(this.visible){
                 g.fillRect(420, 20, 20, 400); 
-                //g.fillRect(423, 20, 17, 404);
             }else{
                 g.setColor(Color.ORANGE);
                 g.setFont(new Font("Verdana", 1, 20));

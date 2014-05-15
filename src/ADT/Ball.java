@@ -64,8 +64,8 @@ public class Ball {
         double y = position.d2;
         if (this.velocity.length() >= 200){
             throw new RuntimeException("Ball Is Moving Too Fast!!!");
-        }else if(this.radius<0.25 || this.radius>1){
-            throw new RuntimeException("Ball's radius should be in the range between 0.25 and 1, inclusive!");
+        }else if(this.radius<0.25 || this.radius>.5){
+            throw new RuntimeException("Ball's radius should be in the range between 0.25 and 0.5, inclusive!");
         }else if (x < this.radius || x > 20-this.radius || y < this.radius || y > 20-this.radius) {
             throw new RuntimeException(
                     "Ball's position cannot be outside of the board's bounds!!!");

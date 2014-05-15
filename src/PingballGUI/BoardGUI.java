@@ -214,7 +214,7 @@ public class BoardGUI extends JPanel {
     public void updateBoardString(String newBoardText) {
         this.boardText = newBoardText;
     }
-/*
+
     public static void main(String[] args) {
         
         SwingUtilities.invokeLater(new Runnable() {
@@ -245,5 +245,5 @@ public class BoardGUI extends JPanel {
 
             }
         });
-    }*/
+    }
 }

@@ -16,3 +16,7 @@ WHERE TO FIND BOARDS:
    sampleBoard
    test1
    test2
+HOW TO JOIN BOARDS:
+-h NAME_left NAME2_right
+-or
+-v NAME_top NAME2_bottom

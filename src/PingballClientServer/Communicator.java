@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -78,7 +77,7 @@ public class Communicator implements Runnable{
 			clientSocket.close();
 
 		} catch (IOException e) {
-			System.out.println("in or out failed");
+			System.err.println("in or out failed");
 		}
 	}
 
@@ -106,7 +105,6 @@ public class Communicator implements Runnable{
 						try {
 							this.sleep(50);
 						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 						ArrayList<String> hitwall = board.whichWallGotHit();
@@ -128,8 +126,7 @@ public class Communicator implements Runnable{
                                 // sample output: hit NAMEofBoard wallNum  NAMEofBall x y xVel yVel
                                 //System.out.println(portalHit);
                                 for(String hitMessage: portalHit){
-                                    System.out.println(portalHit.size());
-                                    System.out.println(hitMessage);
+                                   
                                     out.println(hitMessage);
                                 }
                                 board.updatePortalHit();
@@ -187,7 +184,7 @@ public class Communicator implements Runnable{
 			    }   		
 			}
 		}catch (Exception e) {
-			e.printStackTrace();
+			
 		}finally {
 			out.close();
 			in.close();
@@ -290,18 +287,8 @@ public class Communicator implements Runnable{
 			float yVel = Float.parseFloat(tokens[5]);
 			float radius = Float.parseFloat(tokens[6]);
 
-			// ADD A NEW BALL AT X,Y LOC IN THE CLIENT 		
-		
-			System.out.println("ABABABBAABBBABBBBABABBABBABBABABABABAB");
-
+			// ADD A NEW BALL AT X,Y LOC IN THE CLIENT 	
 			board.insertBall(nameOfBall, x, y, xVel, yVel, radius);
-
-
-			//System.out.println(input);
-
-			System.out.println(input);
-
-
 			return null;
 		}   
 
@@ -329,12 +316,11 @@ public class Communicator implements Runnable{
 		}
 		
 		if (tokens[0].equals("chatCreated")) {
-			System.out.println("inside chatCreated");
+			//System.out.println("inside chatCreated");
 			final int wallNum = Integer.parseInt(tokens[1]);
 			final String chatNeighbor = tokens[2];
 			final Communicator c = this;
 			
-			// TODO: do GUI stuff
 			SwingUtilities.invokeLater(new Runnable() {
 				public void run() {
 					ChatGUI cg = new ChatGUI(wallNum, c, board.boardname, chatNeighbor);
@@ -347,12 +333,7 @@ public class Communicator implements Runnable{
 					cg.showGUI();
 				}				
 			});
-			System.out.println("wallnum Created: " + wallNum);
-			System.out.println("is chatReceieves[wallnum] null: " + chatReceives[wallNum] == null);
-			System.out.println("is chatSends[wallnum] null: " + chatSends[wallNum] == null);
 			
-			
-			//System.out.println("endingnnnn");
 			return null;
 		}
 		
@@ -363,8 +344,6 @@ public class Communicator implements Runnable{
 			
 			
 			board.giveNeighborsName(wallNum, neighbor);
-			System.out.println(wallNum);
-			System.out.println(neighbor);
 			board.connectWall(wallNum, neighbor);
 			
 			String answer = null;
@@ -378,16 +357,13 @@ public class Communicator implements Runnable{
 		}
 		
 		if(tokens[0].equals("unmark")) {
-			//System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+			
 			int wallNum = Integer.parseInt(tokens[1]);
 			String neighbor = tokens[2];
 			board.removeNeighborsName(wallNum, neighbor);
 			return null;
 		}
 
-		//System.out.println(input+"Boooooooooooooooooooo");
-
-		// Should never get here--make sure to return in each of the valid cases above.
 		throw new UnsupportedOperationException();
 	}
 	
@@ -402,10 +378,7 @@ public class Communicator implements Runnable{
 				             "Do you want to talk to " + chatNeighbor + " ?" +
 				             		"\n If so, we'll let you know if both of you want to talk to each other", 
 				             		"Chat Invitation", JOptionPane.YES_NO_OPTION);
-//		//System.out.println("chatRequested" + chatRequested);
-//		//System.out.println("Yes_no_option: " + JOptionPane.YES_NO_OPTION);
-//		//System.out.println("Yes_no cancel option: " + JOptionPane.YES_NO_CANCEL_OPTION);
-//		//System.out.println("ok cancel option: " + JOptionPane.OK_CANCEL_OPTION);
+
 		return chatRequested == JOptionPane.YES_NO_OPTION;
 	}
 	

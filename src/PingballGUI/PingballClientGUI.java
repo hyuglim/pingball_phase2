@@ -22,6 +22,12 @@ package PingballGUI;
  * 
  * Thread safety/Concurrency Argument:
  * 
+ * Board instance is confined to a single thread which is responsible for its graphics representation.
+ * All the modification of the board happen in a single thread, and all its fields that get mutated 
+ * (balls, walls and gadgets) are wrapped into synchronized lists and can be accessed only by acquiring a
+ *  lock on this object. Also, all the Swing related changes happen in a separate thread. Thus,
+ *  we can claim that PingballClientGUI object is threadsafe.
+ * 
  */
 import java.awt.Color;  
 import java.awt.FlowLayout;

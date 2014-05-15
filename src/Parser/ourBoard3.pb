@@ -1,4 +1,4 @@
-board name=sampleBoard2 gravity=20.0
+board name=ourBoard3 gravity=20.0
 
   # define a ball
   ball name=Ball1 x=0.5 y=5.5 xVelocity=1 yVelocity=0 radius = 0.25
@@ -35,3 +35,7 @@ board name=sampleBoard2 gravity=20.0
 
   # make the absorber self-triggering
   fire trigger=Abs action=Abs
+  
+  #keys
+  keyup key=alt action=FlipL1
+  keydown key=space action=FlipR2

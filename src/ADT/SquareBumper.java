@@ -300,8 +300,11 @@ public class SquareBumper implements Gadget {
      */
     @Override
     public void draw(Graphics2D g2) {
+        
         g2.setColor(Color.RED);
         g2.fillRect(x * 20 + 20, y * 20 + 20, getWidth() * 20, getHeight() * 20);
+        g2.setColor(Color.WHITE);
+        g2.drawRect(x * 20 + 20, y * 20 + 20, getWidth() * 20, getHeight() * 20);
     }
 
     /**

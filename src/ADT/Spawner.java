@@ -1,5 +1,6 @@
 package ADT;
  
+import java.awt.Color;
 import java.awt.Graphics2D; 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -8,7 +9,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+
 import javax.imageio.ImageIO;
+
 import physics.Circle;
 import physics.Geometry;
 import physics.Vect;
@@ -246,14 +249,11 @@ public class Spawner implements Gadget{
       */
      @Override
      public void draw(Graphics2D g2) {
-         BufferedImage img = null;
-         //swirl picture
-         try {
-             img = ImageIO.read(new File("src/ADT/Spawner.jpg"));
-         } catch (IOException e) {
-             System.err.println("No image");
-         }
-             g2.drawImage(img, x*20+20, y*20+20, 20, 20, null);
+         g2.setColor(Color.WHITE);
+         g2.drawOval(x * 20 + 20, y * 20 + 20, getWidth() * 15, getHeight() * 20);
+         Color c = new Color(225, 142,82);// orange
+         g2.setColor(c);
+         g2.fillOval(x * 20 + 20, y * 20 + 20, getWidth() * 15, getHeight() * 20);
 
      }
      
