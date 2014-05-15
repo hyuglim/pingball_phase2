@@ -12,12 +12,15 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import PingballClientServer.Communicator;
 
+<<<<<<< HEAD
 /**
  * Jotto GUI has a SwingWorker running in the background thread
  * each listener gets a separate jottomodel, so they're modifying their own data.
  * JTable is modified by a event dispatching thread, so the data is safe.
  * 
  */
+=======
+>>>>>>> a349fd515b327fe7c53d8e365307dc0bcec34543
 public class ChatGUI extends JFrame implements Runnable{
 
 	private static final long serialVersionUID = 1L; // required by Serializable
