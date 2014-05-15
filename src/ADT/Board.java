@@ -302,8 +302,7 @@ public class Board extends TimerTask {
         if (ballOut){
             for (Ball b:ballsToRemove){
                 removeBall(b);
-            }
-            
+            }   
         }
         }
         

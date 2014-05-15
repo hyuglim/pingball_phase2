@@ -25,9 +25,7 @@ import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -35,7 +33,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
-
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -202,7 +199,11 @@ public class PingballClientGUI extends JFrame implements ActionListener{
          */
 
         disconnectFromServer.addActionListener(new ActionListener(){
+
             public void actionPerformed(ActionEvent event){
+                if(boardGui!=null){
+                    boardGui.stop();
+                }
                 try {
                     if(myClient!=null){
                         myClient.close();
@@ -210,7 +211,10 @@ public class PingballClientGUI extends JFrame implements ActionListener{
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                
+                boardGui.start();
             }
+            
         });
         
         /**
@@ -311,7 +315,6 @@ public class PingballClientGUI extends JFrame implements ActionListener{
                             add(restartButton);
                             add(exitButton);
                             getContentPane().add(boardGui);
-                            boardGui.start();
                         }else{
                             boardGui.updateBoard(newBoard);
                             boardGui.updateBoardString(boardTextString);
@@ -346,22 +349,22 @@ public class PingballClientGUI extends JFrame implements ActionListener{
     private class MyDispatcher implements KeyEventDispatcher{
         @Override
         public boolean dispatchKeyEvent(KeyEvent e) {
-            if (e.getID() == KeyEvent.KEY_PRESSED) {
+            if(e.getID() == KeyEvent.KEY_PRESSED) {
                 String key = KeyEvent.getKeyText(e.getKeyCode());
                 String keyString = key.replaceAll(" ", "").toLowerCase();
                 if(boardGui!=null){
-                    boardGui.getBoard().triggerDownKey(keyString);
+                    if(boardGui.isRunning()){
+                        boardGui.getBoard().triggerDownKey(keyString);
+                    }
                 }
-                System.out.println("Key Pressed: " + keyString);
-            } else if (e.getID() == KeyEvent.KEY_RELEASED) {
+            }else if (e.getID() == KeyEvent.KEY_RELEASED) {
                 String key = KeyEvent.getKeyText(e.getKeyCode());
                 String keyString = key.replaceAll(" ", "").toLowerCase();
                 if(boardGui!=null){
-                    boardGui.getBoard().triggerUpKey(keyString);
+                    if(boardGui.isRunning()){
+                        boardGui.getBoard().triggerUpKey(keyString);
+                    }
                 }
-                System.out.println("Key Released: " + keyString);
-            } else if (e.getID() == KeyEvent.KEY_TYPED) {
-                System.out.println("Key Typed: " + KeyEvent.getKeyText(e.getKeyCode()));
             }
             return false;
         }
@@ -395,6 +398,8 @@ public class PingballClientGUI extends JFrame implements ActionListener{
                 PingballClientGUI main = new PingballClientGUI();
                 main.setTitle("PingballGUI Client");
                 main.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                
+                
                 main.setVisible(true);
                 main.setSize(600, 600);
             }

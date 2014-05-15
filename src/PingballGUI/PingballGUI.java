@@ -353,6 +353,7 @@ public class PingballGUI extends JFrame implements ActionListener{
     public static void main(final String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
+                
                 PingballGUI main = new PingballGUI();
                 main.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 main.setVisible(true);

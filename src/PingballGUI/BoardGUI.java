@@ -13,10 +13,18 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
+
 import ADT.Ball;
 import ADT.Board;
 import ADT.Gadget;
@@ -204,5 +212,31 @@ public class BoardGUI extends JPanel {
    }
    
    
+   public static void main(String[] args){
+       SwingUtilities.invokeLater(new Runnable() {
+           public void run() {
+
+               StringBuilder boardText = new StringBuilder("");
+               BufferedReader br;
+               try {
+                   br = new BufferedReader(new FileReader("src/Parser/sampleBoard.pb"));
+                   for(String line = br.readLine(); line != null; line = br.readLine()){
+                       boardText.append('\n'+line);
+                   }
+               } catch (FileNotFoundException e) {
+                   e.printStackTrace();
+               } catch (IOException e) {
+                   e.printStackTrace();
+               }
+               
+               String boardTextString = boardText.toString().substring(1);
+               Board newBoard = BoardFileFactory.parse(boardTextString);                
+               BoardGUI boardGui = new BoardGUI(newBoard, boardTextString);               
+               boardGui.setVisible(true); 
+               boardGui.setSize(440, 440);
+                            
+           }
+       });
+   }
    
 }
