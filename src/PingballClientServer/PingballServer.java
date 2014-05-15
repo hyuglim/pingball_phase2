@@ -116,7 +116,7 @@ public class PingballServer {
 		for (int i = 0; i < adj.size(); i++) {
 			if (invis.get(i) && chats.get(i)==null) {
 				String neigh = adj.get(i);
-				//System.out.println("mark " + i + " " + neigh);
+				System.out.println("mark " + i + " " + neigh);
 
 				out.println("mark " + i + " " + neigh);
 
@@ -329,7 +329,7 @@ public class PingballServer {
 	public boolean checkChatAgreement(String name, boolean nameWantsChat, String neighbor) {
 		int nameIndex = neighbors.get(neighbor).getOne().indexOf(name);
 		boolean neighborWantsChat = neighbors.get(neighbor).getFour().get(nameIndex) ;
-		return nameWantsChat && neighborWantsChat;
+		return nameWantsChat && neighborWantsChat; 
 	}
 	
 	public boolean checkBothFinished (String name, String neighbor) {
@@ -550,7 +550,7 @@ public class PingballServer {
 		// change the delimiter to something else later
 		String[] strangeTokens = input.split("123456789");
 		if (strangeTokens[0].equals("chatSend")) {
-			System.out.println("inside chatSend: " + input);
+			//System.out.println("inside chatSend: " + input);
 			String chatName = strangeTokens[1];
 			String chatNeighbor = strangeTokens[2];
 			int wallNum = neighbors.get(chatNeighbor).getOne().indexOf(chatName);
@@ -563,7 +563,7 @@ public class PingballServer {
 		}
 		
 		if (tokens[0].equals("chatWant")) {
-			System.out.println("input: " + input);
+			//System.out.println("input: " + input);
 			int wallNum = Integer.parseInt(tokens[1]);
 			String chatName = tokens[2];
 			String chatNeighbor = tokens[3];
@@ -571,12 +571,12 @@ public class PingballServer {
 			
 			boolean ended = checkBothFinished(chatName, chatNeighbor);
 			if (!ended) {
-				System.out.println("chatName: " + chatName + " chatNeibor: " + chatNeighbor);
+				//System.out.println("chatName: " + chatName + " chatNeibor: " + chatNeighbor);
 				return null;
 			}
 			
 			boolean chatAgreed = checkChatAgreement(chatName, true, chatNeighbor);
-			System.out.println("chatAgreed: " + chatAgreed + " chatName: " + chatName + " chatNeigh: " + chatNeighbor);
+			//System.out.println("chatAgreed: " + chatAgreed + " chatName: " + chatName + " chatNeigh: " + chatNeighbor);
 			
 			if (chatAgreed && ended){
 				String msgToChatName = "chatCreated " + wallNum + " " + chatNeighbor;
@@ -600,7 +600,7 @@ public class PingballServer {
 		}
 		
 		if (tokens[0].equals("chatNo")) {
-			System.out.println("input " + input);
+			//System.out.println("input " + input);
 			boolean send = !Boolean.parseBoolean(tokens[1]);
 			int wallNum = Integer.parseInt(tokens[2]);
 			String chatName = tokens[3];
@@ -650,7 +650,7 @@ public class PingballServer {
 				//String msgToSender = "delete " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel;
 				String msgToReceiver = "create " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel + " " + radius;
 
-				//System.out.println(msgToReceiver);
+				System.out.println(msgToReceiver);
 				//outSender.println(msgToSender);
 				outReceiver.println(msgToReceiver);
 
@@ -713,6 +713,7 @@ public class PingballServer {
 		// sample input: hit NAMEofBoard wallNum  NAMEofBall x y xVel yVel
 		// wallNum is either 0,1,2,3 -> top, bottom, left, right
 		if (tokens[0].equals("hit")) {
+		    System.out.println("INPUT AGAIN: "+input);
 			String nameOfBoard = tokens[1];
 			int wallNum = Integer.parseInt(tokens[2]);
 			String nameOfBall = tokens[3];
@@ -738,33 +739,50 @@ public class PingballServer {
 			try {
 				outSender = new PrintWriter(socketSender.getOutputStream(), true);
 
-				//System.out.println("hit invisible MAANN");
+				System.out.println("wall number is "+wallNum);
 
 				String neighbor = neighbors.get(nameOfBoard).getOne().get(wallNum);
 
 				Socket socketReceiver = neighbors.get(neighbor).getThree();
 
 				outReceiver = new PrintWriter(socketReceiver.getOutputStream(), true);
-
+				
+				if(wallNum==0){
+				    System.out.println("Y0 value is "+y);
+				    y+=19;
+				}
+				else if (wallNum==1){
+				    System.out.println("Y1 value is "+y);
+				    y-=19;
+				}
+				else if(wallNum==2){
+				    x+=19;
+				}
+				else{
+				    x-=19;
+				}
+				
+				/*
 				switch(wallNum){
 				case 0: 
-					y += 15;
+					y += 19;
 					break;
 				case 1:
-					y -= 15;
+					y -= 19;
 					break;
 				case 2:
-					x += 15;
+					x += 19;
 					break;
 				case 3:
-					x -= 15;
+					x -= 19;
 					break;					
 
 				}
+				*/
 
 				//String msgToSender = "delete " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel;
 				String msgToReceiver = "create " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel + " " + radius;
-
+				System.out.println(msgToReceiver);
 				//outSender.println(msgToSender);
 				outReceiver.println(msgToReceiver);
 				return null;

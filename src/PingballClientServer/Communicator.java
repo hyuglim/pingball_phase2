@@ -249,6 +249,7 @@ public class Communicator implements Runnable{
 			
 			// ADD A NEW BALL AT X,Y LOC IN THE CLIENT 			
 			board.insertBall(nameOfBall, x, y, xVel, yVel, radius);
+			System.out.println(input);
 			return null;
 		}   
 

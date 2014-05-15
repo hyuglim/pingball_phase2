@@ -709,7 +709,7 @@ public class Board extends TimerTask {
      * @param nameOfBall the String name of the ball to be inserted
      */
     public void insertBall(String nameOfBall, double x, double y, double xVel, double yVel, double radius){
-        Ball ball = new Ball(nameOfBall, x, x, xVel, yVel, radius);
+        Ball ball = new Ball(nameOfBall, x, y, xVel, yVel, radius);
         this.addBall(ball);
 
     }
