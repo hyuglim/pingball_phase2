@@ -214,7 +214,14 @@ public class LeftFlipper implements Gadget {
 
         int velocityInRadian = 6;
 
+<<<<<<< HEAD
         double angularVelocity=0;
+=======
+
+
+        double angularVelocity = 0;
+
+>>>>>>> e89a7153e89ec835aba3b6071907cc64bc14175d
         // If its self-triggering rotate it
         if (this.triggers.contains(this)) {
             angularVelocity = Math.PI * velocityInRadian;
@@ -238,8 +245,9 @@ public class LeftFlipper implements Gadget {
                         .getBallCircle().getCenter(), ball.getVelocity());
             }
         }
+        
         ball.updateBallVelocity(newVelocity.times(this.reflection));
-
+        
         // triggers all the gadgets that this leftflipper triggers
         for (Gadget gadget : this.triggers) {
             gadget.action();
@@ -267,20 +275,31 @@ public class LeftFlipper implements Gadget {
          * return geometry.timeUntilRotatingWallCollision(line, center,
          * angularVelocity, ball, velocity); }
          */
+        /*
         double minTimeToCollision = Geometry.timeUntilRotatingWallCollision(
-                line, center, angularVelocity, ball.getBallCircle(),
+                segment, center, 0, ball.getBallCircle(),
                 ball.getVelocity());
         // double minTimeToCollision = Geometry.timeUntilWallCollision(line,
         // ball.getBallCircle(), ball.getVelocity());
         double timeToEnd1 = Geometry.timeUntilRotatingCircleCollision(end1,
-                end1.getCenter(), angularVelocity, ball.getBallCircle(),
+                end1.getCenter(), 0, ball.getBallCircle(),
                 ball.getVelocity());
         minTimeToCollision = Math.min(minTimeToCollision, timeToEnd1);
         double timeToEnd2 = Geometry.timeUntilRotatingCircleCollision(end2,
-                end2.getCenter(), angularVelocity, ball.getBallCircle(),
+                end2.getCenter(), 0, ball.getBallCircle(),
                 ball.getVelocity());
         minTimeToCollision = Math.min(minTimeToCollision, timeToEnd2);
+        System.out.println(minTimeToCollision);
         return minTimeToCollision;
+        */
+        
+            double minTimeToCollision = Geometry.timeUntilWallCollision(segment, ball.getBallCircle(), ball.getVelocity());
+            double timeToEnd1 = Geometry.timeUntilCircleCollision(end1, ball.getBallCircle(), ball.getVelocity());
+            minTimeToCollision = Math.min(minTimeToCollision, timeToEnd1);
+            double timeToEnd2 = Geometry.timeUntilCircleCollision(end2, ball.getBallCircle(), ball.getVelocity());
+            minTimeToCollision = Math.min(minTimeToCollision, timeToEnd2);
+            return minTimeToCollision;
+        
     }
 
     /**
@@ -347,6 +366,10 @@ public class LeftFlipper implements Gadget {
      */
     public void action() {
         makeNoise();
+<<<<<<< HEAD
+=======
+
+>>>>>>> e89a7153e89ec835aba3b6071907cc64bc14175d
 
         if (this.rotated) {
             this.rotated = false;

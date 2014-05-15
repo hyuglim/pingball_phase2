@@ -50,7 +50,12 @@ public class BoardGUI extends JPanel {
         setFocusable(true);
         requestFocusInWindow();
         repaint();
+<<<<<<< HEAD
 /*        Action chatTimer = new AbstractAction() {
+=======
+        
+        Action chatTimer = new AbstractAction() {
+>>>>>>> e89a7153e89ec835aba3b6071907cc64bc14175d
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -64,12 +69,24 @@ public class BoardGUI extends JPanel {
         this.setBackground(backgroundColor);     
         this.setFocusable(true);
         this.requestFocusInWindow();
+<<<<<<< HEAD
         this.repaint();*/
 
         this.myTimer = new Timer(50, paintTimer);
         this.myTimer.start();      
         
                                                             
+=======
+        this.repaint();
+
+        this.myTimer = new Timer(50, paintTimer);
+        this.myTimer.start();      
+
+
+
+             
+
+>>>>>>> e89a7153e89ec835aba3b6071907cc64bc14175d
     }
     
     /**
