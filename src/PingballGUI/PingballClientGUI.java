@@ -10,8 +10,8 @@ package PingballGUI;
  * and exiting from the user interface are respectively supported
  * through the menu items: loadFile, connectToServer, disconnectFromServer and exit.
  * 
- * Once a valid board file is loaded, starts displaying the board game corresponding 
- * to the chosen board file and adds new JButtons to the user interface: pauseButton, 
+ * Once a valid board file is loaded, adds BoardGUI to the interface, starts displaying the 
+ * board game corresponding to the chosen board file and adds new JButtons to the user interface: pauseButton, 
  * resumeButton, restartButton and exitButtion that support the commands for the operations: 
  * pausing the game, resuming the game, restarting the game from the initial state of the board
  * and exiting from the user interface. 
@@ -19,14 +19,17 @@ package PingballGUI;
  * Furthermore, has additional about section in the help section of the menu that
  * gives the users directions on how to play the game and a JMenuBar on the user interface
  * that lets the user change the background color of the user interface.
+ * 
+ * Thread safety/Concurrency Argument:
+ * 
  */
 import java.awt.Color;  
 import java.awt.FlowLayout;
-import java.awt.KeyEventDispatcher;
-import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -34,6 +37,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
+
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -131,7 +135,8 @@ public class PingballClientGUI extends JFrame implements ActionListener{
         file.add(exit);
         menubar.add(file);
         
-        /* Help Section in the menu.
+        /* 
+         * Add help JMenu that has a section about that gives directions on how to play.
          */
         JMenu help = new JMenu("help");
         menubar.add(help);
@@ -191,6 +196,7 @@ public class PingballClientGUI extends JFrame implements ActionListener{
                 if(boardGui!=null){
                     boardGui.start();
                 }
+                requestFocusInWindow();
             }
         });
         
@@ -212,6 +218,7 @@ public class PingballClientGUI extends JFrame implements ActionListener{
                     e.printStackTrace();
                 }               
                 boardGui.start();
+                requestFocusInWindow();
             }
             
         });
@@ -224,6 +231,7 @@ public class PingballClientGUI extends JFrame implements ActionListener{
         pauseButton.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent event){
                 boardGui.stop();
+                requestFocusInWindow();
             }
         });
 
@@ -234,6 +242,7 @@ public class PingballClientGUI extends JFrame implements ActionListener{
         resumeButton.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent event){
                 boardGui.start();
+                requestFocusInWindow();
             }
         });
 
@@ -247,6 +256,7 @@ public class PingballClientGUI extends JFrame implements ActionListener{
         restartButton.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent event){
                 boardGui.restart();
+                requestFocusInWindow();
             }
         });
 
@@ -272,6 +282,10 @@ public class PingballClientGUI extends JFrame implements ActionListener{
         });
         
         
+        /**
+         * Registers an action listener for the about option in the help JMenu,
+         * detailing the directions on how to play
+         */
         about.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(null, "To start a single machine play: Choose"
@@ -284,7 +298,10 @@ public class PingballClientGUI extends JFrame implements ActionListener{
                         + "       then connect to the server\n"
                         + "To disconnect from Server: Choose the disconnectFromServer option from the Menu\n"
                         + "To exit: Choose the exit option from the Menu");
+                requestFocusInWindow();
+            
             }
+            
         });
         
         /**
@@ -341,23 +358,13 @@ public class PingballClientGUI extends JFrame implements ActionListener{
                 if(boardGui!=null){
                     boardGui.start();
                 }
+                requestFocusInWindow();
             }
-        });       
-        KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
-        manager.addKeyEventDispatcher(new MyDispatcher());
-    }
-    
-    /**
-     * Class for key listener:
-     * Listens for the key events: typed, pressed or released and checks
-     * if the key triggers gadgets in the board and triggers those gadgets.
-     * @author zulsarbatmunkh
-     *
-     */
-    private class MyDispatcher implements KeyEventDispatcher{
-        @Override
-        public boolean dispatchKeyEvent(KeyEvent e) {
-            if(e.getID() == KeyEvent.KEY_PRESSED) {
+            
+        });  
+
+        KeyListener listener = new KeyAdapter() {
+            public void keyPressed(KeyEvent e) {
                 String key = KeyEvent.getKeyText(e.getKeyCode());
                 String keyString = key.replaceAll(" ", "").toLowerCase();
                 if(boardGui!=null){
@@ -365,7 +372,8 @@ public class PingballClientGUI extends JFrame implements ActionListener{
                         boardGui.getBoard().triggerDownKey(keyString);
                     }
                 }
-            }else if (e.getID() == KeyEvent.KEY_RELEASED) {
+            }
+            public void keyReleased(KeyEvent e) {
                 String key = KeyEvent.getKeyText(e.getKeyCode());
                 String keyString = key.replaceAll(" ", "").toLowerCase();
                 if(boardGui!=null){
@@ -374,9 +382,11 @@ public class PingballClientGUI extends JFrame implements ActionListener{
                     }
                 }
             }
-            return false;
-        }
-   }
+        };
+
+        KeyListener magical = new MagicKeyListener(listener);
+        addKeyListener(magical);
+    }
 
     /**
      * Lets the user to change the background color of the user interface.
