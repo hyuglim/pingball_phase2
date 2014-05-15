@@ -13,21 +13,15 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
-<<<<<<< HEAD
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-=======
->>>>>>> 0c365f86e7b4d00580466d3b98ae81f0549b733b
-
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
-
 import ADT.Ball;
 import ADT.Board;
 import ADT.Gadget;

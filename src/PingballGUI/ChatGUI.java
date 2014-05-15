@@ -1,21 +1,16 @@
 package PingballGUI;
 
-import static javax.swing.GroupLayout.Alignment.BASELINE;
-
+import static javax.swing.GroupLayout.Alignment.BASELINE; 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
-
 import javax.swing.GroupLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
-
 import PingballClientServer.Communicator;
-
 
 /**
  * Jotto GUI has a SwingWorker running in the background thread
@@ -28,7 +23,6 @@ public class ChatGUI extends JFrame implements Runnable{
 	private static final long serialVersionUID = 1L; // required by Serializable
 
 	// components to use in the GUI
-
 	private final JLabel chatInstruction;
 	private final JTextField chatSend;
 	private final JTable converseTable;

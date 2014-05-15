@@ -1,5 +1,6 @@
 package PingballGUI;
 
+
 /**
  * The Pingball playing GUI user interface that displays the running game as a   
  * graphical user interface that pops up in a new window. 
@@ -91,7 +92,7 @@ public class PingballClientGUI extends JFrame implements ActionListener{
         exitButton.setText("exit");
         
         /*
-         * 
+         * add MenuBar that changes the background color of the GUI
          */
         bar = new JMenuBar();
         myMenu = new JMenu("Background Color");
@@ -114,7 +115,8 @@ public class PingballClientGUI extends JFrame implements ActionListener{
         green.addActionListener(this);
         
         /*
-         * 
+         * Add MenuBar for the loadFile, connectToServer, disconnectFromServer
+         * and exit commands.
          */
         JMenuBar menubar = new JMenuBar();     
         setJMenuBar(menubar);      
@@ -164,7 +166,7 @@ public class PingballClientGUI extends JFrame implements ActionListener{
                         try{
                             serverId = Integer.parseInt(serverIdString);
                             if(serverId<0 || serverId>65535){
-                                JOptionPane.showMessageDialog(null, "Invalid Port Number: " + serverIdString + " Port number should be an integer in the "
+                                JOptionPane.showMessageDialog(null, "Invalid Port Number: " + serverIdString + "\nPort number should be an integer in the "
                                         + "range 0 to 65535 inclusive, Connect again!", "Warning!", JOptionPane.WARNING_MESSAGE);
                             }
                             try {
@@ -181,11 +183,10 @@ public class PingballClientGUI extends JFrame implements ActionListener{
                                 JOptionPane.showMessageDialog(null, "Connection refused! Connect again!");
                             }
                         }catch(Exception e){
-                            JOptionPane.showMessageDialog(null, "Invalid Port Number: " + serverIdString + " Port number should be an integer in the "
+                            JOptionPane.showMessageDialog(null, "Invalid Port Number: " + serverIdString + "\nPort number should be an integer in the "
                                     + "range 0 to 65535 inclusive, Connect again!", "Warning!", JOptionPane.WARNING_MESSAGE);
                         }
-                    }
-                    
+                    }                   
                 }
                 if(boardGui!=null){
                     boardGui.start();
@@ -199,7 +200,6 @@ public class PingballClientGUI extends JFrame implements ActionListener{
          */
 
         disconnectFromServer.addActionListener(new ActionListener(){
-
             public void actionPerformed(ActionEvent event){
                 if(boardGui!=null){
                     boardGui.stop();
@@ -210,8 +210,7 @@ public class PingballClientGUI extends JFrame implements ActionListener{
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
-                }
-                
+                }               
                 boardGui.start();
             }
             
@@ -273,6 +272,21 @@ public class PingballClientGUI extends JFrame implements ActionListener{
         });
         
         
+        about.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null, "To start a single machine play: Choose"
+                        + " load file option from the Menu and choose a valid\n"
+                        + "       board file once you load a file you'll have more buttons available for your "
+                        + "board game\n"
+                        + "To connect with the Server: Choose the connectToServer option from the Menu\n"
+                        + "       and provide a valid host name and port, if you want to play multiplayer game\n"
+                        + "       and connect your board with other boards, you must first load a board file and\n"
+                        + "       then connect to the server\n"
+                        + "To disconnect from Server: Choose the disconnectFromServer option from the Menu\n"
+                        + "To exit: Choose the exit option from the Menu");
+            }
+        });
+        
         /**
          * Registers an action listener for the loadFile JMenuItem, so that
          * when this item is selected from the menu, opens a file chooser
@@ -285,7 +299,6 @@ public class PingballClientGUI extends JFrame implements ActionListener{
                 if(boardGui!=null){
                     boardGui.stop();
                 }
-                
                 JFileChooser fc = new JFileChooser();
                 fc.showOpenDialog(null);
                 File file = fc.getSelectedFile();
@@ -325,20 +338,15 @@ public class PingballClientGUI extends JFrame implements ActionListener{
                                 "Warning!", JOptionPane.WARNING_MESSAGE);
                     }                    
                 }
-                
                 if(boardGui!=null){
                     boardGui.start();
                 }
             }
-        });
-        
+        });       
         KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
         manager.addKeyEventDispatcher(new MyDispatcher());
-        
-
     }
     
-
     /**
      * Class for key listener:
      * Listens for the key events: typed, pressed or released and checks
@@ -370,20 +378,15 @@ public class PingballClientGUI extends JFrame implements ActionListener{
         }
    }
 
-
     /**
      * Lets the user to change the background color of the user interface.
      */
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == red){
             this.getContentPane().setBackground(Color.RED);
-        }
-
-        if(e.getSource() == blue){
+        }else if(e.getSource() == blue){
             this.getContentPane().setBackground(Color.BLUE);
-        }
-
-        if(e.getSource() == green){
+        }else if(e.getSource() == green){
             this.getContentPane().setBackground(Color.GREEN);
         }   
     } 
