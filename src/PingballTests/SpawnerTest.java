@@ -60,7 +60,7 @@ public class SpawnerTest {
     @Test
     public void testLargeBallHalves(){
         Vect oldVel  = new Vect(5,5);
-        double r = 1;
+        double r = 0.5;
         Ball ball = new Ball("b", new Circle(3.9,3.9,r), oldVel);
         Spawner spawner = new Spawner("s", 4,4);
         spawner.reflect(ball);

@@ -71,7 +71,7 @@ public class AbsorberTest {
     @Test
     public void oneBallTest() {
         Absorber abs = new Absorber("abs", 3,3,6,1);
-        Ball ball = new Ball("ball",5,1, .25, 0,10);
+        Ball ball = new Ball("ball",5,1,0,10,  .25);
         abs.reflect(ball);
         
         assertEquals(new Vect(8.75,3.75), ball.getBallCircle().getCenter());
@@ -84,8 +84,8 @@ public class AbsorberTest {
     public void twoBallTest() {
         Absorber abs = new Absorber("abs", 3,3,6,1);
         
-        Ball ball = new Ball("ball", 5, 1, .25, 0,10);
-        Ball ball2 = new Ball("ball2", 5, 0, .25, 0, 5);
+        Ball ball = new Ball("ball", 5, 1, 0,10, .25);
+        Ball ball2 = new Ball("ball2", 5, 0, 0, 5, .25);
         abs.reflect(ball);
         abs.reflect(ball2);
         
@@ -103,9 +103,9 @@ public class AbsorberTest {
     @Test
     public void multipleBallTest() {
         Gadget abs = new Absorber("abs", 0,3,20,1);
-        Ball ball = new Ball("ball", 5,1, .25, 0,100);
-        Ball ball2 = new Ball("ball2", 5, 0, .25, 0, 50);
-        Ball ball3 = new Ball("ball3",  6, 0, .25, 0, 50);
+        Ball ball = new Ball("ball", 5,1, 0,100, .25);
+        Ball ball2 = new Ball("ball2", 5, 0, 0, 50, .25);
+        Ball ball3 = new Ball("ball3",  6, 0, 0, 50, .25);
         abs.reflect(ball);
         abs.reflect(ball2);
         abs.reflect(ball3);

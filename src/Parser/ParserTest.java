@@ -1,12 +1,7 @@
 package Parser;
 
 
-import static org.junit.Assert.*;
-
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-
+import static org.junit.Assert.*; 
 import org.junit.Test;
 
 import ADT.Ball;
@@ -263,7 +258,4 @@ public class ParserTest {
         assertTrue(onlyBall.getXVelocity() == 2.5);
         assertTrue(onlyBall.getYVelocity() == 2.5);
     }
-
-
-    
 }

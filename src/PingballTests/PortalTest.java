@@ -55,6 +55,7 @@ public class PortalTest {
         b1.addGadget(p1);
         b2.addGadget(p2);
         Ball ball = new Ball("b", 15,14.9, 0, 10, .25);
+        b1.connectWall(0, "B");
         b1.addBall(ball);
         b1.update();
         System.out.println(b1.getBalls().size());
