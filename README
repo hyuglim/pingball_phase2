@@ -1,0 +1,18 @@
+HOW TO START A SINGLE PLAY:
+ - Run PingballClientGUI
+HOW TO START A MULTIPLAYER GAME:
+ - Run server through the console(terminal)
+ - Run PingballClientGUI
+
+HOW TO START A SERVER:
+ - Run server through the console (terminal) using following command:
+   PingballServer [--port PORT]
+WHERE TO FIND BOARDS:
+ - All team board files are located in the package folder Parser
+   There are 6 board files:
+   ourBoard1
+   ourBoard2
+   ourBoard3
+   sampleBoard
+   test1
+   test2

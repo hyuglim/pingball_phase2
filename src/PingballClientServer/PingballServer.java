@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
- * ##############Server/Client Overview and Concurrency Arguments###############
+ * ##############Server/Client Overview and Concurrency Arguments for Pingball Game###############
  * 
  *             Overview:
  * The Server has n+1 threads, given n clients.
@@ -75,14 +75,15 @@ public class PingballServer {
 	//ConcurrentHashMap<String, Tuple> created when joining the boards is as follows:
 	//
 	//                 top      bot  left right   top   bot   left right
-	//{ "board1" : ([neighbor1, n2, n3,   n4] , [true, true, true, true], board1's socket)
-	//  "neighbor1": ([null, client1, null, null],[false, true, false, false], neighbor1's socket)
-	//  "board3" : ([n1,  null,   null, n4]   , [true, false, true, false], board3's socket)
+	//{ "board1" : ([neighbor1, n2, n3,   n4] , [true, true, true, true], board1's socket, [true, false, false, true])
+	//  "neighbor1": ([null, client1, null, null],[false, true, false, false], neighbor1's socket, [false, true, true, false])
+	//  "board3" : ([n1,  null,   null, n4]   , [true, false, true, false], board3's socket, ...)
 	//   ... }
 	// Thus, each board name has a list of all the neighboring board names which are initialized as null.
 	// Each board name also has a list of booleans indicating if the top, bottom, left, or right wall is 
-	// invisible or not. Finally, each board name has a socket that corresponds to that particular client thread.
-	// Tuple has a list of strings and a list of booleans
+	// invisible or not. Each board name has a socket that corresponds to that particular client thread.
+	// The final list is a list of booleans that indicate if each neighbor has agreed to chat with that client
+	// Quadruple has a list of strings and a list of booleans. 
 	private ConcurrentHashMap<String, Quadruple<List<String>,List<Boolean>,Socket,List<Boolean>>> neighbors 
 	= new ConcurrentHashMap<String, Quadruple<List<String>,List<Boolean>,Socket, List<Boolean>>>();
 	
@@ -95,7 +96,6 @@ public class PingballServer {
 	 */
 	public PingballServer(int port) throws IOException {
 		this.serverSocket = new ServerSocket(port);
-
 	}
 
 	/**
@@ -123,6 +123,7 @@ public class PingballServer {
 		}		
 	}
 	
+	
 	/**
 	 * get the socket corresponding to chatName and send the message 
 	 * to that board
@@ -130,6 +131,7 @@ public class PingballServer {
 	 * @param msg
 	 * @throws IOException
 	 */
+	/*
 	private void notifyChat(String chatName, String msg) throws IOException{
 			System.out.println("notifyChat: " + msg);
 		
@@ -138,6 +140,7 @@ public class PingballServer {
 			out.println(msg);					
 		
 	}
+	*/
 
 	/**
 	 * join boards horizontally. 
@@ -318,17 +321,21 @@ public class PingballServer {
 		}
 	}
 	
-/*	*//**
+<<<<<<< HEAD
+    /**
+=======
+	/**
+>>>>>>> ca290c6edffea74d65e41bff41412a1c926651fc
 	 * 
 	 * @param name: board that wants to chat
 	 * @param nameWantsChat: if that board wants to chat
 	 * @return if both name and neighbor want to chat
-	 *//*
+	 */
 	public boolean checkChatAgreement(String name, boolean nameWantsChat, String neighbor) {
 		int nameIndex = neighbors.get(neighbor).getOne().indexOf(name);
 		boolean neighborWantsChat = neighbors.get(neighbor).getFour().get(nameIndex) ;
-		return nameWantsChat && neighborWantsChat;
-	}
+		return nameWantsChat && neighborWantsChat; 
+	} */
 	
 	/**
 	 * 
@@ -337,6 +344,7 @@ public class PingballServer {
 	 * @return if both name and neighbor have expressed yes or no on 
 	 *         whether to join the chat
 	 */
+	/*
 	public boolean checkBothFinished (String name, String neighbor) {
 		int nameIndex = neighbors.get(neighbor).getOne().indexOf(name);
 		int neighborIndex = neighbors.get(name).getOne().indexOf(neighbor);
@@ -347,23 +355,58 @@ public class PingballServer {
 		    && neighbors.get(name).getFour().get(neighborIndex) != null;		
 	}
 	
+<<<<<<< HEAD
 	 /*
+=======
+<<<<<<< HEAD
+	*/
+	/**
+	 * update if the board wants to talk to neighbor of given index
+
+=======
+	/**
+	 * update if the board wants to talk to neighbor of given index
+	 *
+>>>>>>> ca290c6edffea74d65e41bff41412a1c926651fc
+>>>>>>> deea1fd35bd92ede2b770435d2c8f6584dc0a9c5
 	 * @param name
 	 * @param nameWantsChat
 	 * @param neighborIndex
 	 */
+<<<<<<< HEAD
 
+=======
+<<<<<<< HEAD
+	/*
+=======
+>>>>>>> ca290c6edffea74d65e41bff41412a1c926651fc
+>>>>>>> deea1fd35bd92ede2b770435d2c8f6584dc0a9c5
 	public void updateChatWant(String name, boolean nameWantsChat, int neighborIndex) {
 		neighbors.get(name).getFour().set(neighborIndex, nameWantsChat);
 	}
 
+<<<<<<< HEAD
 	
+=======
+<<<<<<< HEAD
+	*/
+=======
+>>>>>>> ca290c6edffea74d65e41bff41412a1c926651fc
+	/**
+	 * Run the server, listening for client connections and handling them.
+	 * Never returns unless an exception is thrown.
+	 * 
+	 * @throws IOException if the main server socket is broken
+	 *                     (IOExceptions from individual clients do *not* terminate serve())
+	 */
+>>>>>>> deea1fd35bd92ede2b770435d2c8f6584dc0a9c5
 	public void serve() throws IOException {
 		new Thread() {
 			/**
 			 * listen for server join commands
 			 */
 			public void run() {
+<<<<<<< HEAD
 			    Scanner sc = new Scanner(System.in);
                 System.out.println("Enter a join command:");
                 while(sc.hasNextLine()) {
@@ -376,6 +419,28 @@ public class PingballServer {
                 }
                 sc.close();
 				
+=======
+
+<<<<<<< HEAD
+			    
+=======
+	
+>>>>>>> ca290c6edffea74d65e41bff41412a1c926651fc
+				Scanner sc = new Scanner(System.in);
+				System.out.println("Enter a join command:");
+				while(sc.hasNextLine()) {
+
+					String joinCommand = sc.nextLine();
+					try {
+						joinBoards(joinCommand);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}					
+
+				}
+				sc.close();
+
+>>>>>>> deea1fd35bd92ede2b770435d2c8f6584dc0a9c5
 			}
 		}.start();
 
@@ -514,7 +579,18 @@ public class PingballServer {
 				System.out.println("index of neighbor: " + index);
 				nOfns.set(index, null);
 				bOfns.set(index, false);		
+<<<<<<< HEAD
 				cOfns.set(index, null);
+=======
+
+<<<<<<< HEAD
+
+=======
+>>>>>>> ca290c6edffea74d65e41bff41412a1c926651fc
+				cOfns.set(index, null);
+
+
+>>>>>>> deea1fd35bd92ede2b770435d2c8f6584dc0a9c5
 			}
 		}	
 		
@@ -548,9 +624,9 @@ public class PingballServer {
 		
 		// assume for now that the messages sent are one word long
 		// change the delimiter to something else later
-		/*String[] strangeTokens = input.split("123456789");
+		String[] strangeTokens = input.split("123456789");
 		if (strangeTokens[0].equals("chatSend")) {
-			System.out.println("inside chatSend: " + input);
+			//System.out.println("inside chatSend: " + input);
 			String chatName = strangeTokens[1];
 			String chatNeighbor = strangeTokens[2];
 			int wallNum = neighbors.get(chatNeighbor).getOne().indexOf(chatName);
@@ -563,7 +639,7 @@ public class PingballServer {
 		}
 		
 		if (tokens[0].equals("chatWant")) {
-			System.out.println("input: " + input);
+			//System.out.println("input: " + input);
 			int wallNum = Integer.parseInt(tokens[1]);
 			String chatName = tokens[2];
 			String chatNeighbor = tokens[3];
@@ -571,12 +647,12 @@ public class PingballServer {
 			
 			boolean ended = checkBothFinished(chatName, chatNeighbor);
 			if (!ended) {
-				System.out.println("chatName: " + chatName + " chatNeibor: " + chatNeighbor);
+				//System.out.println("chatName: " + chatName + " chatNeibor: " + chatNeighbor);
 				return null;
 			}
 			
 			boolean chatAgreed = checkChatAgreement(chatName, true, chatNeighbor);
-			System.out.println("chatAgreed: " + chatAgreed + " chatName: " + chatName + " chatNeigh: " + chatNeighbor);
+			//System.out.println("chatAgreed: " + chatAgreed + " chatName: " + chatName + " chatNeigh: " + chatNeighbor);
 			
 			if (chatAgreed && ended){
 				String msgToChatName = "chatCreated " + wallNum + " " + chatNeighbor;
@@ -600,7 +676,7 @@ public class PingballServer {
 		}
 		
 		if (tokens[0].equals("chatNo")) {
-			System.out.println("input " + input);
+			//System.out.println("input " + input);
 			boolean send = !Boolean.parseBoolean(tokens[1]);
 			int wallNum = Integer.parseInt(tokens[2]);
 			String chatName = tokens[3];
@@ -627,7 +703,7 @@ public class PingballServer {
 			
 			return null;
 		}
-*/
+
 		if (tokens[0].equals("create")){
 
 			String otherBoardName = tokens[1];
@@ -650,7 +726,7 @@ public class PingballServer {
 				//String msgToSender = "delete " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel;
 				String msgToReceiver = "create " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel + " " + radius;
 
-				//System.out.println(msgToReceiver);
+				System.out.println(msgToReceiver);
 				//outSender.println(msgToSender);
 				outReceiver.println(msgToReceiver);
 
@@ -698,6 +774,7 @@ public class PingballServer {
 				Socket socketReceiver = neighbors.get(nameOfBoard).getThree();
 
 				outReceiver = new PrintWriter(socketReceiver.getOutputStream(), true);
+
 				String msgToReceiver = "create " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel + " " + radius;
 
 				//outSender.println(msgToSender);
@@ -713,7 +790,14 @@ public class PingballServer {
 		// sample input: hit NAMEofBoard wallNum  NAMEofBall x y xVel yVel
 		// wallNum is either 0,1,2,3 -> top, bottom, left, right
 		if (tokens[0].equals("hit")) {
+<<<<<<< HEAD
+=======
+
+>>>>>>> ca290c6edffea74d65e41bff41412a1c926651fc
+		    System.out.println("INPUT AGAIN: "+input);
+
 		    System.out.println("Input message: " + input);
+
 			String nameOfBoard = tokens[1];
 			int wallNum = Integer.parseInt(tokens[2]);
 			String nameOfBall = tokens[3];
@@ -739,7 +823,7 @@ public class PingballServer {
 			try {
 				outSender = new PrintWriter(socketSender.getOutputStream(), true);
 
-				//System.out.println("hit invisible MAANN");
+				System.out.println("wall number is "+wallNum);
 
 				String neighbor = neighbors.get(nameOfBoard).getOne().get(wallNum);
 
@@ -748,19 +832,32 @@ public class PingballServer {
 				outReceiver = new PrintWriter(socketReceiver.getOutputStream(), true);
 				
 				if(wallNum==0){
-				    y += 19;
-				}else if(wallNum==1){
-				    y -= 19;
-				}else if(wallNum==2){
-				    x += 19;
-				}else if(wallNum==3){
-				    x -= 19;
+
+				    System.out.println("Y0 value is "+y);
+				    y+=19;
+				}
+				else if (wallNum==1){
+				    System.out.println("Y1 value is "+y);
+				    y-=19;
+				}
+				else if(wallNum==2){
+				    x+=19;
+				}
+				else{
+				    x-=19;
 				}
 				
+<<<<<<< HEAD
+
+				
+			
+=======
 				System.out.println(wallNum);
+
+>>>>>>> ca290c6edffea74d65e41bff41412a1c926651fc
 				//String msgToSender = "delete " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel;
 				String msgToReceiver = "create " + nameOfBall + " " + x + " " + y + " " + xVel + " " + yVel + " " + radius;
-
+				System.out.println(msgToReceiver);
 				//outSender.println(msgToSender);
 				outReceiver.println(msgToReceiver);
 				return null;

@@ -1,6 +1,6 @@
-/*package PingballGUI;
+package PingballGUI;
 
-import static javax.swing.GroupLayout.Alignment.BASELINE;  
+import static javax.swing.GroupLayout.Alignment.BASELINE; 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
@@ -12,13 +12,14 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import PingballClientServer.Communicator;
 
-*//**
- * Jotto GUI has a SwingWorker running in the background thread
- * each listener gets a separate jottomodel, so they're modifying their own data.
- * JTable is modified by a event dispatching thread, so the data is safe.
- * 
- *//*
 
+/**
+ * A window that pops up when two boards agree to a chat
+ * Concurrency argument for this GUI is made on top of Communicator class
+ * 
+ * @author jonathan
+ *
+ */
 public class ChatGUI extends JFrame implements Runnable{
 
 	private static final long serialVersionUID = 1L; // required by Serializable
@@ -41,17 +42,17 @@ public class ChatGUI extends JFrame implements Runnable{
 	private final String me;
 	private final String chatNeighbor;
 
-	*//**
-	 * No input given
-	 * Create all the GUI components here
-	 * newPuzzle button, textfield for the user to enter new number, 
-	 * textfield for user input, and table showing how the user is doing in the game
-	 *  
-	 * instantiate a thread for the model to keep running in the background
-	 *//*
+	
+	/**
+	 * GUI window has an introductory statement of who you are talking to,
+	 * a chat box to type into, and a conversation table
+	 * @param wallNum
+	 * @param c
+	 * @param me
+	 * @param chatNeighbor
+	 */
 	public ChatGUI(int wallNum, Communicator c, String me, String chatNeighbor) {
-		// components must be named with "setName" as specified in the problem set
-		// remember to use these objects in your GUI!
+
 		this.me = me;
 		this.chatNeighbor = chatNeighbor;
 
@@ -63,7 +64,7 @@ public class ChatGUI extends JFrame implements Runnable{
 
 		chatSend = new JTextField();
 		chatSend.setName("guess");
-		TypeGuessListener t = new TypeGuessListener();
+		TypeChatListener t = new TypeChatListener();
 		chatSend.addActionListener(t);		
 
 		final String[] colNames = {"Your Neighbor", "You"}; 
@@ -104,9 +105,9 @@ public class ChatGUI extends JFrame implements Runnable{
 
 	}
 
-	*//**
+	/**
 	 * pack and show GUI on the screen
-	 *//*
+	 */
 	public void showGUI() {
 
 
@@ -121,16 +122,16 @@ public class ChatGUI extends JFrame implements Runnable{
 
 
 
-	*//**
-	 * Listens for user input for guesses
+	/**
+	 * Listens for user input for chat box
 	 *
-	 *//*
-	private class TypeGuessListener implements ActionListener {
+	 */
+	private class TypeChatListener implements ActionListener {
 
-		*//**
+		/**
 		 * Listen for user input and put the input into the request 
 		 * queue to be sent to the server
-		 *//*
+		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
 
@@ -152,6 +153,9 @@ public class ChatGUI extends JFrame implements Runnable{
 
 	}
 
+	/**
+	 * take chat responses off the queue and store on the table
+	 */
 	@Override
 	public void run() {
 		while (true) {
@@ -165,29 +169,9 @@ public class ChatGUI extends JFrame implements Runnable{
 	}
 	
 	
-	
 
-//	private class PutInAnswer extends SwingWorker<String, Object> {
-//
-//		/**
-//		 * constantly check for responses coming from the server
-//		 * process them appropriately and store them into the JTable
-//		 */
-//		@Override
-//		public String doInBackground() {
-//			//String chatReceive = c.take();
-////			String msg = 
-////			backgroundC.chatReceive(msg, wallNum)
-//		}
-//
-//		@Override
-//		protected void done() {
-//			try {
-//
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
-//		}
-//	}	
+}
 
-	
+
+
+
