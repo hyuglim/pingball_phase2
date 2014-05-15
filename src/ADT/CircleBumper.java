@@ -21,7 +21,6 @@ public class CircleBumper implements Gadget {
      * REP INVARIANT: x, y, name and circle must be non-null 0 <= x <= 19 0 <= y
      * <= 19
      */
-
     private final int x;
     private final int y;
     private final String name;

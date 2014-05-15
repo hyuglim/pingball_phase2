@@ -1,6 +1,6 @@
 package ADT;
  
-import java.awt.Graphics2D;
+import java.awt.Graphics2D; 
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,6 +14,12 @@ import physics.Geometry;
 import physics.Vect;
 import sun.audio.AudioPlayer;
 import sun.audio.AudioStream;
+
+/**
+ * Spawner represents a gadget in the pingball board that changes the radius of the ball
+ * that hit it. If the ball's radius is >= 0.5, then the ball's radius is halved. If the radius is 0.25
+ * the ball gets twice as bigger as before. Otherwise, the radius shrinks so that its radius is 0.25.
+ */
 
 public class Spawner implements Gadget{
 
