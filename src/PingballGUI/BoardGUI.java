@@ -13,10 +13,13 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
+<<<<<<< HEAD
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+=======
+>>>>>>> 0c365f86e7b4d00580466d3b98ae81f0549b733b
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -42,6 +45,7 @@ public class BoardGUI extends JPanel {
     //double buffer variables
     Image dbImage;
     Graphics dbGraphics;
+    private boolean firstTime;
 
     /**
      * Constructor for the BoardGUI:
@@ -53,34 +57,11 @@ public class BoardGUI extends JPanel {
         this.board =  board;
         this.boardText = boardText;
         this.setPreferredSize(new Dimension(440, 440));
-
+        this.firstTime = true;
         setBackground(backgroundColor);     
         setFocusable(true);
         requestFocusInWindow();
         repaint();
-
-/*        Action chatTimer = new AbstractAction() {
-=======
-        
-        Action chatTimer = new AbstractAction() {
->>>>>>> e89a7153e89ec835aba3b6071907cc64bc14175d
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				
-				
-			}
-		};
-        myChatTimer = new Timer(50, chatTimer);
-        myChatTimer.start();
-
-        this.setBackground(backgroundColor);     
-        this.setFocusable(true);
-        this.requestFocusInWindow();
-<<<<<<< HEAD
-        this.repaint();*/
-
-
         this.myTimer = new Timer(50, paintTimer);
         this.myTimer.start();      
     }
@@ -98,7 +79,13 @@ public class BoardGUI extends JPanel {
                 gadget.setNotHit();
             }
             else{
-                gadget.draw(g2);
+                if (firstTime){
+                    gadget.draw(g2);
+                    
+                }
+                else if (gadget.doesFlip()){
+                    gadget.draw(g2);
+                    }
             }
         }
         for (Ball ball:board.getBalls()){
@@ -123,10 +110,26 @@ public class BoardGUI extends JPanel {
      */
     Action paintTimer = new AbstractAction(){
        public void actionPerformed(ActionEvent e){
-           synchronized(board){
-               board.update();
-           }          
-           repaint();
+           Thread t = new Thread(new Runnable() {
+            
+            @Override
+            public void run() {
+                board.update();
+                SwingUtilities.invokeLater(new Runnable() {
+                    
+                    @Override
+                    public void run() {
+                        repaint();
+                        
+                    }
+                });
+                
+            }
+        });
+           t.start();
+               
+                    
+           
        }
    };
    
