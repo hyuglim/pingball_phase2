@@ -1,10 +1,5 @@
 package ADT;
  
-/**
- * A Spawner represents a gadget in the pingball board, whose action shrinks a big ball or  
- * enlarges a small ball.
- */
-import java.awt.Color;  
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;

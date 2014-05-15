@@ -4,22 +4,10 @@ board name=sampleBoard gravity=0.0 friction1 = 0.0 friction2 = 0.0
 # representation of the screenshot in the project handout.
 
   # define a ball
-  ball name=Ball x=15 y=9 xVelocity=0 yVelocity=20 radius=0.25
-  #ball name = BallB x=3 y=2 xVelocity =50 yVelocity =50 radius = 0.5
-
-  #ball name=Ball x=1 y=9 xVelocity=0 yVelocity=3 radius=0.25
-
-<<<<<<< HEAD
- # ball name=Ball x=15 y=9 xVelocity=0 yVelocity=50 radius=0.25
- # ball name = BallB x=3 y=2 xVelocity =50 yVelocity =50 radius = 0.5
- # ball name=Ball x=1 y=9 xVelocity=0 yVelocity=3 radius=0.25
-=======
-  #ball name=Ball x=15 y=9 xVelocity=0 yVelocity=50 radius=0.25
-  #ball name = BallB x=3 y=2 xVelocity =50 yVelocity =50 radius = 0.5
-  #ball name=Ball x=1 y=9 xVelocity=0 yVelocity=3 radius=0.25
->>>>>>> 0c365f86e7b4d00580466d3b98ae81f0549b733b
+ ball name=Ball x=15 y=9 xVelocity=0 yVelocity=20 radius=0.25
   
-  # define a series of circle bumpers
+  
+ # define a series of circle bumpers
   #circleBumper name=Circle5 x=5 y=10 
   
   # define a series of square bumpers
