@@ -55,10 +55,10 @@ public class PingballClient{
 	public PingballClient(Socket socket, Board board) {
 	    this.myBoard = board;
 	    this.socket = socket;
-		this.player = new GamePlayer(board);
+		//this.player = new GamePlayer(board);
 		this.messenger = new Communicator(socket, board);
 		
-		//new Thread(player).start();
+		new Thread(player).start();
 		new Thread(messenger).start();
 	}
 

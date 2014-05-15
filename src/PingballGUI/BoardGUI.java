@@ -13,15 +13,10 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
-<<<<<<< HEAD
-=======
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-
->>>>>>> 365656bfbe1b5477e91ae55426cd0a48ade999d0
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JFrame;
@@ -88,9 +83,13 @@ public class BoardGUI extends JPanel {
                 }
             }
         }
-        for (Ball ball : board.getBalls()) {
-            ball.draw(g2);
+        
+        synchronized(board.getBalls()){
+            for (Ball ball : board.getBalls()) {
+                ball.draw(g2);
+            }
         }
+        
         for (Wall wall : board.getWalls()) {
             wall.draw(g2);
         }
