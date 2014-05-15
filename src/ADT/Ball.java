@@ -332,11 +332,14 @@ public class Ball {
      * its less than 0.25, we give it a new radius 0.25
      */
     public void changeRadius() {
-        if (this.radius == 0.25) {
-            this.radius = 0.25;
-        } else if (this.radius ==0.25){
-            this.radius = this.radius/2;
+        if (this.radius <= 0.25) {
+            this.radius = 0.5;
+        } else if (this.radius <=0.5){
+            this.radius = .5;
         }
+        else{
+            this.radius = this.radius/2;
+       }
     }
     
 
