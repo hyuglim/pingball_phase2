@@ -16,12 +16,43 @@ import javax.swing.SwingUtilities;
 
 import ADT.Board;
 import ADT.Gadget;
+import PingballGUI.ChatGUI;
 
+
+/**
+ * Overview and Concurrency Arguments for Chat Feature
+ * 
+ * Communicator is a thread owned by each client that communicates with the server.
+ * Communicator is responsible for receiving messages from the server and giving messages to the server,
+ * depending what happens inside the pingball game.
+ * The argument for the actual pingball game proper can be found at the top of PingballServer.java
+ * 
+ * 
+ * ###############################Chat Functionality ############################################# 
+ * If both boards agree to come into the chat, then the Communicator thread receives a message from 
+ * the server to create a ChatGUI. Each Communicator thread has four ChatGUIs at maximum for talking
+ * to four of its joined neighbors. When a ChatGUI is started, two queues are initiated for putting 
+ * chats to send to the neighbor and receiving chats from the neighbor. ChatGUI is initiated by SwingUtilities
+ * invokeLater method. ChatGUI has a separate thread running that checks if there is something to 
+ * take from the chatSends and Receives queues. 
+ * 
+ * 
+ * ########################Concurrency argument#####################
+ * Each Communicator thread can have at maximum eight queues for chat functionality. A send queue and a receive queue
+ * for each of the four neighbors. Those queues are the only shared data between the Communicator thread 
+ * and ChatGUI, and those queues are BlockingQueues, a threadsafe data type provided by Java. 
+ * Each of those queues store an immutable data String. Thus, the shared data is safe from multithreading.
+ *  
+ * 
+ * 
+ * @author jonathan
+ *
+ */
 public class Communicator implements Runnable{
 	private Socket clientSocket = null;
 	private Board board = null;
 	
-	//private final ChatGUI[] chatGUIs = new ChatGUI[4];
+	private final ChatGUI[] chatGUIs = new ChatGUI[4];
 	
 	private final String[] chatNeighbors = new String[4];
 	private final BlockingQueue<String>[] chatSends = new BlockingQueue[4];
@@ -107,7 +138,7 @@ public class Communicator implements Runnable{
                             }   
                         }                       
                         // take chats off the queue and send to the server
-                        /*for (int i = 0; i < chatSends.length; i++) {
+                        for (int i = 0; i < chatSends.length; i++) {
                         	try {
                         		
                         		if (chatSends[i] != null && chatSends[i].size() > 0) { // because we don't want this thread to block because of take() method
@@ -123,7 +154,7 @@ public class Communicator implements Runnable{
 							} catch (InterruptedException e) {
 								e.printStackTrace();
 							}
-                        }*/
+                        }
                         
                         
 					}
@@ -148,17 +179,17 @@ public class Communicator implements Runnable{
 			        	}
 			            
 			        }			        
-	/*		        if (output.contains("chatWant") || output.contains("chatNo")) {
+			        if (output.contains("chatWant") || output.contains("chatNo")) {
 			        	synchronized(out) {
 			        		out.println(output);
 			        	}
 			        	
 			        	//System.out.println(output);
-			        }*/
+			        }
 			    }   		
 			}
 		}catch (Exception e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 		}finally {
 			out.close();
 			in.close();
@@ -177,7 +208,7 @@ public class Communicator implements Runnable{
 		// receiving messages from the chat
 		String delim = "123456789";
 		String[] strangeTokens = input.split(delim);
-		/*if(strangeTokens[0].equals("chatReceive")) {
+		if(strangeTokens[0].equals("chatReceive")) {
 			//System.out.println("inside chatReceive");
 			String chatNeighbor = strangeTokens[1];
 			int wallNum = Integer.parseInt(strangeTokens[2]);
@@ -194,7 +225,7 @@ public class Communicator implements Runnable{
 			}
 			
 			return null;
-		}*/
+		}
 		
 		//CONFIRMING IF BALL HIT AN INVISIBLE WALL
 		if(tokens[0].equals("delete")) {
@@ -266,9 +297,13 @@ public class Communicator implements Runnable{
 			// ADD A NEW BALL AT X,Y LOC IN THE CLIENT 			
 			board.insertBall(nameOfBall, x, y, xVel, yVel, radius);
 
+<<<<<<< HEAD
 			//System.out.println(input);
 
 			
+=======
+			System.out.println(input);
+>>>>>>> ca290c6edffea74d65e41bff41412a1c926651fc
 
 			return null;
 		}   
@@ -278,7 +313,7 @@ public class Communicator implements Runnable{
 			return null;
 		}
 		
-		/*if (tokens[0].equals("chatReject")) {
+		if (tokens[0].equals("chatReject")) {
 			//System.out.println("inside chatReject");
 			String chatNeighbor = tokens[1];
 			String msg = chatNeighbor + " does not want to talk to you.";
@@ -318,17 +353,11 @@ public class Communicator implements Runnable{
 			System.out.println("wallnum Created: " + wallNum);
 			System.out.println("is chatReceieves[wallnum] null: " + chatReceives[wallNum] == null);
 			System.out.println("is chatSends[wallnum] null: " + chatSends[wallNum] == null);
-			*/
-//			SwingUtilities.invokeLater(new Runnable() {
-//				public void run() {
-/*//					cg.update
-//				}
-//			});
 			
 			
 			//System.out.println("endingnnnn");
 			return null;
-		}*/
+		}
 		
 		if(tokens[0].equals("mark")) {
 		
@@ -338,12 +367,12 @@ public class Communicator implements Runnable{
 			board.connectWall(wallNum, neighbor);
 			
 			String answer = null;
-			/*boolean chatWant = askForChat(neighbor, wallNum);
+			boolean chatWant = askForChat(neighbor, wallNum);
 			if (chatWant)
 				answer = "chatWant " + wallNum + " " + this.board.boardname + " " + neighbor;
 			else
 				answer = "chatNo " + chatWant + " " + wallNum + " " + this.board.boardname + " " + neighbor;
-			*/
+			
 			return answer;
 		}
 		
@@ -367,7 +396,7 @@ public class Communicator implements Runnable{
 	 * @param wallNum
 	 * @return 
 	 */
-	/*private boolean askForChat(String chatNeighbor, int wallNum) {
+	private boolean askForChat(String chatNeighbor, int wallNum) {
 		int chatRequested = JOptionPane.showConfirmDialog(new JFrame(), 
 				             "Do you want to talk to " + chatNeighbor + " ?" +
 				             		"\n If so, we'll let you know if both of you want to talk to each other", 
@@ -396,5 +425,5 @@ public class Communicator implements Runnable{
 			e.printStackTrace();
 		}
 	}
-	*/
+	
 }
